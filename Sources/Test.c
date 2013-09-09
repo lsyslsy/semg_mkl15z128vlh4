@@ -14,9 +14,9 @@
  **     Settings    :
  **
  **     Contents    :
- **     			        
+ **         GPIO    - void GPIOTest(void);
  **         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -49,11 +49,7 @@
 #include "Events.h"
 #include "Cpu.h"
 
-#include "Aliases.h"
-#include "Globals.h"
-#include "Init.h"
-#include "Macros.h"
-#include "Settings.h"
+#include "MyHeaders.h"
 
 /* 
  * ===================================================================

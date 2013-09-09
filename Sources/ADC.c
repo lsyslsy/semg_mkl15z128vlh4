@@ -42,7 +42,7 @@
  **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
  **
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -74,15 +74,11 @@
 #include "Events.h"
 #include "Cpu.h"
 
-#include "ADC.h"
-#include "Aliases.h"
-#include "Globals.h"
 #include "limits.h"
-#include "Macros.h"
-#include "Settings.h"
-#include "stdlib.h"
 #include "string.h"
-#include "Utilities.h"
+#include "stdlib.h"
+
+#include "MyHeaders.h"
 
 /* 
  * ===================================================================
@@ -689,7 +685,7 @@ LDD_TError ADCSendCommand(byte* cmd, uint8 len)
     }
     
     /* Prepare the buffer of command transmitted to ADC. */
-    err = SPI1Send(cmd, len);
+//    err = SPI1Send(cmd, len);
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);         /* If error occurred, print the error message, */
@@ -697,7 +693,7 @@ LDD_TError ADCSendCommand(byte* cmd, uint8 len)
     }
     
     /* Enable the SPI transmission interrupt to transmit. */
-    SPI1EnableTxInterrupt();
+//    SPI1EnableTxInterrupt();
     
     return err;
 }

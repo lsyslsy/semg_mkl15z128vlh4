@@ -6,18 +6,14 @@
 **     Component   : SPIMaster_LDD
 **     Version     : Component 01.091, Driver 01.02, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-08-03, 15:57, # CodeGen: 110
+**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
 **     Abstract    :
 **         This component "SPIMaster_LDD" implements MASTER part of synchronous
 **         serial master-slave communication.
 **     Settings    :
 **          Component name                                 : SM_SPI1
 **          Device                                         : SPI1
-**          Interrupt service/event                        : Enabled
-**            Input interrupt                              : INT_SPI1
-**            Input interrupt priority                     : medium priority
-**            Output interrupt                             : INT_SPI1
-**            Output interrupt priority                    : medium priority
+**          Interrupt service/event                        : Disabled
 **          Settings                                       : 
 **            Input pin                                    : Enabled
 **              Pin                                        : PTD7/SPI1_MISO/UART0_TX/SPI1_MOSI
@@ -46,11 +42,11 @@
 **          Initialization                                 : 
 **            Initial chip select                          : 0
 **            Initial attribute set                        : 0
-**            Enabled in init. code                        : yes
+**            Enabled in init. code                        : no
 **            Auto initialization                          : no
 **            Event mask                                   : 
-**              OnBlockSent                                : Enabled
-**              OnBlockReceived                            : Enabled
+**              OnBlockSent                                : Disabled
+**              OnBlockReceived                            : Disabled
 **              OnError                                    : Disabled
 **          CPU clock/configuration selection              : 
 **            Clock configuration 0                        : This component enabled
@@ -62,9 +58,10 @@
 **            Clock configuration 6                        : This component disabled
 **            Clock configuration 7                        : This component disabled
 **     Contents    :
-**         Init         - LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr);
-**         SendBlock    - LDD_TError SM_SPI1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
-**         ReceiveBlock - LDD_TError SM_SPI1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
+**         Init    - LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr);
+**         Enable  - LDD_TError SM_SPI1_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable - LDD_TError SM_SPI1_Disable(LDD_TDeviceData *DeviceDataPtr);
+**         Main    - void SM_SPI1_Main(LDD_TDeviceData *DeviceDataPtr);
 **
 **     Copyright : 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
 **     SOURCE DISTRIBUTION PERMISSIBLE as directed in End User License Agreement.
@@ -109,12 +106,11 @@ extern "C" {
   
 /* Methods configuration constants - generated for all enabled component's methods */
 #define SM_SPI1_Init_METHOD_ENABLED    /*!< Init method of the component SM_SPI1 is enabled (generated) */
-#define SM_SPI1_SendBlock_METHOD_ENABLED /*!< SendBlock method of the component SM_SPI1 is enabled (generated) */
-#define SM_SPI1_ReceiveBlock_METHOD_ENABLED /*!< ReceiveBlock method of the component SM_SPI1 is enabled (generated) */
+#define SM_SPI1_Enable_METHOD_ENABLED  /*!< Enable method of the component SM_SPI1 is enabled (generated) */
+#define SM_SPI1_Disable_METHOD_ENABLED /*!< Disable method of the component SM_SPI1 is enabled (generated) */
+#define SM_SPI1_Main_METHOD_ENABLED    /*!< Main method of the component SM_SPI1 is enabled (generated) */
 
 /* Events configuration constants - generated for all enabled component's events */
-#define SM_SPI1_OnBlockSent_EVENT_ENABLED /*!< OnBlockSent event of the component SM_SPI1 is enabled (generated) */
-#define SM_SPI1_OnBlockReceived_EVENT_ENABLED /*!< OnBlockReceived event of the component SM_SPI1 is enabled (generated) */
 
 #define SM_SPI1_CHIP_SELECT_COUNT 0U   /*!< Number of chip selects */
 #define SM_SPI1_CONFIGURATION_COUNT 1U /*!< Number of predefined configurations */
@@ -149,94 +145,71 @@ LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr);
 
 /*
 ** ===================================================================
-**     Method      :  SM_SPI1_ReceiveBlock (component SPIMaster_LDD)
+**     Method      :  SM_SPI1_Enable (component SPIMaster_LDD)
 */
 /*!
 **     @brief
-**         This method specifies the number of data to receive. The
-**         method returns ERR_BUSY until the specified number of
-**         characters is received. The method <CancelBlockReception>
-**         can be used to cancel a running receive operation.
+**         This method enables SPI device. This method is intended to
+**         be used together with <Disable()> method to temporary switch
+**         On/Off the device after the device is initialized. This
+**         method is required if the <Enabled in init. code> property
+**         is set to "no" value.
 **     @param
 **         DeviceDataPtr   - Device data structure
 **                           pointer returned by <Init> method.
-**     @param
-**         BufferPtr       - Pointer to A buffer where
-**                           received characters will be stored.
-**     @param
-**         Size            - Size of the block
 **     @return
 **                         - Error code, possible codes:
 **                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active clock configuration
-**                           ERR_DISABLED - Component is disabled
-**                           ERR_BUSY - The previous receive request is
-**                           pending
+**                           ERR_SPEED - The device doesn't work in the
+**                           active clock configuration
 */
 /* ===================================================================*/
-LDD_TError SM_SPI1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *BufferPtr, uint16_t Size);
+LDD_TError SM_SPI1_Enable(LDD_TDeviceData *DeviceDataPtr);
 
 /*
 ** ===================================================================
-**     Method      :  SM_SPI1_SendBlock (component SPIMaster_LDD)
+**     Method      :  SM_SPI1_Disable (component SPIMaster_LDD)
 */
 /*!
 **     @brief
-**         This method sends a block of characters. The method returns
-**         ERR_BUSY when the previous block transmission is not
-**         completed. The method <CancelBlockTransmission> can be used
-**         to cancel a transmit operation.
+**         Disables the SPI device. When the device is disabled, some
+**         component methods should not be called. If so, error
+**         ERR_DISABLED may be reported. This method is intended to be
+**         used together with <Enable()> method to temporary switch
+**         on/off the device after the device is initialized. This
+**         method is not required. The <Deinit()> method can be used to
+**         switch off and uninstall the device.
 **     @param
 **         DeviceDataPtr   - Device data structure
 **                           pointer returned by <Init> method.
-**     @param
-**         BufferPtr       - Pointer to the block of data
-**                           to send.
-**     @param
-**         Size            - Number of characters in the buffer.
 **     @return
 **                         - Error code, possible codes:
 **                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active clock configuration
-**                           ERR_DISABLED - Component is disabled
-**                           ERR_BUSY - The previous transmit request is
-**                           pending
+**                           ERR_SPEED - The device doesn't work in the
+**                           active clock configuration
 */
 /* ===================================================================*/
-LDD_TError SM_SPI1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *BufferPtr, uint16_t Size);
+LDD_TError SM_SPI1_Disable(LDD_TDeviceData *DeviceDataPtr);
 
 /*
- * ===================================================================
- *     Method      : SM_SPI1_EnabelInterrupt(component SPIMaster_LDD)
- */
+** ===================================================================
+**     Method      :  SM_SPI1_Main (component SPIMaster_LDD)
+*/
 /*!
- *     @brief
- *          This method enables transmission and reception interrupts.
- *          After Send/ReceiveBlock is invoked, this method must be called
- *          to enable either transmission or reception interrupt or both,
- *          or no data will be transmitted or received. 
- *     @param
- *          enableTxInterrupt   - Boolean flag of transmission interrupt switch.
- *     @param
- *          enableRxInterrupt   - Boolean flag of reception interrupt switch.  
- */
-/* ===================================================================*/
-void SM_SPI1_EnableInterrupt(bool enableTxInterrupt, bool enableRxInterrupt);
-
-/*
-** ===================================================================
-**     Method      :  SM_SPI1_Interrupt (component SPIMaster_LDD)
-**
-**     Description :
-**         The ISR function handling the device receive/transmit 
-**         interrupt.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
+**     @brief
+**         This method is available only in the polling mode (Interrupt
+**         service/event = 'no'). If interrupt service is disabled this
+**         method replaces the interrupt handler. This method should be
+**         called if Receive/SendBlock was invoked before in order to
+**         run the reception/transmission. The end of the
+**         receiving/transmitting is indicated by OnBlockSent or
+**         OnBlockReceived event. 
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
 */
-/* {Default RTOS Adapter} ISR function prototype */
-PE_ISR(SM_SPI1_Interrupt);
+/* ===================================================================*/
+void SM_SPI1_Main(LDD_TDeviceData *DeviceDataPtr);
 
 /* END SM_SPI1. */
 

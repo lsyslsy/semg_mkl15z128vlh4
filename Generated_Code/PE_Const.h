@@ -6,7 +6,7 @@
 **     Component   : PE_Const
 **     Version     : Driver 01.00
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-07-22, 19:25, # CodeGen: 49
+**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
 **     Abstract    :
 **         This component "PE_Const" contains internal definitions
 **         of the constants.

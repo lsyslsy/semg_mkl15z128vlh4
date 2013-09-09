@@ -42,7 +42,7 @@
  **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
  **         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/

@@ -46,6 +46,9 @@
 #include "BitIO_CLKSEL.h"
 #include "EINT_NOT_DRDY.h"
 #include "EINT_SYNC_INT.h"
+#include "DMAT_M_SPI_TX.h"
+#include "DMA_M_SPI.h"
+#include "DMAT_M_SPI_RX.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -235,6 +238,90 @@ void SysTick_OnInterrupt(void);
 */
 PE_ISR(SysTick_Interrupt);
 
+
+/*
+** ===================================================================
+**     Event       :  DMAT_M_SPI_RX_OnComplete (module Events)
+**
+**     Component   :  DMAT_M_SPI_RX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called at the end of a DMA transfer. If the Half complete
+**         property in initialization section is anabled, this event is
+**         also called when current major iteration count reaches the
+**         halfway point. See SetEventMask() and GetEventMask() methods.
+**         This event is enabled only if Interrupts property in Channel
+**         select section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_M_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Event       :  DMAT_M_SPI_RX_OnError (module Events)
+**
+**     Component   :  DMAT_M_SPI_RX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called when error in channel settings is detected. See
+**         SetEventMask() and GetEventMask() methods. This event is
+**         enabled only if Interrupts property in Channel select
+**         section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_M_SPI_RX_OnError(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Event       :  DMAT_M_SPI_TX_OnComplete (module Events)
+**
+**     Component   :  DMAT_M_SPI_TX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called at the end of a DMA transfer. If the Half complete
+**         property in initialization section is anabled, this event is
+**         also called when current major iteration count reaches the
+**         halfway point. See SetEventMask() and GetEventMask() methods.
+**         This event is enabled only if Interrupts property in Channel
+**         select section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Event       :  DMAT_M_SPI_TX_OnError (module Events)
+**
+**     Component   :  DMAT_M_SPI_TX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called when error in channel settings is detected. See
+**         SetEventMask() and GetEventMask() methods. This event is
+**         enabled only if Interrupts property in Channel select
+**         section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_M_SPI_TX_OnError(LDD_TUserData *UserDataPtr);
 
 /* END Events */
 

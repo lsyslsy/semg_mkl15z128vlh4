@@ -16,6 +16,8 @@
  **			    - User data
  **				- On-chip devices
  **					- SPI0, SPI1
+ **					- SPI1_TX_DMA, SPI1_RX_DMA
+ **					- DMA
  **					- UART0, UART2
  **					- PTA2
  **					- PTB1
@@ -29,7 +31,7 @@
  **     Contents    :
  **     			UserInit - UserInit(void);        
  **         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -44,6 +46,8 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
+ *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
  *          <li> PTB1
@@ -66,6 +70,8 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
+ *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
  *          <li> PTB1
@@ -100,13 +106,11 @@
 #include "IO_Map.h"
 #include "Events.h"
 #include "Cpu.h"
+#include "DMAT_M_SPI_TX.h"
+#include "DMA_M_SPI.h"
+#include "DMAT_M_SPI_RX.h"
 
-#include "ADC.h"
-#include "Aliases.h"
-#include "Globals.h"
-#include "Init.h"
-#include "Macros.h"
-#include "Settings.h"
+#include "MyHeaders.h"
 
 /*
  * ===================================================================
@@ -114,7 +118,7 @@
  */
 /*!
  *     @brief
- *          Initializes on-chip and peripheral devices. 
+ *          Initialize on-chip and peripheral devices. 
  *          The method is called in the main function and will be called
  *          only once.
  */
@@ -146,7 +150,7 @@ void UserInit(void)
   */
  /*!
   *     @brief
-  *          Initializes user data. 
+  *          Initialize user data. 
   *          The method is called in the UserInit function and will be called
   *          only once.
   */
@@ -166,7 +170,7 @@ void UserDataInit(void)
  */
 /*!
  *     @brief
- *          Initializes on-chip devices. 
+ *          Initialize on-chip devices. 
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -194,6 +198,11 @@ void OnChipInit(void)
     SPIInit();
 #if DEBUG
     printf("| | -SPIInit finished.\n");
+    printf("| | -DMAInit begins...\n");
+#endif
+    DMAInit();
+#if DEBUG
+    printf("| | -DMAInit finished.\n");
 #endif
 }
 
@@ -203,7 +212,7 @@ void OnChipInit(void)
  */
 /*!
  *     @brief
- *          Initializes Peripheral devices. 
+ *          Initialize Peripheral devices. 
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -225,7 +234,7 @@ void PeripheralInit(void)
  */
 /*!
  *     @brief
- *          Initializes GPIO. 
+ *          Initialize GPIO. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -296,7 +305,7 @@ void GPIOInit(void)
  */
 /*!
  *     @brief
- *          Initializes SPI. 
+ *          Initialize SPI. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -314,11 +323,41 @@ void SPIInit(void)
 
 /*
  * ===================================================================
+ *     Method      :  DMAInit (Component DMA)
+ */
+/*!
+ *     @brief
+ *         	Initialize DMA controller. Including SPI transmission and reception DMA method.
+ *         	The method is called in the OnChipInit function and will be called
+ *         	only once.         	
+ */
+/* ===================================================================*/
+void DMAInit(void)
+{
+#if USING_DMA
+//    DMA4SPI0 = DMA4SPI0Init();
+    DMA4SPI1 = DMA4SPI1Init();
+#endif
+    
+#if USING_SPI0_DMA
+    SPI0TxDma = SPI0TxDmaInit();
+    SPI0RxDma = SPI0RxDmaInit();
+#endif
+    
+#if USING_SPI1_DMA
+    SPI1TxDma = SPI1TxDmaInit();
+    SPI1RxDma = SPI1RxDmaInit();
+#endif
+    
+}
+
+/*
+ * ===================================================================
  *     Method      :  UARTInit (Component UART)
  */
 /*!
  *     @brief
- *          Initializes UART. 
+ *          Initialize UART. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */

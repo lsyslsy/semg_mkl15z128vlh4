@@ -16,7 +16,8 @@
  **     Contents    :
  **         Process         - void Process(void);
  **         SplitRawData    - LDD_TError SplitRawData(TADCDataPtr adcDataPtr);
- **     mail      	: pzdongdong@163.com
+ **     
+ **     Mail      	: pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
  ** ###################################################################*/

@@ -14,7 +14,7 @@
  **          when ports or functions changed.
  **
  **     
- **     mail        : pzdongdong@163.com
+ **     Mail        : pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -74,11 +74,27 @@
             /*!
              * @{
              */
+#if USING_DMA
+#define DMA4SPI0 dmaController4SlaveSPIDevData
+#define DMA4SPI1 dmaController4MasterSPIDevData
+#endif
+            /*!
+             * @{
+             */
 #if USING_SPI0
 #define SPI0 slaveSPI0DevData
 #endif
 #if USING_SPI1
 #define SPI1 masterSPI1DevData
+#endif
+
+#if USING_SPI0_DMA
+#define SPI0RxDma slaveSPIRxDmaDevData
+#define SPI0TxDma slaveSPITxDmaDevData
+#endif
+#if USING_SPI1_DMA
+#define SPI1RxDma masterSPIRxDmaDevData
+#define SPI1TxDma masterSPITxDmaDevData
 #endif
             /*!
              * @}
@@ -204,6 +220,33 @@
              * @}
              */
             /*!
+             * @{
+             */
+#if USING_DMA
+#define DMA4SPI0Init()                                               DMA_S_SPI_Init(DMA4SPI1)
+#define DMA4SPI0Enable()                                             DMA_S_SPI_Enable(DMA4SPI1)
+#define DMA4SPI0Disable()                                            DMA_S_SPI_Disable(DMA4SPI1)
+#define DMA4SPI0AllocateChannel(descriptorPtr)                       DMA_S_SPI_AllocateChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI0EnableChannel(descriptorPtr)                         DMA_S_SPI_EnableChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI0DisableChannel(descriptorPtr)                        DMA_S_SPI_DisableChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI0SetChannelSourceAddress(descriptorPtr, address)      DMA_S_SPI_SetChannelSourceAddress(DMA4SPI1, descriptorPtr, address)
+#define DMA4SPI0SetChannelDestinationAddress(descriptorPtr, address) DMA_S_SPI_SetChannelDestinationAddress(DMA4SPI1, descriptorPtr, address)
+#define DMA4SPI0SetChannelByteCount(descriptorPtr, byteCount)        DMA_S_SPI_SetChannelByteCount(DMA4SPI1, descriptorPtr, byteCount)
+
+#define DMA4SPI1Init()                                               DMA_M_SPI_Init(DMA4SPI1)
+#define DMA4SPI1Enable()                                             DMA_M_SPI_Enable(DMA4SPI1)
+#define DMA4SPI1Disable()                                            DMA_M_SPI_Disable(DMA4SPI1)
+#define DMA4SPI1AllocateChannel(descriptorPtr)                       DMA_M_SPI_AllocateChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI1EnableChannel(descriptorPtr)                         DMA_M_SPI_EnableChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI1DisableChannel(descriptorPtr)                        DMA_M_SPI_DisableChannel(DMA4SPI1, descriptorPtr)
+#define DMA4SPI1SetChannelSourceAddress(descriptorPtr, address)      DMA_M_SPI_SetChannelSourceAddress(DMA4SPI1, descriptorPtr, address)
+#define DMA4SPI1SetChannelDestinationAddress(descriptorPtr, address) DMA_M_SPI_SetChannelDestinationAddress(DMA4SPI1, descriptorPtr, address)
+#define DMA4SPI1SetChannelByteCount(descriptorPtr, byteCount)        DMA_M_SPI_SetChannelByteCount(DMA4SPI1, descriptorPtr, byteCount)
+#endif
+            /*!
+             * @}
+             */
+            /*!
              * @{ 
              */
 #if USING_SPI0
@@ -226,7 +269,41 @@
 #define SPI1Send(data, size)    SM_SPI1_SendBlock(SPI1, data, size)
 #define SPI1EnableInterrupt()   SM_SPI1_EnableInterrupt(TRUE, TRUE)
 #define SPI1EnableTxInterrupt() SM_SPI1_EnableInterrupt(TRUE, FALSE)
-#define SPI1EnableRxInterrupt() SM_SPI1_EnableInterrupt(FALSE, TRUE)
+#endif
+
+#if USING_SPI0_DMA
+#define SPI0RxDmaInit()                         DMAT_S_SPI_RX_Init(SPI1RxDma)
+#define SPI0RxDmaAllocateChannel()              DMAT_S_SPI_RX_AllocateChannel(SPI1RxDma)
+#define SPI0RxDmaEnableChannel()                DMAT_S_SPI_RX_EnableChannel(SPI1RxDma)
+#define SPI0RxDmaDisbleChannel()                DMAT_S_SPI_RX_DisableChannel(SPI1RxDma)
+#define SPI0RxDmaSetSourceAddress(address)      DMAT_S_SPI_RX_SetSourceAddress(SPI1RxDma, address)
+#define SPI0RxDmaSetDestinationAddress(address) DMAT_S_SPI_RX_SetDestinationAddress(SPI1RxDma, address)
+#define SPI0RxDmaSetByteCount(address)          DMAT_S_SPI_RX_SetByteCount(SPI1RxDma, address)
+
+#define SPI0TxDmaInit()                         DMAT_S_SPI_TX_Init(SPI1TxDma)
+#define SPI0TxDmaAllocateChannel()              DMAT_S_SPI_TX_AllocateChannel(SPI1TxDma)
+#define SPI0TxDmaEnableChannel()                DMAT_S_SPI_TX_EnableChannel(SPI1TxDma)
+#define SPI0TxDmaDisableChannel()               DMAT_S_SPI_TX_DisableChannel(SPI1TxDma)
+#define SPI0TxDmaSetSourceAddress(address)      DMAT_S_SPI_TX_SetSourceAddress(SPI1TxDma, address)
+#define SPI0TxDmaSetDestinationAddress(address) DMAT_S_SPI_TX_SetDestinationAddress(SPI1TxDma, address)
+#define SPI0TxDmaSetByteCount(byteCount)        DMAT_S_SPI_TX_SetByteCount(SPI1TxDma, byteCount)
+#endif
+#if USING_SPI1_DMA
+#define SPI1RxDmaInit()                         DMAT_M_SPI_RX_Init(SPI1RxDma)
+#define SPI1RxDmaAllocateChannel()              DMAT_M_SPI_RX_AllocateChannel(SPI1RxDma)
+#define SPI1RxDmaEnableChannel()                DMAT_M_SPI_RX_EnableChannel(SPI1RxDma)
+#define SPI1RxDmaDisbleChannel()                DMAT_M_SPI_RX_DisableChannel(SPI1RxDma)
+#define SPI1RxDmaSetSourceAddress(address)      DMAT_M_SPI_RX_SetSourceAddress(SPI1RxDma, address)
+#define SPI1RxDmaSetDestinationAddress(address) DMAT_M_SPI_RX_SetDestinationAddress(SPI1RxDma, address)
+#define SPI1RxDmaSetByteCount(address)          DMAT_M_SPI_RX_SetByteCount(SPI1RxDma, address)
+
+#define SPI1TxDmaInit()                         DMAT_M_SPI_TX_Init(SPI1TxDma)
+#define SPI1TxDmaAllocateChannel()              DMAT_M_SPI_TX_AllocateChannel(SPI1TxDma)
+#define SPI1TxDmaEnableChannel()                DMAT_M_SPI_TX_EnableChannel(SPI1TxDma)
+#define SPI1TxDmaDisableChannel()               DMAT_M_SPI_TX_DisableChannel(SPI1TxDma)
+#define SPI1TxDmaSetSourceAddress(address)      DMAT_M_SPI_TX_SetSourceAddress(SPI1TxDma, address)
+#define SPI1TxDmaSetDestinationAddress(address) DMAT_M_SPI_TX_SetDestinationAddress(SPI1TxDma, address)
+#define SPI1TxDmaSetByteCount(byteCount)        DMAT_M_SPI_TX_SetByteCount(SPI1TxDma, byteCount)
 #endif
             /*!
              * @}

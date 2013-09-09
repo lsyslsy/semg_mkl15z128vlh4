@@ -6,18 +6,14 @@
 **     Component   : SPIMaster_LDD
 **     Version     : Component 01.091, Driver 01.02, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-08-03, 15:57, # CodeGen: 110
+**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
 **     Abstract    :
 **         This component "SPIMaster_LDD" implements MASTER part of synchronous
 **         serial master-slave communication.
 **     Settings    :
 **          Component name                                 : SM_SPI1
 **          Device                                         : SPI1
-**          Interrupt service/event                        : Enabled
-**            Input interrupt                              : INT_SPI1
-**            Input interrupt priority                     : medium priority
-**            Output interrupt                             : INT_SPI1
-**            Output interrupt priority                    : medium priority
+**          Interrupt service/event                        : Disabled
 **          Settings                                       : 
 **            Input pin                                    : Enabled
 **              Pin                                        : PTD7/SPI1_MISO/UART0_TX/SPI1_MOSI
@@ -46,11 +42,11 @@
 **          Initialization                                 : 
 **            Initial chip select                          : 0
 **            Initial attribute set                        : 0
-**            Enabled in init. code                        : yes
+**            Enabled in init. code                        : no
 **            Auto initialization                          : no
 **            Event mask                                   : 
-**              OnBlockSent                                : Enabled
-**              OnBlockReceived                            : Enabled
+**              OnBlockSent                                : Disabled
+**              OnBlockReceived                            : Disabled
 **              OnError                                    : Disabled
 **          CPU clock/configuration selection              : 
 **            Clock configuration 0                        : This component enabled
@@ -62,9 +58,10 @@
 **            Clock configuration 6                        : This component disabled
 **            Clock configuration 7                        : This component disabled
 **     Contents    :
-**         Init         - LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr);
-**         SendBlock    - LDD_TError SM_SPI1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
-**         ReceiveBlock - LDD_TError SM_SPI1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
+**         Init    - LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr);
+**         Enable  - LDD_TError SM_SPI1_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable - LDD_TError SM_SPI1_Disable(LDD_TDeviceData *DeviceDataPtr);
+**         Main    - void SM_SPI1_Main(LDD_TDeviceData *DeviceDataPtr);
 **
 **     Copyright : 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
 **     SOURCE DISTRIBUTION PERMISSIBLE as directed in End User License Agreement.
@@ -87,7 +84,6 @@
 /* MODULE SM_SPI1. */
 /*lint -save  -e926 -e927 -e928 -e929 Disable MISRA rule (11.4) checking. */
 
-#include "Events.h"
 #include "SM_SPI1.h"
 /* {Default RTOS Adapter} No RTOS includes */
 
@@ -95,19 +91,14 @@
 extern "C" {
 #endif 
 
-#define AVAILABLE_EVENTS_MASK (LDD_SPIMASTER_ON_BLOCK_RECEIVED | LDD_SPIMASTER_ON_BLOCK_SENT)
+#define AVAILABLE_EVENTS_MASK 0x00U
 
 /* These constants contain pins masks */
 #define SM_SPI1_AVAILABLE_PIN_MASK (LDD_SPIMASTER_INPUT_PIN | LDD_SPIMASTER_OUTPUT_PIN | LDD_SPIMASTER_CLK_PIN)
 
 typedef struct {
+  bool EnUser;                         /* Enable/Disable device */
   LDD_SPIMASTER_TError ErrFlag;        /* Error flags */
-  uint16_t InpRecvDataNum;             /* The counter of received characters */
-  uint8_t *InpDataPtr;                 /* The buffer pointer for received characters */
-  uint16_t InpDataNumReq;              /* The counter of characters to receive by ReceiveBlock() */
-  uint16_t OutSentDataNum;             /* The counter of sent characters */
-  uint8_t *OutDataPtr;                 /* The buffer pointer for data to be transmitted */
-  uint16_t OutDataNumReq;              /* The counter of characters to be send by SendBlock() */
   LDD_TUserData *UserData;             /* User device data structure */
 } SM_SPI1_TDeviceData;                 /* Device data structure type */
 
@@ -115,9 +106,8 @@ typedef SM_SPI1_TDeviceData* SM_SPI1_TDeviceDataPtr ; /* Pointer to the device d
 
 /* {Default RTOS Adapter} Static object used for simulation of dynamic driver memory allocation */
 static SM_SPI1_TDeviceData DeviceDataPrv__DEFAULT_RTOS_ALLOC;
-/* {Default RTOS Adapter} Global variable used for passing a parameter into ISR */
-static SM_SPI1_TDeviceDataPtr INT_SPI1__DEFAULT_RTOS_ISRPARAM;
 /* Internal method prototypes */
+static void HWEnDi(LDD_TDeviceData *DeviceDataPtr);
 
 /*
 ** ===================================================================
@@ -150,29 +140,10 @@ LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr)
   /* {Default RTOS Adapter} Driver memory allocation: Dynamic allocation is simulated by a pointer to the static object */
   DeviceDataPrv = &DeviceDataPrv__DEFAULT_RTOS_ALLOC;
   DeviceDataPrv->UserData = UserDataPtr; /* Store the RTOS device structure */
-  /* Interrupt vector(s) allocation */
-  /* {Default RTOS Adapter} Set interrupt vector: IVT is static, ISR parameter is passed by the global variable */
-  INT_SPI1__DEFAULT_RTOS_ISRPARAM = DeviceDataPrv;
+  DeviceDataPrv->EnUser = FALSE;       /* Disable device */
   DeviceDataPrv->ErrFlag = 0x00U;      /* Clear error flags */
-  /* Clear the receive counters and pointer */
-  DeviceDataPrv->InpRecvDataNum = 0x00U; /* Clear the counter of received characters */
-  DeviceDataPrv->InpDataNumReq = 0x00U; /* Clear the counter of characters to receive by ReceiveBlock() */
-  DeviceDataPrv->InpDataPtr = NULL;    /* Clear the buffer pointer for received characters */
-  /* Clear the transmit counters and pointer */
-  DeviceDataPrv->OutSentDataNum = 0x00U; /* Clear the counter of sent characters */
-  DeviceDataPrv->OutDataNumReq = 0x00U; /* Clear the counter of characters to be send by SendBlock() */
-  DeviceDataPrv->OutDataPtr = NULL;    /* Clear the buffer pointer for data to be transmitted */
   /* SIM_SCGC4: SPI1=1 */
   SIM_SCGC4 |= SIM_SCGC4_SPI1_MASK;                                   
-  /* Interrupt vector(s) priority setting */
-  /* NVIC_IPR2: PRI_11=0x80 */
-  NVIC_IPR2 = (uint32_t)((NVIC_IPR2 & (uint32_t)~(uint32_t)(
-               NVIC_IP_PRI_11(0x7F)
-              )) | (uint32_t)(
-               NVIC_IP_PRI_11(0x80)
-              ));                                  
-  /* NVIC_ISER: SETENA|=0x0800 */
-  NVIC_ISER |= NVIC_ISER_SETENA(0x0800);                                   
   /* PORTD_PCR7: ISF=0,MUX=2 */
   PORTD_PCR7 = (uint32_t)((PORTD_PCR7 & (uint32_t)~(uint32_t)(
                 PORT_PCR_ISF_MASK |
@@ -200,8 +171,6 @@ LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr)
   SPI1_C2 = SPI_C2_MODFEN_MASK;        /* Set configuration register */
   /* SPI1_BR: ??=0,SPPR=2,SPR=1 */
   SPI1_BR = (SPI_BR_SPPR(0x02) | SPI_BR_SPR(0x01)); /* Set baud rate register */
-  /* SPI1_C1: SPE=1 */
-  SPI1_C1 |= SPI_C1_SPE_MASK;          /* Enable SPI module */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_SM_SPI1_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv); /* Return pointer to the data data structure */
@@ -209,180 +178,111 @@ LDD_TDeviceData* SM_SPI1_Init(LDD_TUserData *UserDataPtr)
 
 /*
 ** ===================================================================
-**     Method      :  SM_SPI1_ReceiveBlock (component SPIMaster_LDD)
+**     Method      :  SM_SPI1_Enable (component SPIMaster_LDD)
 */
 /*!
 **     @brief
-**         This method specifies the number of data to receive. The
-**         method returns ERR_BUSY until the specified number of
-**         characters is received. The method <CancelBlockReception>
-**         can be used to cancel a running receive operation.
+**         This method enables SPI device. This method is intended to
+**         be used together with <Disable()> method to temporary switch
+**         On/Off the device after the device is initialized. This
+**         method is required if the <Enabled in init. code> property
+**         is set to "no" value.
 **     @param
 **         DeviceDataPtr   - Device data structure
 **                           pointer returned by <Init> method.
-**     @param
-**         BufferPtr       - Pointer to A buffer where
-**                           received characters will be stored.
-**     @param
-**         Size            - Size of the block
 **     @return
 **                         - Error code, possible codes:
 **                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active clock configuration
-**                           ERR_DISABLED - Component is disabled
-**                           ERR_BUSY - The previous receive request is
-**                           pending
+**                           ERR_SPEED - The device doesn't work in the
+**                           active clock configuration
 */
 /* ===================================================================*/
-LDD_TError SM_SPI1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *BufferPtr, uint16_t Size)
+LDD_TError SM_SPI1_Enable(LDD_TDeviceData *DeviceDataPtr)
 {
-  if (((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->InpDataNumReq != 0x00U) { /* Is the previous receive operation pending? */
-    return ERR_BUSY;                   /* If yes then error */
+  if (!((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->EnUser) { /* Is the device disabled by user? */
+    ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->EnUser = TRUE; /* If yes then set the flag "device enabled" */
+    HWEnDi((SM_SPI1_TDeviceDataPtr)DeviceDataPtr); /* Enable the device */
   }
-  /* {Default RTOS Adapter} Critical section begin, general PE function is used */
-//  EnterCritical();
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->InpDataPtr = (uint8_t*)BufferPtr; /* Store a pointer to the input data. */
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->InpDataNumReq = Size; /* Store a number of characters to be received. */
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->InpRecvDataNum = 0x00U; /* Set number of received characters to zero. */
-//  SPI_PDD_EnableInterruptMask(SPI1_BASE_PTR, SPI_PDD_RX_BUFFER_FULL_OR_FAULT); /* Enable Rx buffer full interrupt */
-  /* {Default RTOS Adapter} Critical section end, general PE function is used */
-//  ExitCritical();
   return ERR_OK;                       /* OK */
 }
 
 /*
 ** ===================================================================
-**     Method      :  SM_SPI1_SendBlock (component SPIMaster_LDD)
+**     Method      :  SM_SPI1_Disable (component SPIMaster_LDD)
 */
 /*!
 **     @brief
-**         This method sends a block of characters. The method returns
-**         ERR_BUSY when the previous block transmission is not
-**         completed. The method <CancelBlockTransmission> can be used
-**         to cancel a transmit operation.
+**         Disables the SPI device. When the device is disabled, some
+**         component methods should not be called. If so, error
+**         ERR_DISABLED may be reported. This method is intended to be
+**         used together with <Enable()> method to temporary switch
+**         on/off the device after the device is initialized. This
+**         method is not required. The <Deinit()> method can be used to
+**         switch off and uninstall the device.
 **     @param
 **         DeviceDataPtr   - Device data structure
 **                           pointer returned by <Init> method.
-**     @param
-**         BufferPtr       - Pointer to the block of data
-**                           to send.
-**     @param
-**         Size            - Number of characters in the buffer.
 **     @return
 **                         - Error code, possible codes:
 **                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active clock configuration
-**                           ERR_DISABLED - Component is disabled
-**                           ERR_BUSY - The previous transmit request is
-**                           pending
+**                           ERR_SPEED - The device doesn't work in the
+**                           active clock configuration
 */
 /* ===================================================================*/
-LDD_TError SM_SPI1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *BufferPtr, uint16_t Size)
+LDD_TError SM_SPI1_Disable(LDD_TDeviceData *DeviceDataPtr)
 {
-  if (((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->OutDataNumReq != 0x00U) { /* Is the previous transmit operation pending? */
-    return ERR_BUSY;                   /* If yes then error */
+  if (((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->EnUser) { /* Is the device enabled by user? */
+    ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->EnUser = FALSE; /* If yes then set the flag "device disabled" */
+    HWEnDi((SM_SPI1_TDeviceDataPtr)DeviceDataPtr); /* Disable the device */
   }
-  /* {Default RTOS Adapter} Critical section begin, general PE function is used */
-//  EnterCritical();
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->OutDataPtr = (uint8_t*)BufferPtr; /* Set a pointer to the output data. */
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->OutDataNumReq = Size; /* Set the counter of characters to be sent. */
-  ((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->OutSentDataNum = 0x00U; /* Clear the counter of sent characters. */
-//  SPI_PDD_EnableInterruptMask(SPI1_BASE_PTR, SPI_PDD_TX_BUFFER_EMPTY); /* Enable Tx buffer empty interrupt */
-  /* {Default RTOS Adapter} Critical section end, general PE function is used */
-//  ExitCritical();
   return ERR_OK;                       /* OK */
 }
 
 /*
- * ===================================================================
- *     Method      : SM_SPI1_EnabelInterrupt(component SPIMaster_LDD)
- */
-/*!
- *     @brief
- *          This method enables transmission and reception interrupts.
- *          After Send/ReceiveBlock is invoked, this method must be called
- *          to enable either transmission or reception interrupt or both,
- *          or no data will be transmitted or received. 
- *     @param
- *          enableTxInterrupt   - Boolean flag of transmission interrupt switch.
- *     @param
- *          enableRxInterrupt   - Boolean flag of reception interrupt switch.  
- */
-/* ===================================================================*/
-void SM_SPI1_EnableInterrupt(bool enableTxInterrupt, bool enableRxInterrupt)
-{    
-    /* Critical section begins, general PE function is used. */
-    EnterCritical();
-    
-    /* Enable Tx buffer empty interrupt. */
-    if(enableTxInterrupt)
-    {
-        /* 
-         * Read the SPI status and
-         * write one byte to data register
-         * to ensure transmission is right.
-         */
-        SPI_PDD_ReadStatusReg(SPI1_BASE_PTR);
-        SPI_PDD_EnableInterruptMask(SPI1_BASE_PTR, SPI_PDD_TX_BUFFER_EMPTY);
-    }   
-
-    /* Enable Rx buffer full interrupt. */
-    if(enableRxInterrupt)
-    {
-        
-        /* 
-         * Read the SPI status and data register
-         * to ensure reception is right. 
-         */
-        SPI_PDD_ReadData8bit(SPI1_BASE_PTR);
-        SPI_PDD_EnableInterruptMask(SPI1_BASE_PTR, SPI_PDD_RX_BUFFER_FULL_OR_FAULT);
-    }
-    
-    /* Critical section ends, general PE function is used. */
-    
-    ExitCritical();
-}
-
-/*
 ** ===================================================================
-**     Method      :  SM_SPI1_Interrupt (component SPIMaster_LDD)
-**
-**     Description :
-**         The ISR function handling the device receive/transmit 
-**         interrupt.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
+**     Method      :  SM_SPI1_Main (component SPIMaster_LDD)
 */
-PE_ISR(SM_SPI1_Interrupt)
+/*!
+**     @brief
+**         This method is available only in the polling mode (Interrupt
+**         service/event = 'no'). If interrupt service is disabled this
+**         method replaces the interrupt handler. This method should be
+**         called if Receive/SendBlock was invoked before in order to
+**         run the reception/transmission. The end of the
+**         receiving/transmitting is indicated by OnBlockSent or
+**         OnBlockReceived event. 
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+*/
+/* ===================================================================*/
+void SM_SPI1_Main(LDD_TDeviceData *DeviceDataPtr)
 {
-  /* {Default RTOS Adapter} ISR parameter is passed through the global variable */
-  SM_SPI1_TDeviceDataPtr DeviceDataPrv = INT_SPI1__DEFAULT_RTOS_ISRPARAM;
+  SM_SPI1_TDeviceDataPtr DeviceDataPrv = (SM_SPI1_TDeviceDataPtr)DeviceDataPtr;
   uint8_t StatReg = SPI_PDD_ReadStatusReg(SPI1_BASE_PTR); /* Read status register */
 
   if ((StatReg & SPI_PDD_RX_BUFFER_FULL) != 0U) { /* Is any char in HW Rx buffer? */
-    if (DeviceDataPrv->InpDataNumReq != 0x00U) { /* Is the receive block operation pending? */
-      *(DeviceDataPrv->InpDataPtr++) = SPI_PDD_ReadData8bit(SPI1_BASE_PTR); /* Put a character to the receive buffer and increment pointer to receive buffer */
-      DeviceDataPrv->InpRecvDataNum++; /* Increment received char. counter */
-      if (DeviceDataPrv->InpRecvDataNum == DeviceDataPrv->InpDataNumReq) { /* Is the requested number of characters received? */
-        SPI_PDD_DisableInterruptMask(SPI1_BASE_PTR, SPI_PDD_RX_BUFFER_FULL_OR_FAULT); /* Disable Rx buffer full interrupt */
-        DeviceDataPrv->InpDataNumReq = 0x00U; /* If yes then clear number of requested characters to be received. */
-        SM_SPI1_OnBlockReceived(DeviceDataPrv->UserData);
-      }
-    }
   }
-  if ((StatReg & SPI_PDD_TX_BUFFER_EMPTYG) != 0U) { /* Is HW Tx buffer empty? */
-    if (DeviceDataPrv->OutSentDataNum < DeviceDataPrv->OutDataNumReq) { /* Is number of sent characters less than the number of requested incoming characters? */
-      SPI_PDD_WriteData8Bit(SPI1_BASE_PTR, (*((uint8_t *)DeviceDataPrv->OutDataPtr++))); /* Put a character with command to the transmit register and increment pointer to the transmitt buffer */
-      DeviceDataPrv->OutSentDataNum++; /* Increment the counter of sent characters. */
-      if (DeviceDataPrv->OutSentDataNum == DeviceDataPrv->OutDataNumReq) {
-        DeviceDataPrv->OutDataNumReq = 0x00U; /* Clear the counter of characters to be send by SendBlock() */
-        SM_SPI1_OnBlockSent(DeviceDataPrv->UserData);
-      }
-    } else {
-      SPI_PDD_DisableInterruptMask(SPI1_BASE_PTR, SPI_PDD_TX_BUFFER_EMPTY); /* Disable TX interrupt */
-    }
+}
+
+/*
+** ===================================================================
+**     Method      :  HWEnDi (component SPIMaster_LDD)
+**
+**     Description :
+**         Enables or disables the peripheral(s) associated with the 
+**         component. The method is called automatically as a part of the 
+**         Enable and Disable methods and several internal methods.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+static void HWEnDi(LDD_TDeviceData *DeviceDataPtr)
+{
+  if (((SM_SPI1_TDeviceDataPtr)DeviceDataPtr)->EnUser) { /* Enable device? */
+    SPI_PDD_EnableDevice(SPI1_BASE_PTR,PDD_ENABLE); /* Enable device */
+  }
+  else {
+    SPI_PDD_EnableDevice(SPI1_BASE_PTR,PDD_DISABLE); /* Disable device */
   }
 }
 

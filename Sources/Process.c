@@ -16,7 +16,8 @@
  **     Contents    :
  **         Process         - void Process(void);
  **         SplitRawData    - LDD_TError SplitRawData(TADCDataPtr adcDataPtr);
- **     mail        : pzdongdong@163.com
+ **     
+ **     Mail        : pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
  ** ###################################################################*/
@@ -37,8 +38,8 @@
 /* {Default RTOS Adapter} No RTOS includes */
 #include "PE_Error.h"
 #include "PE_Types.h"
-#include "Macros.h"
-#include "Utilities.h"
+
+#include "MyHeaders.h"
 
 /*
  * ===================================================================

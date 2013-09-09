@@ -12,7 +12,7 @@
  **          This file defines global variables used in this project.
  **
  **     
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -77,6 +77,16 @@ LDD_TDeviceData* masterSPI1DevData; /*!< Pointer to SPI1 device data structure i
 LDD_TDeviceData* slaveSPI0DevData; /*!< Pointer to SPI0 device data structure in slave mode. */
 #endif
 
+#if USING_SPI0_DMA
+LDD_TDeviceData* slaveRxSPIDmaDevData;  /*!< Pointer to SPI0 DMA reception device data structure in slave mode. */
+LDD_TDeviceData* slaveTxSPIDmaDevData;  /*!< Pointer to SPI0 DMA transmission device data structure in slave mode. */
+#endif
+
+#if USING_SPI1_DMA
+LDD_TDeviceData* masterSPIRxDmaDevData; /*!< Pointer to SPI1 DMA reception device data structure in master mode. */
+LDD_TDeviceData* masterSPITxDmaDevData; /*!< Pointer to SPI1 DMA transmission device data structure in master mode. */
+#endif
+
 #if USING_UART0
 LDD_TDeviceData* uart0DevData; /*!< Pointer to UAURT0 device data structure. */
 #endif
@@ -87,6 +97,11 @@ LDD_TDeviceData* uart1DevData; /*!< Pointer to UART1 device data structure. */
 
 #if USING_UART2
 LDD_TDeviceData* uart2DevData; /*!< Pointer to UART2 device data structure. */
+#endif
+
+#if USING_DMA
+LDD_TDeviceData* dmaController4SlaveSPIDevData;    /*!< Pointer to DMA controller for slave SPI device data structure. */
+LDD_TDeviceData* dmaController4MasterSPIDevData;   /*!< Pointer to DMA controller for master SPI device data structure. */
 #endif
         /*!
          * @}

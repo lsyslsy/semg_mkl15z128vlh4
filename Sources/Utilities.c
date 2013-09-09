@@ -27,7 +27,7 @@
  **         PrintErrorMessage - void PrintErrorMessage(LDD_TError err);
  **                         
  **                         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
  ** ###################################################################*/

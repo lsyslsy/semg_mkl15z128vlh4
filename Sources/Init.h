@@ -16,6 +16,8 @@
  **			    - User data
  **				- On-chip devices
  **					- SPI0, SPI1
+ **					- SPI1_TX_DMA, SPI1_RX_DMA
+ **					- DMA
  **					- UART0, UART2
  **                 - PTA2
  **                 - PTB1
@@ -29,7 +31,7 @@
  **     Contents    :
  **     			UserInit - UserInit(void);        
  **         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
@@ -44,6 +46,8 @@
  *		<li> On-chip devices
  *			<ul>
  *			<li> SPI0, SPI1
+ *			<li> SPI1_TX_DMA, SPI1_RX_DMA
+ *			<li> DMA
  *			<li> UART0, UART2
  *          <li> PTA2
  *          <li> PTB1
@@ -66,6 +70,8 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
+ *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
  *          <li> PTB1
@@ -99,7 +105,7 @@ extern "C"
  */
 /*!
  *     @brief
- *          Initializes on-chip and peripheral devices. 
+ *          Initialize on-chip and peripheral devices. 
  *          The method is called in the main function and will be called
  *          only once.
  */
@@ -112,7 +118,7 @@ void UserInit(void);
  */
 /*!
  *     @brief
- *          Initializes user data. 
+ *          Initialize user data. 
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -125,7 +131,7 @@ void UserDataInit(void);
  */
 /*!
  *     @brief
- *          Initializes on-chip devices. 
+ *          Initialize on-chip devices. 
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -138,7 +144,7 @@ void OnChipInit(void);
  */
 /*!
  *     @brief
- *          Initializes Peripheral devices. 
+ *          Initialize Peripheral devices. 
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -151,7 +157,7 @@ void PeripheralInit(void);
  */
 /*!
  *     @brief
- *          Initializes GPIO. 
+ *          Initialize GPIO. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -164,7 +170,7 @@ void GPIOInit(void);
  */
 /*!
  *     @brief
- *          Initializes SPI. 
+ *          Initialize SPI. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -173,11 +179,24 @@ void SPIInit(void);
 
 /*
  * ===================================================================
+ *     Method      :  DMAInit (Component DMA)
+ */
+/*!
+ *     @brief
+ *          Initialize DMA controller. Including SPI transmission and reception DMA method.
+ *          The method is called in the OnChipInit function and will be called
+ *          only once.          
+ */
+/* ===================================================================*/
+void DMAInit(void);
+
+/*
+ * ===================================================================
  *     Method      :  UARTInit (Component UART)
  */
 /*!
  *     @brief
- *          Initializes UART. 
+ *          Initialize UART. 
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */

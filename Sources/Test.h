@@ -16,7 +16,7 @@
  **     Contents    :
  **         GPIO    - void GPIOTest(void);
  **         
- **     mail      	: pzdongdong@163.com
+ **     Mail      	: pzdongdong@163.com
  **     
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
