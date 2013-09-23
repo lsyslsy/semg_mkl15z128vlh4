@@ -99,11 +99,12 @@ LDD_TDeviceData* uart1DevData; /*!< Pointer to UART1 device data structure. */
 LDD_TDeviceData* uart2DevData; /*!< Pointer to UART2 device data structure. */
 #endif
 
-#if USING_DMA
+//#if USING_DMA
+/* Already defined in DMA_CTRL.h */
 LDD_TDeviceData* dmaControllerDevData;             /*!< Pointer to DMA controller device data structure. */
-LDD_TDeviceData* dmaController4SlaveSPIDevData;    /*!< Pointer to DMA controller for slave SPI device data structure. */
-LDD_TDeviceData* dmaController4MasterSPIDevData;   /*!< Pointer to DMA controller for master SPI device data structure. */
-#endif
+//LDD_TDeviceData* dmaController4SlaveSPIDevData;    /*!< Pointer to DMA controller for slave SPI device data structure. */
+//LDD_TDeviceData* dmaController4MasterSPIDevData;   /*!< Pointer to DMA controller for master SPI device data structure. */
+//#endif
         /*!
          * @}
          */
@@ -113,6 +114,7 @@ LDD_TDeviceData* dmaController4MasterSPIDevData;   /*!< Pointer to DMA controlle
          */
 LDD_TDeviceData* portA2DevData;  /*!< Pointer to PortA Pin2 device data structure, signal: SYNC_INT. */
 LDD_TDeviceData* portB1DevData;  /*!< Pointer to PortB Pin1 device data structure, signal: START. */
+LDD_TDeviceData* portB19DevData; /*!< Pointer to PortB Pin19 device data structure, signal: UPDRDY. */
 LDD_TDeviceData* portC1DevData;  /*!< Pointer to PortC Pin1 device data structure, signal: DAISY_IN. */
 LDD_TDeviceData* portC2DevData;  /*!< Pointer to PortC Pin2 device data structure, signal: CLKSEL. */
 //LDD_TDeviceData* portC3DevData;  /*!< Pointer to PortC Pin3 device data structure, signal: TEST_SIGNAL. */

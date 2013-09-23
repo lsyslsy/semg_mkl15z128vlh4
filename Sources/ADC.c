@@ -37,8 +37,8 @@
  **         SendCommand        - LDD_TError ADCSendCommand(byte* cmd);
  **         ReadRegister       - LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n);
  **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
- **         ReadData           - LDD_TError ADCReadContinuousData();
- **                            - LDD_TError ADCReadData();
+ **         ReadData           - LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
+ **                            - LDD_TError ADCReadData(byte* dat, uint8 n);
  **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
  **
@@ -79,6 +79,9 @@
 #include "stdlib.h"
 
 #include "MyHeaders.h"
+
+
+static LDD_TError CheckCommand(byte cmd);
 
 /* 
  * ===================================================================
@@ -649,7 +652,8 @@ LDD_TError ADCStopReadDataContinuous(void)
  */
 /*!
  *     @brief
- *          Send command to ADC via SPI1.
+ *          Send command to ADC via SPI1. Please use ADCReadRegister and
+ *          ADCWriteRegister, but not this function, to read and write ADC's register!
  *     @param[in]
  *          cmd             - Pointer to command to be sent.
  *                            See group ADC Commands in Macros.h.
@@ -669,6 +673,7 @@ LDD_TError ADCSendCommand(byte* cmd)
 {
     LDD_TError err;
     uint8 len;
+    byte dummy;
     
     /* Check the command. */
     err = CheckCommand(*cmd);
@@ -681,7 +686,8 @@ LDD_TError ADCSendCommand(byte* cmd)
     len = ((*cmd) < ADC_CMD_RREG(0x00)) ? 1 : 2;
     
     /* Try to send the command to ADC. */
-    err = SPI1SendData((LDD_DMA_TAddress)cmd, (LDD_DMA_TByteCount)len);
+    err = SPI1ReceiveSendData((LDD_DMA_TAddress)cmd, (LDD_DMA_TAddress)(&dummy),
+                              (LDD_DMA_TByteCount)len, (LDD_DMA_TByteCount)len);
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);         /* If error occurred, print the error message, */
@@ -767,8 +773,6 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
         return err;                                 /* then return the error type. */
     }
     
-//    free(strCmd);
-    
     return err;
 }
 
@@ -800,8 +804,9 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
 LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
 {
     LDD_TError err;
+    byte strCmd[REGISTER_NUMBER + 2];                   /* Write register command is a double-byte command. */
+    byte dummy[REGISTER_NUMBER + 2];                    /* Receive dummy message. */
     uint8 i;
-    byte* strCmd = NULL;                                     /* Write register command is a double-byte command. */
     
     /* Check if the register address is valid. */
     if(regAddr < ADC_REG_ID || regAddr > ADC_REG_WCT2)
@@ -829,38 +834,25 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
         
         return err;
     }
-    
-    strCmd = (byte*)malloc(n + 2);
-    if(!strCmd)
-    {
-        err = ERR_NOTAVAIL;
-        PrintErrorMessage(err);
-        
-        return err;
-    }
-    memset(strCmd, 0xAAU, n + 2);
-    
-    /* Copy the data to be written to the command buffer. */
-    for(i = 0; i < n; i++)
-    {
-        strCmd[n + 2 + i] = dat[i]; 
-    }
 
     /* Send the write data command to ADC. */
     strCmd[0] = ADC_CMD_WREG(regAddr);              /* According to user manual, write ADC register command, */
     strCmd[1] = n - 1;                              /* and if the number of registers to be written is n, n - 1 should be sent to ADC. */
-
-    err = SPI1SendData((LDD_DMA_TAddress)strCmd, n + 2);
+    for(i = 0; i < n; i++)
+    {
+        strCmd[i + 2] = dat[i];
+    }
+    
+    err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dummy,
+                              (LDD_DMA_TByteCount)(n + 2), (LDD_DMA_TByteCount)(n + 2));
+    
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
         printf("Send command error\n");             /* If error occurred, print message, */
         
-        free(strCmd);
         return err;                                 /* then return the error type. */
     }
-    
-    free(strCmd);
     
     return err;
 }
@@ -875,7 +867,7 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]
- *          len             - The length of data bytes to be read.
+ *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -888,11 +880,10 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
  *                              - etc.         - See PE_Error.h.
  */  
 /* ===================================================================*/
-LDD_TError ADCReadContinuousData(byte* dat, uint16 len)
+LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
 {
-//    extern volatile bool flagMasterReceived;
     LDD_TError err;
-    byte* dummy = NULL;
+    byte dummy[RAW_DATA_SIZE];
     
     /* Check if the reception buffer is valid. */
     if(!dat)
@@ -904,7 +895,7 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len)
     }
     
     /* Check if the length of data bytes is valid. */
-    if(len < 0 || len > USHRT_MAX)
+    if(n < 0 || n > RAW_DATA_SIZE)
     {
         err = ERR_PARAM_LENGTH;
         PrintErrorMessage(err);
@@ -912,56 +903,18 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len)
         return err;
     }
     
-    /* Make sure the flag is FALSE before reception begins. */
-//    flagMasterReceived = FALSE;
-    
-    dummy = (byte*)malloc(len + 1);             /* Dummy message provides clock for slave SPI device. */
-    if(!dummy)                           /* If the allocation failed, return with error. */
-    {
-        err = ERR_NOTAVAIL;
-        PrintErrorMessage(err);
-        
-        return err;
-    }
-    memset(dummy, 0, len + 1);
-    
-    /* 
-     * Prepare the buffer of dummy message transmitted to ADC
-     * as the clock for slave SPI device to transmit data.
-     */
-//    err = SPI1Send(dummy, len + 1);
+    /* Try to receive data. */
+    err = SPI1ReceiveSendData((LDD_DMA_TAddress)dummy, (LDD_DMA_TAddress)dat,
+                              (LDD_DMA_TByteCount)n, (LDD_DMA_TByteCount)n);
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
 #if DEBUG
         printf("Send dummy error\n");
 #endif        
-        free(dummy);
         return err;
     }
     
-    /* Prepare the reception buffer for the data. */
-//    err = SPI1Receive(dat, len);
-    if(err != ERR_OK)
-    {
-        PrintErrorMessage(err);
-#if DEBUG
-        printf("Read data error\n");
-#endif
-        free(dummy);
-        return err;
-    }
-    
-    /* 
-     * Enable the transmission and reception interrupts
-     * to Send dummy message and receive data.
-     */
-//    SPI1EnableInterrupt();
-    
-    /* Wait until the reception finishes. */
-//    while(!flagMasterReceived);
-    
-    free(dummy);
     return err;
 }
 
@@ -971,11 +924,12 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len)
  */
 /*!
  *     @brief
- *          Read conversion data from ADC in RDATA mode via SPI1.
+ *          Read conversion data from ADC in RDATA mode via SPI1. The first byte is useless,
+ *          the real data starts at index 1!!!
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]
- *          len             - The length of data bytes to be read.
+ *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -988,12 +942,10 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len)
  *                              - etc.         - See PE_Error.h.
  */                                
 /* ===================================================================*/
-LDD_TError ADCReadData(byte* dat, uint16 len)
+LDD_TError ADCReadData(byte* dat, uint8 n)
 {
-//    extern volatile bool flagMasterReceived;
     LDD_TError err;
-    byte* dummy = NULL;
-    byte cmd;
+    byte strCmd[RAW_DATA_SIZE + 1];
     
     /* Check if the reception buffer is valid. */
     if(!dat)
@@ -1005,7 +957,7 @@ LDD_TError ADCReadData(byte* dat, uint16 len)
     }
     
     /* Check if the length of data bytes is valid. */
-    if(len < 0 || len > USHRT_MAX)
+    if(n < 0 || n > RAW_DATA_SIZE)
     {
         err = ERR_PARAM_LENGTH;
         PrintErrorMessage(err);
@@ -1013,68 +965,20 @@ LDD_TError ADCReadData(byte* dat, uint16 len)
         return err;
     }
     
-    /* Make sure the flag is FALSE before reception begins. */
-//    flagMasterReceived = FALSE;
-    
-    dummy = (byte*)malloc(len + 1);                 /* Dummy message provides clock for slave SPI device. */
-    if(!dummy)                               /* If the allocation failed, return with error. */
-    {
-        err = ERR_NOTAVAIL;
-        PrintErrorMessage(err);
-        
-        return err;
-    }
-    memset(dummy, 0, len + 1);
-    
-    /* Send the read data command to ADC. */
-    cmd = ADC_CMD_RDATA;
-//    err = ADCSendCommand(&cmd, 1);
+    strCmd[0] = ADC_CMD_RDATA;
+    /* Try to send and receive the data.
+     * Remember that the dat[0] is useless!!!
+     * The real data begins at dat[1]!!! */
+    err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
+                        (LDD_DMA_TByteCount)(n + 1), (LDD_DMA_TByteCount)(n + 1));
     if(err != ERR_OK)
     {
 #if DEBUG
         printf("Send command error\n");             /* If error occurred, print message, */
 #endif
-        free(dummy);                                /* and free the memory allocated dynamically, */
         return err;                                 /* then return the error type. */
     }
     
-    /* 
-     * Prepare the buffer of dummy message transmitted to ADC
-     * as the clock for slave SPI device to transmit data.
-     */
-//    err = SPI1Send(dummy, len + 1);
-    if(err != ERR_OK)
-    {
-        PrintErrorMessage(err);
-#if DEBUG
-        printf("Send dummy error\n");
-#endif        
-        free(dummy);
-        return err;
-    }
-    
-    /* Prepare the reception buffer for the data. */
-//    err = SPI1Receive(dat, len);
-    if(err != ERR_OK)
-    {
-        PrintErrorMessage(err);
-#if DEBUG
-        printf("Read data error\n");
-#endif
-        free(dummy);
-        return err;
-    }
-    
-    /* 
-     * Enable the transmission and reception interrupts
-     * to Send dummy message and receive data.
-     */
-//    SPI1EnableInterrupt();
-    
-    /* Wait until the reception finishes. */
-//    while(!flagMasterReceived);
-    
-    free(dummy);
     return err;
 }
 
@@ -1120,7 +1024,7 @@ TADCData ADCDataInit(TADCDataPtr userDataPtr)
  *         	                - ERR_PARAM_LENGTH: Length is illegal.
  */
 /* ===================================================================*/
-LDD_TError CheckCommand(byte cmd)
+static LDD_TError CheckCommand(byte cmd)
 {
     if(cmd != ADC_CMD_WAKEUP  &&
        cmd != ADC_CMD_STANDBY &&

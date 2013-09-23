@@ -30,6 +30,8 @@
 #include "Events.h"
 #include "SysTick_PDD.h"
 #include "SysTick.h"
+
+#include "SPI.h"
 #include "MyHeaders.h"
 
 #ifdef __cplusplus
@@ -119,6 +121,9 @@ void SS_SPI0_OnBlockSent(LDD_TUserData *UserDataPtr)
 void SS_SPI0_OnBlockReceived(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
+    
+    
+    
     flagSlaveReceived = TRUE;
 }
 
@@ -230,7 +235,10 @@ void AS_UART2_OnBlockSent(LDD_TUserData *UserDataPtr)
 void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-
+    extern TADCDataPtr adcDataPtr;
+    
+    flagSPI1RxDMATransCompleted = FALSE;
+    ADCReadContinuousData(adcDataPtr->rawData, (LDD_DMA_TByteCount)RAW_DATA_SIZE);
     
     flagDataReady = TRUE;
 }
@@ -256,10 +264,16 @@ void EINT_SYNC_INT_OnInterrupt(LDD_TUserData *UserDataPtr)
     extern volatile byte* uploadBufferPtr;
     extern volatile byte msg[2000];
     extern volatile byte msg2[2000];
+    byte dummy[2000];
     
     EIntSyncInterruptDisable(EINT_SYNC_INT);
     
+    flagSPI0RxDMATransCompleted = FALSE;
     uploadBufferPtr = (uploadBufferPtr == msg) ? msg2 : msg;
+    SPI0ReceiveSendData((LDD_DMA_TAddress)uploadBufferPtr, (LDD_DMA_TAddress)dummy,
+                        (LDD_DMA_TByteCount)2000, (LDD_DMA_TByteCount)2000);
+    
+    IOUploadReadySetVal();
     
     flagUploadReady = TRUE;
 }
@@ -318,7 +332,7 @@ void DMAT_M_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
     SPI1RxDMADisable();
-    SPI1DisableRxDMA();
+//    SPI1DisableRxDMA();
     flagSPI1RxDMATransCompleted = TRUE;    
 }
 
@@ -369,8 +383,9 @@ void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
     SPI1TxDMADisable();
-    SPI1DisableTxDMA();
+//    SPI1DisableTxDMA();
     flagSPI1TxDMATransCompleted = TRUE;
+    flagDataReady = FALSE;
 }
 
 /*
@@ -420,7 +435,12 @@ void DMAT_S_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
     SPI0RxDMADisable();
-    SPI0DisableRxDMA();
+//    SPI0DisableRxDMA();
+   
+    IOUploadReadyClrVal();
+    EIntSyncInterruptEnable(NULL);
+    
+    flagUploadReady = FALSE;
     flagSPI0RxDMATransCompleted = TRUE;
 }
 
@@ -471,7 +491,7 @@ void DMAT_S_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
     SPI0TxDMADisable();
-    SPI0RxDMADisable();
+//    SPI0RxDMADisable();
     flagSPI0TxDMATransCompleted = TRUE;
 }
 

@@ -7,7 +7,7 @@
 **     Version     : Component 01.000, Driver 01.04, CPU db: 3.00.000
 **     Datasheet   : KL15P80M48SF0RM, Rev.3, Sep 2012
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
+**     Date/Time   : 2013-09-23, 16:24, # CodeGen: 154
 **     Abstract    :
 **
 **     Settings    :
@@ -52,6 +52,7 @@
 #include "DMAT_M_SPI_RX.h"
 #include "DMAT_S_SPI_TX.h"
 #include "DMAT_S_SPI_RX.h"
+#include "BitIO_UPRDY.h"
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"

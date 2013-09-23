@@ -84,9 +84,24 @@
 #define MAX_REGISTER_READ_NUMBER     0x20U                                              /*!< Maxmimum number of registers to be read. */
 #define RAW_DATA_HEAD_SIZE           0x03U                                              /*!< Head size of raw data from ADC. */
 #define RAW_DATA_SIZE                RAW_DATA_HEAD_SIZE + USING_CHANNEL_NUMBER * 2      /*!< Size of raw data = 3Bytes + USING_CHANNEL_NUMBER * 2Bytes. */
-#define RAW_DATA_HEAD                0x0CU                                              /*!< The first 4 bits of right ADC raw data is always 0b1100. */
+#define RAW_DATA_HEAD                0x0CU                                              /*!< The first 4 bits of right ADC value must be 0b1100. */
+#define RAW_DATA_HEAD_MASK           0x0FU                                              /*!< The mask of first 4 bits. The right value is always 0b1100. */
+#define RAW_DATA_GPIO_MASK           0x0FU                                              /*!< The mask of GPIO data of ADC value. */
 #define BYTE_NUMBER_PER_CHANNEL      0x02U                                              /*!< The number of bytes per channel's data. */
 #endif  /* #if USING_ADS1198 */
+    /*!
+     * @}
+     */
+    /*!
+     * addtogroup DMAConst DMA constants
+     * @{
+     */
+#if USING_DMA
+#define SPI1_TX_DMA_CHANNEL 0x00U
+#define SPI1_RX_DMA_CHANNEL 0x01U
+#define SPI0_TX_DMA_CHANNEL 0x02U
+#define SPI0_RX_DMA_CHANNEL 0x03U
+#endif /* #if USING_DMA */
     /*!
      * @}
      */

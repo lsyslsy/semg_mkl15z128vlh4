@@ -37,8 +37,8 @@
  **         SendCommand        - LDD_TError ADCSendCommand(byte* cmd);
  **         ReadRegister       - LDD_TError ADCReadRegister(byte regAddrbyte* dat, uint8 n);
  **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
- **         ReadData           - LDD_TError ADCReadContinuousData();
- **                            - LDD_TError ADCReadData();
+ **         ReadData           - LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
+ **                            - LDD_TError ADCReadData(byte* dat, uint8 n);
  **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
  **         
@@ -445,7 +445,7 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]
- *          len             - The length of data bytes to be read.
+ *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -458,7 +458,7 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
-LDD_TError ADCReadContinuousData(byte* dat, uint16 len);
+LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
 
 /*
  * ===================================================================
@@ -466,11 +466,12 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len);
  */
 /*!
  *     @brief
- *          Read conversion data from ADC in RDATA mode via SPI1.
+ *          Read conversion data from ADC in RDATA mode via SPI1. The first byte is useless,
+ *          the real data starts at index 1!!!
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]
- *          len             - The length of data bytes to be read.
+ *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -483,7 +484,7 @@ LDD_TError ADCReadContinuousData(byte* dat, uint16 len);
  *                              - etc.         - See PE_Error.h.
  */                                
 /* ===================================================================*/
-LDD_TError ADCReadData(byte* dat, uint16 len);
+LDD_TError ADCReadData(byte* dat, uint8 n);
 
 /*
  * ===================================================================
@@ -499,23 +500,6 @@ LDD_TError ADCReadData(byte* dat, uint16 len);
  */
 /* ===================================================================*/
 TADCData ADCDataInit(TADCDataPtr userDataPtr);
-
-/*
- * ===================================================================
- *     Method      : CheckCommand (Module ADC)
- */
-/*!
- *     @brief
- *          This method checks if the command is valid.
- *     @param[in]
- *          cmd             - Command to be checked.
- *     @return
- *                          - ERR_OK: Command is valid and the length is legal.
- *                          - ERR_PARAM_COMMAND: Command is invalid.
- *                          - ERR_PARAM_LENGTH: Length is illegal.
- */
-/* ===================================================================*/
-LDD_TError CheckCommand(byte cmd);
     
     /* END ADC. */
 

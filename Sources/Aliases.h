@@ -63,6 +63,7 @@
 #define EINT_SYNC_INT  portA2DevData
 #define EINT_NOT_DRDY  portD4DevData
 #define IO_START       portB1DevData
+#define IO_UPRDY      portB19DevData
 #define IO_DAISY_IN    portC1DevData
 #define IO_CLKSEL      portC2DevData
 #define IO_TEST_SGINAL portC3DevData
@@ -76,6 +77,7 @@
              */
 #if USING_DMA
 #define DMA_CTRL      dmaControllerDevData
+//#define DMA_CTRL      DMA_CTRL_DeviceDataPtr
 #endif
             /*!
              * @{
@@ -151,6 +153,17 @@
 #define IOStartPutVal(value)     BitIO_START_PutVal(IO_START, value)
 #define IOStartClrVal()          BitIO_START_ClrVal(IO_START)
 #define IOStartSetVal()          BitIO_START_SetVal(IO_START)
+            /*!
+             * @}
+             */
+            /*!
+             * @{
+             */
+#define IOUploadReadyInit(userDataPtr) BitIO_UPRDY_Init(userDataPtr)
+#define IOUploadReadyGetVal()          BitIO_UPRDY_GetVal(IO_UPRDY)
+#define IOUploadReadyPutVal(value)     BitIO_UPRDY_PutVal(IO_UPRDY, value)
+#define IOUploadReadyClrVal()          BitIO_UPRDY_ClrVal(IO_UPRDY)
+#define IOUploadReadySetVal()          BitIO_UPRDY_SetVal(IO_UPRDY)
             /*!
              * @}
              */

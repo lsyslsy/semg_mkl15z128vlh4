@@ -20,7 +20,7 @@
  **					- DMA
  **					- UART0, UART2
  **                 - PTA2
- **                 - PTB1
+ **                 - PTB1, PTB19
  **                 - PTC1, PTC2
  **                 - PTD4
  **                 - PTE18, PTE19
@@ -50,7 +50,7 @@
  *			<li> DMA
  *			<li> UART0, UART2
  *          <li> PTA2
- *          <li> PTB1
+ *          <li> PTB1, PTB19
  *          <li> PTC1, PTC2
  *          <li> PTD4
  *          <li> PTE18, PTE19
@@ -74,7 +74,7 @@
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
- *          <li> PTB1
+ *          <li> PTB1, PTB19
  *          <li> PTC1, PTC2
  *          <li> PTD4
  *          <li> PTE18, PTE19
@@ -111,97 +111,6 @@ extern "C"
  */
 /* ===================================================================*/
 void UserInit(void);
-
-/*
- * ===================================================================
- *     Method      :  UserDataInit ()
- */
-/*!
- *     @brief
- *          Initialize user data. 
- *          The method is called in the UserInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void UserDataInit(void);
-
-/*
- * ===================================================================
- *     Method      :  OnChipInit (Component on-chip devices)
- */
-/*!
- *     @brief
- *          Initialize on-chip devices. 
- *          The method is called in the UserInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void OnChipInit(void);
-
-/*
- * ===================================================================
- *     Method      :  PeripheralInit (Component Peripheral devices)
- */
-/*!
- *     @brief
- *          Initialize Peripheral devices. 
- *          The method is called in the UserInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void PeripheralInit(void);
-
-/*
- * ===================================================================
- *     Method      :  GPIOInit (Component GPIO)
- */
-/*!
- *     @brief
- *          Initialize GPIO. 
- *          The method is called in the OnChipInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void GPIOInit(void);
-
-/*
- * ===================================================================
- *     Method      :  SPIInit (Component SPI)
- */
-/*!
- *     @brief
- *          Initialize SPI. 
- *          The method is called in the OnChipInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void SPIInit(void);
-
-/*
- * ===================================================================
- *     Method      :  DMAInit (Component DMA)
- */
-/*!
- *     @brief
- *          Initialize DMA controller. Including SPI transmission and reception DMA method.
- *          The method is called in the OnChipInit function and will be called
- *          only once.          
- */
-/* ===================================================================*/
-void DMAInit(void);
-
-/*
- * ===================================================================
- *     Method      :  UARTInit (Component UART)
- */
-/*!
- *     @brief
- *          Initialize UART. 
- *          The method is called in the OnChipInit function and will be called
- *          only once.
- */
-/* ===================================================================*/
-void UARTInit(void);
 
 /* END Cpu. */
 

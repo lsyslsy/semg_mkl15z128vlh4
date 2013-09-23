@@ -51,6 +51,7 @@
 #include "DMAT_M_SPI_RX.h"
 #include "DMAT_S_SPI_TX.h"
 #include "DMAT_S_SPI_RX.h"
+#include "BitIO_UPRDY.h"
 
 #ifdef __cplusplus
 extern "C" {

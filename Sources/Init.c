@@ -20,7 +20,7 @@
  **					- DMA
  **					- UART0, UART2
  **					- PTA2
- **					- PTB1
+ **					- PTB1, PTB19
  **					- PTC1, PTC2
  **					- PTD4
  **					- PTE18, PTE19
@@ -50,7 +50,7 @@
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
- *          <li> PTB1
+ *          <li> PTB1, PTB19
  *          <li> PTC1, PTC2
  *          <li> PTD4
  *          <li> PTE18, PTE19
@@ -74,7 +74,7 @@
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
- *          <li> PTB1
+ *          <li> PTB1, PTB19
  *          <li> PTC1, PTC2
  *          <li> PTD4
  *          <li> PTE18, PTE19
@@ -96,6 +96,7 @@
 #include "EINT_SYNC_INT.h"
 #include "BitIO_NOT_PWDN.h"
 #include "BitIO_NOT_RESET.h"
+#include "BitIO_UPRDY.h"
 #include "BitIO_START.h"
 #include "BitIO_DAISY_IN.h"
 #include "BitIO_CLKSEL.h"
@@ -111,6 +112,15 @@
 #include "DMAT_M_SPI_RX.h"
 
 #include "MyHeaders.h"
+
+
+static void UserDataInit(void);
+static void OnChipInit(void);
+static void PeripheralInit(void);
+static void GPIOInit(void);
+static void SPIInit(void);
+static void DMAInit(void);
+static void UARTInit(void);
 
 /*
  * ===================================================================
@@ -155,7 +165,7 @@ void UserInit(void)
   *          only once.
   */
  /* ===================================================================*/
-void UserDataInit(void)
+static void UserDataInit(void)
 {
     extern TADCData adcData;
     extern TADCDataPtr adcDataPtr;
@@ -175,7 +185,7 @@ void UserDataInit(void)
  *          only once.
  */
 /* ===================================================================*/
-void OnChipInit(void)
+static void OnChipInit(void)
 {
 #if DEBUG
     printf("| |-+SysTickInit begins...\n");
@@ -217,7 +227,7 @@ void OnChipInit(void)
  *          only once.
  */
 /* ===================================================================*/
-void PeripheralInit(void)
+static void PeripheralInit(void)
 {
 #if DEBUG
     printf("| |-+ADCInit begins...\n");
@@ -239,7 +249,7 @@ void PeripheralInit(void)
  *          only once.
  */
 /* ===================================================================*/
-void GPIOInit(void)
+static void GPIOInit(void)
 {
     /*
      * Initialize Port SYNC_INT for external interrupt from ARM. 
@@ -291,6 +301,13 @@ void GPIOInit(void)
      */
     IO_NOT_RESET = IONotResetInit(NULL);
     
+    /*
+     * Initialize Port UPRDY for output to ARM.
+     * Inform arm upload data are ready to retrieve.
+     * Default: 0
+     */
+    IO_UPRDY = IOUploadReadyInit(NULL);
+    
 //    /*
 //     * Initialize bidirection Port TEST_SIGNAL for test some functions.
 //     * Initial direction is output.
@@ -310,7 +327,7 @@ void GPIOInit(void)
  *          only once.
  */
 /* ===================================================================*/
-void SPIInit(void)
+static void SPIInit(void)
 {
 #if USING_SPI0
     SPI0 = SPI0Init(NULL);      /* Initialize SPI0 in slave mode, transmitter data to ARM. */
@@ -322,8 +339,8 @@ void SPIInit(void)
 #if USING_SPI1
     SPI1 = SPI1Init(NULL);      /* Initialize SPI1 in master mode, read ADC data. */
     SPI1Enable();
-//    SPI1EnableRxDMA();
-//    SPI1EnableTxDMA();
+    SPI1EnableRxDMA();
+    SPI1EnableTxDMA();
 #endif
 }
 
@@ -338,7 +355,7 @@ void SPIInit(void)
  *         	only once.         	
  */
 /* ===================================================================*/
-void DMAInit(void)
+static void DMAInit(void)
 {
 #if USING_DMA
     DMA_CTRL = DMAControllerInit(NULL);
@@ -375,7 +392,7 @@ void DMAInit(void)
  *          only once.
  */
 /* ===================================================================*/
-void UARTInit(void)
+static void UARTInit(void)
 {
 #if USING_UART1
     UART1 = UART1Init(NULL);    /* Initialize UART1. */
