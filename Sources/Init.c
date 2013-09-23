@@ -16,7 +16,7 @@
  **			    - User data
  **				- On-chip devices
  **					- SPI0, SPI1
- **					- SPI1_TX_DMA, SPI1_RX_DMA
+ **					- SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  **					- DMA
  **					- UART0, UART2
  **					- PTA2
@@ -46,7 +46,7 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
- *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
@@ -70,7 +70,7 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
- *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2
@@ -107,7 +107,7 @@
 #include "Events.h"
 #include "Cpu.h"
 #include "DMAT_M_SPI_TX.h"
-#include "DMA_M_SPI.h"
+#include "DMA_CTRL.h"
 #include "DMAT_M_SPI_RX.h"
 
 #include "MyHeaders.h"
@@ -188,6 +188,11 @@ void OnChipInit(void)
     GPIOInit();
 #if DEBUG
     printf("| | -GPIOInit finished.\n");
+    printf("| |-+DMAInit begins...\n");
+#endif
+    DMAInit();
+#if DEBUG
+    printf("| | -DMAInit finished.\n");
     printf("| |-+UARTInit begins...\n");
 #endif
     UARTInit();
@@ -198,11 +203,6 @@ void OnChipInit(void)
     SPIInit();
 #if DEBUG
     printf("| | -SPIInit finished.\n");
-    printf("| | -DMAInit begins...\n");
-#endif
-    DMAInit();
-#if DEBUG
-    printf("| | -DMAInit finished.\n");
 #endif
 }
 
@@ -314,10 +314,16 @@ void SPIInit(void)
 {
 #if USING_SPI0
     SPI0 = SPI0Init(NULL);      /* Initialize SPI0 in slave mode, transmitter data to ARM. */
+    SPI0Enable();
+//    SPI0EnableRxDMA();
+//    SPI0EnableTxDMA();
 #endif
     
 #if USING_SPI1
     SPI1 = SPI1Init(NULL);      /* Initialize SPI1 in master mode, read ADC data. */
+    SPI1Enable();
+//    SPI1EnableRxDMA();
+//    SPI1EnableTxDMA();
 #endif
 }
 
@@ -335,20 +341,27 @@ void SPIInit(void)
 void DMAInit(void)
 {
 #if USING_DMA
-//    DMA4SPI0 = DMA4SPI0Init();
-    DMA4SPI1 = DMA4SPI1Init();
+    DMA_CTRL = DMAControllerInit(NULL);
+    DMAControllerEnable();
 #endif
     
 #if USING_SPI0_DMA
-    SPI0TxDma = SPI0TxDmaInit();
-    SPI0RxDma = SPI0RxDmaInit();
+    SPI0_TX_DMA = SPI0TxDMAInit(NULL);
+    SPI0TxDMADisable();
+    SPI0TxDMAAllocateChannel();
+    SPI0_RX_DMA = SPI0RxDMAInit(NULL);
+    SPI0RxDMADisable();
+    SPI0RxDMAAllocateChannel();
 #endif
     
 #if USING_SPI1_DMA
-    SPI1TxDma = SPI1TxDmaInit();
-    SPI1RxDma = SPI1RxDmaInit();
+    SPI1_TX_DMA = SPI1TxDMAInit(NULL);
+    SPI1TxDMADisable();
+    SPI1TxDMAAllocateChannel();
+    SPI1_RX_DMA = SPI1RxDMAInit(NULL);
+    SPI1RxDMADisable();
+    SPI1RxDMAAllocateChannel();
 #endif
-    
 }
 
 /*
@@ -373,7 +386,7 @@ void UARTInit(void)
 #endif
 }
 
-/* END Init. */
+    /* END Init. */
 
 /*!
  * @}

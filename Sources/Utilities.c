@@ -63,9 +63,8 @@
  * Global Variables
  * ===================================================================
  */
-volatile bool flagDelayed = FALSE;   /*!< Flag of delay status. */
-extern volatile bool flagUartReceived;
-extern volatile bool flagUartSent;
+extern volatile bool flagDelayed;   /*!< Flag of delay status. */
+
 
 /*
  * ===================================================================

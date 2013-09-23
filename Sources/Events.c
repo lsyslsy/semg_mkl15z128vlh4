@@ -26,14 +26,11 @@
  **  @{
  */
 /* MODULE Events */
-
-#include "Aliases.h"
 #include "Cpu.h"
 #include "Events.h"
-#include "Globals.h"
 #include "SysTick_PDD.h"
 #include "SysTick.h"
-#include "Utilities.h"
+#include "MyHeaders.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -47,16 +44,19 @@ extern "C"
  * Global Variables
  * ===================================================================
  */
-extern volatile bool flagMasterReceived;
-extern volatile bool flagMasterSent;
-extern volatile bool flagSlaveReceived;
-extern volatile bool flagSlaveSent;
-extern volatile bool flagDataReady;
-extern volatile bool flagUartReceived;
-extern volatile bool flagUartSent;
-extern volatile bool flagUploadReady;
-extern volatile bool flagDelayed;
-extern volatile byte* uploadBufferPtr;
+volatile bool flagMasterReceived = FALSE;
+volatile bool flagMasterSent = FALSE;
+volatile bool flagSlaveReceived = FALSE;
+volatile bool flagSlaveSent = FALSE;
+volatile bool flagUartReceived = FALSE;
+volatile bool flagUartSent = FALSE;
+volatile bool flagDataReady = FALSE;
+volatile bool flagUploadReady = FALSE;
+volatile bool flagSPI0TxDMATransCompleted = FALSE;
+volatile bool flagSPI0RxDMATransCompleted = FALSE;
+volatile bool flagSPI1TxDMATransCompleted = FALSE;
+volatile bool flagSPI1RxDMATransCompleted = FALSE;
+volatile bool flagDelayed = FALSE;
 
 /*
  ** ===================================================================
@@ -253,6 +253,7 @@ void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
 void EINT_SYNC_INT_OnInterrupt(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
+    extern volatile byte* uploadBufferPtr;
     extern volatile byte msg[2000];
     extern volatile byte msg2[2000];
     
@@ -316,6 +317,9 @@ PE_ISR(SysTick_Interrupt)
 void DMAT_M_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    SPI1RxDMADisable();
+    SPI1DisableRxDMA();
+    flagSPI1RxDMATransCompleted = TRUE;    
 }
 
 /*
@@ -364,6 +368,9 @@ void DMAT_M_SPI_RX_OnError(LDD_TUserData *UserDataPtr)
 void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    SPI1TxDMADisable();
+    SPI1DisableTxDMA();
+    flagSPI1TxDMATransCompleted = TRUE;
 }
 
 /*
@@ -385,6 +392,108 @@ void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 */
 /* ===================================================================*/
 void DMAT_M_SPI_TX_OnError(LDD_TUserData *UserDataPtr)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  DMAT_S_SPI_RX_OnComplete (module Events)
+**
+**     Component   :  DMAT_S_SPI_RX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called at the end of a DMA transfer. If the Half complete
+**         property in initialization section is anabled, this event is
+**         also called when current major iteration count reaches the
+**         halfway point. See SetEventMask() and GetEventMask() methods.
+**         This event is enabled only if Interrupts property in Channel
+**         select section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_S_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
+{
+  /* Write your code here ... */
+    SPI0RxDMADisable();
+    SPI0DisableRxDMA();
+    flagSPI0RxDMATransCompleted = TRUE;
+}
+
+/*
+** ===================================================================
+**     Event       :  DMAT_S_SPI_RX_OnError (module Events)
+**
+**     Component   :  DMAT_S_SPI_RX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called when error in channel settings is detected. See
+**         SetEventMask() and GetEventMask() methods. This event is
+**         enabled only if Interrupts property in Channel select
+**         section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_S_SPI_RX_OnError(LDD_TUserData *UserDataPtr)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  DMAT_S_SPI_TX_OnComplete (module Events)
+**
+**     Component   :  DMAT_S_SPI_TX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called at the end of a DMA transfer. If the Half complete
+**         property in initialization section is anabled, this event is
+**         also called when current major iteration count reaches the
+**         halfway point. See SetEventMask() and GetEventMask() methods.
+**         This event is enabled only if Interrupts property in Channel
+**         select section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_S_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
+{
+  /* Write your code here ... */
+    SPI0TxDMADisable();
+    SPI0RxDMADisable();
+    flagSPI0TxDMATransCompleted = TRUE;
+}
+
+/*
+** ===================================================================
+**     Event       :  DMAT_S_SPI_TX_OnError (module Events)
+**
+**     Component   :  DMAT_S_SPI_TX [DMATransfer_LDD]
+*/
+/*!
+**     @brief
+**         Called when error in channel settings is detected. See
+**         SetEventMask() and GetEventMask() methods. This event is
+**         enabled only if Interrupts property in Channel select
+**         section is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void DMAT_S_SPI_TX_OnError(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
 }

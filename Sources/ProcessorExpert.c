@@ -45,13 +45,17 @@
 #include "EINT_NOT_DRDY.h"
 #include "EINT_SYNC_INT.h"
 #include "DMAT_M_SPI_TX.h"
-#include "DMA_M_SPI.h"
+#include "DMA_CTRL.h"
 #include "DMAT_M_SPI_RX.h"
+#include "DMAT_S_SPI_TX.h"
+#include "DMAT_S_SPI_RX.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "IO_Map.h"
+
+#include "SPI_PDD.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #include "MyHeaders.h"
@@ -69,14 +73,6 @@
  * ===================================================================
  */
 extern TADCDataPtr adcDataPtr;
-volatile bool flagMasterReceived = FALSE;
-volatile bool flagMasterSent = FALSE;
-volatile bool flagSlaveReceived = FALSE;
-volatile bool flagSlaveSent = FALSE;
-volatile bool flagUartReceived = FALSE;
-volatile bool flagUartSent = FALSE;
-volatile bool flagDataReady = FALSE;
-volatile bool flagUploadReady = FALSE;
 volatile byte* uploadBufferPtr = NULL;
 volatile byte msg[MSG_SIZE] = {0};
 volatile byte msg2[MSG_SIZE] = {0};
@@ -91,11 +87,14 @@ int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
     /* Write your local variable definition here */
+    extern bool flagSPI1RxDMATransCompleted;
     uint8 len = 20;
     uint8 count = 0;
-    uint32 i = 0;
+    byte i = 0;
+    byte* rs = NULL;
     byte cmd = 0xFFU;
-    byte strCmd[2] = {0};
+    byte strCmd[3] = {0};
+    byte ans[30] = {0xFFU, 0xFFU, 0xFFU, 0xFFU};
     byte dummy[MSG_SIZE] = {0};
     byte data[100] = {0};
     byte hw[] = "Hello World!";
@@ -106,7 +105,7 @@ int main(void)
 
     /* Write your code here */
     /* For example: for(;;) { } */
-
+    
     /* Initialize on-chip and peripheral devices */
 #if DEBUG
     GPIOTest();
@@ -120,8 +119,41 @@ int main(void)
 #if DEBUG
     GPIOTest();
 #endif
-
     
+    
+    cmd = ADC_CMD_SDATAC;
+    ADCSendCommand(&cmd);
+    
+    cmd = ADC_REG_CONFIG1;
+    ADCReadRegister(cmd, &ans[0], 1);
+    DelaySomeUs(1);
+    printf("%x\n", ans[0]);
+    
+    cmd = ADC_REG_CONFIG1;
+    data[0] = 0xAAU;
+    ADCWriteRegister(cmd, &data[0], 1);
+    DelaySomeUs(10);
+    
+    while(1)
+    {
+        ADCReadRegister(cmd, &ans[0], 1);
+        while(!flagSPI1RxDMATransCompleted);
+        flagSPI1RxDMATransCompleted = FALSE;
+//        DelaySomeUs(1);
+//        printf("%x | ", ans[2]);
+    }
+    
+    while(1)
+    {
+        ADCReadRegister(cmd, ans, 1);
+        for(i = 0; i < 26; i++)
+        {
+            printf("%x | ", ans[i]);
+        }
+        printf("\n");
+    }
+    
+
     
     /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

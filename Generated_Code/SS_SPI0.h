@@ -6,18 +6,14 @@
 **     Component   : SPISlave_LDD
 **     Version     : Component 01.038, Driver 01.02, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-08-04, 18:46, # CodeGen: 115
+**     Date/Time   : 2013-09-20, 15:42, # CodeGen: 144
 **     Abstract    :
 **         This component "SPISlave_LDD" implements SLAVE part of synchronous
 **         serial master-slave communication.
 **     Settings    :
 **          Component name                                 : SS_SPI0
 **          Device                                         : SPI0
-**          Interrupt service/event                        : Enabled
-**            Input interrupt                              : INT_SPI0
-**            Input interrupt priority                     : medium priority
-**            Output interrupt                             : INT_SPI0
-**            Output interrupt priority                    : medium priority
+**          Interrupt service/event                        : Disabled
 **          Settings                                       : 
 **            Input pin                                    : Enabled
 **              Pin                                        : CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO
@@ -43,7 +39,7 @@
 **            HW output buffer size                        : Max buffer size
 **            HW output watermark                          : 1
 **          Initialization                                 : 
-**            Enabled in init. code                        : yes
+**            Enabled in init. code                        : no
 **            Auto initialization                          : no
 **            Event mask                                   : 
 **              OnBlockSent                                : Enabled
@@ -51,8 +47,11 @@
 **              OnError                                    : Disabled
 **     Contents    :
 **         Init         - LDD_TDeviceData* SS_SPI0_Init(LDD_TUserData *UserDataPtr);
+**         Enable       - LDD_TError SS_SPI0_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable      - LDD_TError SS_SPI0_Disable(LDD_TDeviceData *DeviceDataPtr);
 **         SendBlock    - LDD_TError SS_SPI0_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
 **         ReceiveBlock - LDD_TError SS_SPI0_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
+**         Main         - void SS_SPI0_Main(LDD_TDeviceData *DeviceDataPtr);
 **
 **     Copyright : 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
 **     SOURCE DISTRIBUTION PERMISSIBLE as directed in End User License Agreement.
@@ -97,8 +96,11 @@ extern "C" {
   
 /* Methods configuration constants - generated for all enabled component's methods */
 #define SS_SPI0_Init_METHOD_ENABLED    /*!< Init method of the component SS_SPI0 is enabled (generated) */
+#define SS_SPI0_Enable_METHOD_ENABLED  /*!< Enable method of the component SS_SPI0 is enabled (generated) */
+#define SS_SPI0_Disable_METHOD_ENABLED /*!< Disable method of the component SS_SPI0 is enabled (generated) */
 #define SS_SPI0_SendBlock_METHOD_ENABLED /*!< SendBlock method of the component SS_SPI0 is enabled (generated) */
 #define SS_SPI0_ReceiveBlock_METHOD_ENABLED /*!< ReceiveBlock method of the component SS_SPI0 is enabled (generated) */
+#define SS_SPI0_Main_METHOD_ENABLED    /*!< Main method of the component SS_SPI0 is enabled (generated) */
 
 /* Events configuration constants - generated for all enabled component's events */
 #define SS_SPI0_OnBlockSent_EVENT_ENABLED /*!< OnBlockSent event of the component SS_SPI0 is enabled (generated) */
@@ -132,6 +134,50 @@ extern "C" {
 */
 /* ===================================================================*/
 LDD_TDeviceData* SS_SPI0_Init(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  SS_SPI0_Enable (component SPISlave_LDD)
+*/
+/*!
+**     @brief
+**         This method enables SPI device. This method is intended to
+**         be used together with <Disable()> method to temporary switch
+**         On/Off the device after the device is initialized. This
+**         method is required if the <Enabled in init. code> property
+**         is set to "no" value.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+*/
+/* ===================================================================*/
+LDD_TError SS_SPI0_Enable(LDD_TDeviceData *DeviceDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  SS_SPI0_Disable (component SPISlave_LDD)
+*/
+/*!
+**     @brief
+**         Disables the SPI device. When the device is disabled, some
+**         component methods should not be called. If so, error
+**         ERR_DISABLED may be reported. This method is intended to be
+**         used together with <Enable()> method to temporary switch
+**         on/off the device after the device is initialized. This
+**         method is not required. The <Deinit()> method can be used to
+**         switch off and uninstall the device.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+*/
+/* ===================================================================*/
+LDD_TError SS_SPI0_Disable(LDD_TDeviceData *DeviceDataPtr);
 
 /*
 ** ===================================================================
@@ -190,35 +236,24 @@ LDD_TError SS_SPI0_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *Buffe
 LDD_TError SS_SPI0_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *BufferPtr, uint16_t Size);
 
 /*
- * ===================================================================
- *     Method      : SS_SPI0_EnabelInterrupt(component SPIMaster_LDD)
- */
-/*!
- *     @brief
- *          This method enables transmission and reception interrupts.
- *          After Send/ReceiveBlock is invoked, this method must be called
- *          to enable either transmission or reception interrupt or both,
- *          or no data will be transmitted or received. 
- *     @param
- *          enableTxInterrupt   - Boolean flag of transmission interrupt switch.
- *     @param
- *          enableRxInterrupt   - Boolean flag of reception interrupt switch.  
- */
-/* ===================================================================*/
-void SS_SPI0_EnableInterrupt(bool enableTxInterrupt, bool enableRxInterrupt);
-
-/*
 ** ===================================================================
-**     Method      :  SS_SPI0_Interrupt (component SPISlave_LDD)
-**
-**     Description :
-**         The ISR function handling the device receive/transmit 
-**         interrupt.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
+**     Method      :  SS_SPI0_Main (component SPISlave_LDD)
 */
-/* {Default RTOS Adapter} ISR function prototype */
-PE_ISR(SS_SPI0_Interrupt);
+/*!
+**     @brief
+**         This method is available only in the polling mode (Interrupt
+**         service/event = 'no'). If interrupt service is disabled this
+**         method replaces the interrupt handler. This method should be
+**         called if Receive/SendBlock was invoked before in order to
+**         run the reception/transmission. The end of the
+**         receiving/transmitting is indicated by OnBlockSent or
+**         OnBlockReceived event. 
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+*/
+/* ===================================================================*/
+void SS_SPI0_Main(LDD_TDeviceData *DeviceDataPtr);
 
 /* END SS_SPI0. */
 

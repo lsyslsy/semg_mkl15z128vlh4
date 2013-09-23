@@ -5,7 +5,7 @@
 **     Processor   : MKL15Z128VLH4
 **     Version     : Component 01.000, Driver 01.04, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
+**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
 **     Abstract    :
 **
 **     Settings    :
@@ -42,8 +42,10 @@
   #include "EINT_NOT_DRDY.h"
   #include "EINT_SYNC_INT.h"
   #include "DMAT_M_SPI_TX.h"
-  #include "DMA_M_SPI.h"
+  #include "DMA_CTRL.h"
   #include "DMAT_M_SPI_RX.h"
+  #include "DMAT_S_SPI_TX.h"
+  #include "DMAT_S_SPI_RX.h"
   #include "Events.h"
 
 
@@ -79,17 +81,17 @@
     (tIsrFunc)&Cpu_Interrupt,          /* 0x0D  0x00000034   -   ivINT_Reserved13              unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x0E  0x00000038   -   ivINT_PendableSrvReq          unused by PE */
     (tIsrFunc)&SysTick_Interrupt,      /* 0x0F  0x0000003C   0   ivINT_SysTick                 used by PE */
-    (tIsrFunc)&DMA_M_SPI_Channel0Interrupt, /* 0x10  0x00000040   2   ivINT_DMA0                    used by PE */
-    (tIsrFunc)&DMA_M_SPI_Channel1Interrupt, /* 0x11  0x00000044   2   ivINT_DMA1                    used by PE */
-    (tIsrFunc)&Cpu_Interrupt,          /* 0x12  0x00000048   -   ivINT_DMA2                    unused by PE */
-    (tIsrFunc)&Cpu_Interrupt,          /* 0x13  0x0000004C   -   ivINT_DMA3                    unused by PE */
+    (tIsrFunc)&DMA_CTRL_Channel0Interrupt, /* 0x10  0x00000040   2   ivINT_DMA0                    used by PE */
+    (tIsrFunc)&DMA_CTRL_Channel1Interrupt, /* 0x11  0x00000044   2   ivINT_DMA1                    used by PE */
+    (tIsrFunc)&DMA_CTRL_Channel2Interrupt, /* 0x12  0x00000048   2   ivINT_DMA2                    used by PE */
+    (tIsrFunc)&DMA_CTRL_Channel3Interrupt, /* 0x13  0x0000004C   2   ivINT_DMA3                    used by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x14  0x00000050   -   ivINT_Reserved20              unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x15  0x00000054   -   ivINT_FTFA                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x16  0x00000058   -   ivINT_LVD_LVW                 unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x17  0x0000005C   -   ivINT_LLW                     unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x18  0x00000060   -   ivINT_I2C0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x19  0x00000064   -   ivINT_I2C1                    unused by PE */
-    (tIsrFunc)&SS_SPI0_Interrupt,      /* 0x1A  0x00000068   2   ivINT_SPI0                    used by PE */
+    (tIsrFunc)&Cpu_Interrupt,          /* 0x1A  0x00000068   -   ivINT_SPI0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1B  0x0000006C   -   ivINT_SPI1                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1C  0x00000070   -   ivINT_UART0                   unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1D  0x00000074   -   ivINT_UART1                   unused by PE */

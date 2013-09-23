@@ -76,6 +76,7 @@
      * @{
      */
 #if USING_ADS1198
+#define REGISTER_NUMBER              26U                                                /*!< Number of registers in ADS1198 */
 #define USING_CHANNEL_NUMBER         0x08U                                              /*!< Number of ADC channels used currently. */
 #define MIN_CHANNEL_NUMBER           0x00U                                              /*!< Minimum number of ADC channels. */
 #define MAX_CHANNEL_NUMBER           0x08U                                              /*!< Maximum number of ADC channels. */

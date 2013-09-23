@@ -16,7 +16,7 @@
  **			    - User data
  **				- On-chip devices
  **					- SPI0, SPI1
- **					- SPI1_TX_DMA, SPI1_RX_DMA
+ **					- SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  **					- DMA
  **					- UART0, UART2
  **                 - PTA2
@@ -46,7 +46,7 @@
  *		<li> On-chip devices
  *			<ul>
  *			<li> SPI0, SPI1
- *			<li> SPI1_TX_DMA, SPI1_RX_DMA
+ *			<li> SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  *			<li> DMA
  *			<li> UART0, UART2
  *          <li> PTA2
@@ -70,7 +70,7 @@
  *      <li> On-chip devices
  *          <ul>
  *          <li> SPI0, SPI1
- *          <li> SPI1_TX_DMA, SPI1_RX_DMA
+ *          <li> SPI0_TX_DMA, SPI0_RX_DMA, SPI1_TX_DMA, SPI1_RX_DMA
  *          <li> DMA
  *          <li> UART0, UART2
  *          <li> PTA2

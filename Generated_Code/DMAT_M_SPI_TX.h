@@ -6,41 +6,42 @@
 **     Component   : DMATransfer_LDD
 **     Version     : Component 01.100, Driver 01.08, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
+**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
 **     Abstract    :
 **          This embedded component implements
 **          a DMA transfer channel descriptor definition.
 **     Settings    :
 **          Component name                                 : DMAT_M_SPI_TX
-**          DMA controller device                          : DMA_M_SPI
+**          DMA controller device                          : DMA_CTRL
 **          Channel                                        : 
-**            Channel select                               : Auto select
-**              Channel                                    : Autoselected
+**            Channel select                               : Fixed
+**              Channel                                    : DMA_Channel0
 **              Interrupts                                 : Enabled
+**              Allocate channel                           : yes
 **          Trigger                                        : 
 **            Trigger source type                          : Peripheral device
-**              Trigger source                             : SPI0_Transmit_DMA_Request
+**              Trigger source                             : SPI1_Transmit_DMA_Request
 **              Periodic trigger                           : Disabled
 **          Data source                                    : 
-**            External object declaration                  : 
-**            Address                                      : 0
+**            External object declaration                  : volatile byte* SPI1TxDMADataSourceBuffer = NULL;
+**            Address                                      : SPI1TxDMADataSourceBuffer
 **            Transfer size                                : 8-bit
-**            Address offset                               : 0
+**            Address offset                               : 1
 **            Circular buffer                              : Buffer disabled
 **          Data destination                               : 
-**            External object declaration                  : 
-**            Address                                      : 0
+**            External object declaration                  : volatile byte* SPI1TxDMADataDestinationBuffer = NULL;
+**            Address                                      : (&SPI1_D)
 **            Transfer size                                : 8-bit
 **            Address offset                               : 0
 **            Circular buffer                              : Buffer disabled
 **          Data size                                      : 
-**            External object declaration                  : 
-**            Value                                        : 0
-**          Transfer control                               : Single transfer
-**            Disable after transfer                       : no
-**            Auto-align mode                              : Disabled
+**            External object declaration                  : volatile uint8_t SPI1TxDMAByteCount = 0;
+**            Value                                        : SPI1TxDMAByteCount
+**          Transfer control                               : Cycle-steal
+**            Disable after transfer                       : yes
 **            Asynchronous requests                        : Disabled
 **            Channel linking                              : Disabled
+**            After request complete                       : No action
 **            After transfer complete                      : No action
 **          Initialization                                 : 
 **            Auto initialization                          : no
@@ -87,7 +88,7 @@
 #include "PE_Const.h"
 #include "IO_Map.h"
 /* Include inherited beans */
-#include "DMA_M_SPI.h"
+#include "DMA_CTRL.h"
 #include "DMA_PDD.h"
 #include "DMAMUX_PDD.h"
 

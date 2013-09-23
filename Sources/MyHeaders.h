@@ -41,6 +41,10 @@
 #include "Process.h"
 #include "Test.h"
 #include "Utilities.h"
+#include "SPI.h"
+#include "Events.h"
+
+//#include "SPI_PDD.h"
 
     /* END MODULE MYHEADERS. */
 

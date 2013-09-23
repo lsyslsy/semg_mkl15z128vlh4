@@ -34,9 +34,9 @@
  **         StandBy            - LDD_TError ADCStandBy();
  **         RDATAC             - LDD_TError ADCReadDataContinuous(void);
  **         SDATAC             - LDD_TError ADCStopDataContinuous(void);
- **         SendCommand        - LDD_TError ADCSendCommand(byte* cmd, uint8 len);
- **         ReadRegister       - LDD_TError ADCReadRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
- **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
+ **         SendCommand        - LDD_TError ADCSendCommand(byte* cmd);
+ **         ReadRegister       - LDD_TError ADCReadRegister(byte regAddrbyte* dat, uint8 n);
+ **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  **         ReadData           - LDD_TError ADCReadContinuousData();
  **                            - LDD_TError ADCReadData();
  **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
@@ -366,11 +366,6 @@ LDD_TError ADCStopReadDataContinuous(void);
  *     @param[in]
  *          cmd             - Pointer to command to be sent.
  *                            See group ADC Commands in Macros.h.
- *     @param[in]
- *          len             - The length of command.
- *                            The available value is 1 for most commands,
- *                            except for command read/write register
- *                            which must be 2.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -383,7 +378,7 @@ LDD_TError ADCStopReadDataContinuous(void);
  *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
-LDD_TError ADCSendCommand(byte* cmd, uint8 len);
+LDD_TError ADCSendCommand(byte* cmd);
 
 /*
  * ===================================================================
@@ -391,15 +386,14 @@ LDD_TError ADCSendCommand(byte* cmd, uint8 len);
  */
 /*!
  *     @brief
- *          Read data from register of ADC via SPI1.
+ *          Read data from register of ADC via SPI1. The first two bytes are useless,
+ *          the real data starts at index 2!!!
  *     @param[in]
  *          regAddr         - The first address of register(s) to be read.
+ *     @param[out]
+ *          dat             - Pointer to the buffer where received data in.
  *     @param[in]
  *          n               - The number of registers to be read.
- *     @param[out]
- *          dat             - Pointer to buffer where received data in.
- *     @param[in]
- *          len             - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -412,7 +406,7 @@ LDD_TError ADCSendCommand(byte* cmd, uint8 len);
  *                              - etc.         - See PE_Error.h.
  */                                
 /* ===================================================================*/
-LDD_TError ADCReadRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
+LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n);
 
 /*
  * ===================================================================
@@ -424,11 +418,9 @@ LDD_TError ADCReadRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
  *     @param[in]
  *          regAddr         - The first address of register(s) to be written.
  *     @param[in]
- *          n               - The number of registers to be written.
- *     @param[in]
  *          dat             - Pointer to buffer where data to be written in.
  *     @param[in]
- *          len             - The length of data bytes to be written.
+ *          n               - The number of registers to be written.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             
@@ -441,7 +433,7 @@ LDD_TError ADCReadRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
  *                              - etc.             - See PE_Error.h.
  */                                
 /* ===================================================================*/
-LDD_TError ADCWriteRegister(byte regAddr, uint8 n, byte* dat, uint16 len);
+LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
 
 /*
  * ===================================================================
@@ -517,18 +509,13 @@ TADCData ADCDataInit(TADCDataPtr userDataPtr);
  *          This method checks if the command is valid.
  *     @param[in]
  *          cmd             - Command to be checked.
- *     @param[in]
- *          len             - The length of command to be checked.
- *                            The available value is 1 for most commands,
- *                            except for command read/write register
- *                            which must be 2.
  *     @return
  *                          - ERR_OK: Command is valid and the length is legal.
  *                          - ERR_PARAM_COMMAND: Command is invalid.
  *                          - ERR_PARAM_LENGTH: Length is illegal.
  */
 /* ===================================================================*/
-LDD_TError CheckCommand(byte cmd, uint8 len);
+LDD_TError CheckCommand(byte cmd);
     
     /* END ADC. */
 

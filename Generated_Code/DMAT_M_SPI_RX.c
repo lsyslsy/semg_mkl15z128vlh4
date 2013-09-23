@@ -6,41 +6,42 @@
 **     Component   : DMATransfer_LDD
 **     Version     : Component 01.100, Driver 01.08, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
+**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
 **     Abstract    :
 **          This embedded component implements
 **          a DMA transfer channel descriptor definition.
 **     Settings    :
 **          Component name                                 : DMAT_M_SPI_RX
-**          DMA controller device                          : DMA_M_SPI
+**          DMA controller device                          : DMA_CTRL
 **          Channel                                        : 
-**            Channel select                               : Auto select
-**              Channel                                    : Autoselected
+**            Channel select                               : Fixed
+**              Channel                                    : DMA_Channel1
 **              Interrupts                                 : Enabled
+**              Allocate channel                           : yes
 **          Trigger                                        : 
 **            Trigger source type                          : Peripheral device
 **              Trigger source                             : SPI1_Receive_DMA_Request
 **              Periodic trigger                           : Disabled
 **          Data source                                    : 
-**            External object declaration                  : 
-**            Address                                      : 0
+**            External object declaration                  : volatile byte* SPI1RxDMADataSourceBuffer = NULL;
+**            Address                                      : (&SPI1_D)
 **            Transfer size                                : 8-bit
 **            Address offset                               : 0
 **            Circular buffer                              : Buffer disabled
 **          Data destination                               : 
-**            External object declaration                  : 
-**            Address                                      : 0
+**            External object declaration                  : volatile byte* SPI1RxDMADataDestinationBuffer = NULL;
+**            Address                                      : SPI1RxDMADataDestinationBuffer
 **            Transfer size                                : 8-bit
-**            Address offset                               : 0
+**            Address offset                               : 1
 **            Circular buffer                              : Buffer disabled
 **          Data size                                      : 
-**            External object declaration                  : 
-**            Value                                        : 0
-**          Transfer control                               : Single transfer
-**            Disable after transfer                       : no
-**            Auto-align mode                              : Disabled
+**            External object declaration                  : volatile uint8_t SPI1RxDMAByteCount = 0;
+**            Value                                        : SPI1RxDMAByteCount
+**          Transfer control                               : Cycle-steal
+**            Disable after transfer                       : yes
 **            Asynchronous requests                        : Disabled
 **            Channel linking                              : Disabled
+**            After request complete                       : No action
 **            After transfer complete                      : No action
 **          Initialization                                 : 
 **            Auto initialization                          : no
@@ -80,8 +81,17 @@
 
 #include "Events.h"
 #include "DMAT_M_SPI_RX.h"
+/* User external source object declaration */
+volatile byte* SPI1RxDMADataSourceBuffer = NULL;
+
+/* User external destination object declaration */
+volatile byte* SPI1RxDMADataDestinationBuffer = NULL;
+
+/* User external data size object declaration */
+volatile uint8_t SPI1RxDMAByteCount = 0;
+
 typedef struct {
-  DMA_M_SPI_TDeviceData *DMA_LDD_DeviceDataPtr; /* Pointer to the DMA_LDD component data structure */
+  DMA_CTRL_TDeviceData *DMA_LDD_DeviceDataPtr; /* Pointer to the DMA_LDD component data structure */
   LDD_DMA_TTransferDescriptor *DescriptorPtr; /* Pointer to the component's transfer descriptor */
 } DMAT_M_SPI_RX_TDeviceData;
 
@@ -122,32 +132,31 @@ LDD_TDeviceData* DMAT_M_SPI_RX_Init(LDD_TUserData *UserDataPtr)
   /* Transfer descriptor initialization */
   DeviceDataPtr->DescriptorPtr->UserDataPtr = UserDataPtr; /* User device data structure pointer to be returned by the DMA_LDD component's ISR to the dynamic callback of this Descriptor */
   /* Source settings */
-  DeviceDataPtr->DescriptorPtr->SourceAddress = (LDD_DMA_TAddress)0; /* Address of a DMA transfer source data */
+  DeviceDataPtr->DescriptorPtr->SourceAddress = (LDD_DMA_TAddress)(&SPI1_D); /* Address of a DMA transfer source data */
   DeviceDataPtr->DescriptorPtr->SourceTransferSize = (LDD_DMA_TTransferSize)DMA_PDD_8_BIT; /* 8-bit source data transfer size. */
   DeviceDataPtr->DescriptorPtr->SourceModuloSize = (LDD_DMA_TModuloSize)DMA_PDD_CIRCULAR_BUFFER_DISABLED; /* Circular buffer size. */
   DeviceDataPtr->DescriptorPtr->SourceAddressIncrement = FALSE; /* Address not incremented. */
   /* Destination settings */
-  DeviceDataPtr->DescriptorPtr->DestinationAddress = (LDD_DMA_TAddress)0; /* Address of a DMA transfer destination data */
+  DeviceDataPtr->DescriptorPtr->DestinationAddress = (LDD_DMA_TAddress)SPI1RxDMADataDestinationBuffer; /* Address of a DMA transfer destination data */
   DeviceDataPtr->DescriptorPtr->DestinationTransferSize = (LDD_DMA_TTransferSize)DMA_PDD_8_BIT; /* 8-bit destination data transfer size. */
   DeviceDataPtr->DescriptorPtr->DestinationModuloSize = (LDD_DMA_TModuloSize)DMA_PDD_CIRCULAR_BUFFER_DISABLED; /* Circular buffer size. */
-  DeviceDataPtr->DescriptorPtr->DestinationAddressIncrement = FALSE; /* Address not incremented. */
+  DeviceDataPtr->DescriptorPtr->DestinationAddressIncrement = TRUE; /* Address incremented after each elemental read operation. */
   /* Byte count value */
-  DeviceDataPtr->DescriptorPtr->ByteCount = (LDD_DMA_TByteCount)0; /* Size of data to be transferred. */
+  DeviceDataPtr->DescriptorPtr->ByteCount = (LDD_DMA_TByteCount)SPI1RxDMAByteCount; /* Size of data to be transferred. */
   /* Trigger settings */
   DeviceDataPtr->DescriptorPtr->TriggerType = LDD_DMA_HW_TRIGGER; /* External peripheral trigger is used */
   DeviceDataPtr->DescriptorPtr->TriggerSource = (LDD_DMA_TTriggerSource)0x12U; /* External peripheral trigger source number */
   DeviceDataPtr->DescriptorPtr->PeriodicTrigger = FALSE; /* Periodic trigger mode is not used */
-  DeviceDataPtr->DescriptorPtr->ChannelAutoSelection = TRUE; /* DMA channel auto-select */
-  DeviceDataPtr->DescriptorPtr->ChannelNumber = (LDD_DMA_TChannelNumber)0x00U; /* DMA channel number not used */
-  DeviceDataPtr->DescriptorPtr->AutoAlign = FALSE; /* DMA channel auto-align mode disabled. */
+  DeviceDataPtr->DescriptorPtr->ChannelAutoSelection = FALSE; /* DMA channel fixed value */
+  DeviceDataPtr->DescriptorPtr->ChannelNumber = (LDD_DMA_TChannelNumber)0x01U; /* DMA channel number */
   DeviceDataPtr->DescriptorPtr->AsynchronousRequests = FALSE; /* DMA channel asynchronous requests disabled. */
   /* Inner and outer loop linking settings */
   DeviceDataPtr->DescriptorPtr->ChannelLinkingMode = LDD_DMA_LINKING_DISABLED; /* Channel linking disabled. */
   DeviceDataPtr->DescriptorPtr->InnerLoopLinkedChannel = 0x00U; /* Linked DMA channel number not used. */
   DeviceDataPtr->DescriptorPtr->OuterLoopLinkedChannel = 0x00U; /* Linked DMA channel number not used. */
   /* Transfer control settings */
-  DeviceDataPtr->DescriptorPtr->TransferMode = LDD_DMA_SINGLE_TRANSFER; /* Single transfer per request mode. */
-  DeviceDataPtr->DescriptorPtr->DisableAfterRequest = FALSE; /* Leave enabled after request. */
+  DeviceDataPtr->DescriptorPtr->TransferMode = LDD_DMA_CYCLE_STEAL_TRANSFERS; /* Cycle-steal transfers - one elementary read-write transfer per request. */
+  DeviceDataPtr->DescriptorPtr->DisableAfterRequest = TRUE; /* Disable after request. */
   /* Interrupts and events settings */
   DeviceDataPtr->DescriptorPtr->Interrupts = TRUE; /* Interrupts are requested. */
   DeviceDataPtr->DescriptorPtr->OnComplete = TRUE; /* Event enabled in initialization code. */
@@ -155,11 +164,11 @@ LDD_TDeviceData* DMAT_M_SPI_RX_Init(LDD_TUserData *UserDataPtr)
   DeviceDataPtr->DescriptorPtr->OnCompleteEventPtr = &DMAT_M_SPI_RX_OnComplete; /* Pointer to the OnTransferComplete event */
   DeviceDataPtr->DescriptorPtr->OnErrorEventPtr = &DMAT_M_SPI_RX_OnError; /* Pointer to the OnError event */
   DeviceDataPtr->DescriptorPtr->ChannelEnabled = FALSE; /* Descriptor is not allocating nor using any channel. */
-  if (PE_LDD_DeviceDataList[PE_LDD_COMPONENT_DMA_M_SPI_ID] == NULL) {
-    DeviceDataPtr->DMA_LDD_DeviceDataPtr = DMA_M_SPI_Init(NULL);
+  if (PE_LDD_DeviceDataList[PE_LDD_COMPONENT_DMA_CTRL_ID] == NULL) {
+    DeviceDataPtr->DMA_LDD_DeviceDataPtr = DMA_CTRL_Init(NULL);
   }
   else {
-    DeviceDataPtr->DMA_LDD_DeviceDataPtr = PE_LDD_DeviceDataList[PE_LDD_COMPONENT_DMA_M_SPI_ID];
+    DeviceDataPtr->DMA_LDD_DeviceDataPtr = PE_LDD_DeviceDataList[PE_LDD_COMPONENT_DMA_CTRL_ID];
   }
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_DMAT_M_SPI_RX_ID,DeviceDataPtr);
@@ -216,7 +225,7 @@ void DMAT_M_SPI_RX_Deinit(LDD_TDeviceData *DeviceDataPtr)
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_AllocateChannel(LDD_TDeviceData *DeviceDataPtr)
 {
-  return DMA_M_SPI_AllocateChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
+  return DMA_CTRL_AllocateChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
 }
 
 /*
@@ -256,7 +265,7 @@ LDD_TError DMAT_M_SPI_RX_AllocateChannel(LDD_TDeviceData *DeviceDataPtr)
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_EnableChannel(LDD_TDeviceData *DeviceDataPtr)
 {
-  return DMA_M_SPI_EnableChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
+  return DMA_CTRL_EnableChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
 }
 
 /*
@@ -286,7 +295,7 @@ LDD_TError DMAT_M_SPI_RX_EnableChannel(LDD_TDeviceData *DeviceDataPtr)
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_DisableChannel(LDD_TDeviceData *DeviceDataPtr)
 {
-  return DMA_M_SPI_DisableChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
+  return DMA_CTRL_DisableChannel((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr);
 }
 
 /*
@@ -325,7 +334,7 @@ LDD_TError DMAT_M_SPI_RX_DisableChannel(LDD_TDeviceData *DeviceDataPtr)
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_SetSourceAddress(LDD_TDeviceData *DeviceDataPtr, LDD_DMA_TAddress Address)
 {
-  return DMA_M_SPI_SetChannelSourceAddress((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, Address);
+  return DMA_CTRL_SetChannelSourceAddress((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, Address);
 }
 
 /*
@@ -366,7 +375,7 @@ LDD_TError DMAT_M_SPI_RX_SetSourceAddress(LDD_TDeviceData *DeviceDataPtr, LDD_DM
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_SetDestinationAddress(LDD_TDeviceData *DeviceDataPtr, LDD_DMA_TAddress Address)
 {
-  return DMA_M_SPI_SetChannelDestinationAddress((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, Address);
+  return DMA_CTRL_SetChannelDestinationAddress((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, Address);
 }
 
 /*
@@ -408,7 +417,7 @@ LDD_TError DMAT_M_SPI_RX_SetDestinationAddress(LDD_TDeviceData *DeviceDataPtr, L
 /* ===================================================================*/
 LDD_TError DMAT_M_SPI_RX_SetByteCount(LDD_TDeviceData *DeviceDataPtr, LDD_DMA_TByteCount ByteCount)
 {
-  return DMA_M_SPI_SetChannelByteCount((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, ByteCount);
+  return DMA_CTRL_SetChannelByteCount((LDD_TDeviceData *)(((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DMA_LDD_DeviceDataPtr), ((DMAT_M_SPI_RX_TDeviceData *)DeviceDataPtr)->DescriptorPtr, ByteCount);
 }
 
 /* END DMAT_M_SPI_RX. */

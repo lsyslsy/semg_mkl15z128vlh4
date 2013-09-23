@@ -76,7 +76,7 @@
 #define USING_DMA      1    /*!< DMA controller will be used. */
 #define USING_SPI0     1    /*!< SPI0 will be used. */
 #define USING_SPI1     1    /*!< SPI1 will be used. */
-#define USING_SPI0_DMA 0    /*!< SPI0 DMA TX & RX enabled. */
+#define USING_SPI0_DMA 1    /*!< SPI0 DMA TX & RX enabled. */
 #define USING_SPI1_DMA 1    /*!< SPI1 DMA TX & RX enabled. */
 #define USING_UART0    0    /*!< UART0 will not be used. */
 #define USING_UART1    0    /*!< UART1 will not be used. */

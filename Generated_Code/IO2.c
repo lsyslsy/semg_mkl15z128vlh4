@@ -6,7 +6,7 @@
 **     Component   : Serial_LDD
 **     Version     : Component 01.168, Driver 01.10, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-09, 19:12, # CodeGen: 128
+**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
