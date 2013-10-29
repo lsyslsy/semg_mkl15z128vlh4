@@ -6,7 +6,7 @@
 **     Component   : PE_Types
 **     Version     : Driver 01.01
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-23, 16:24, # CodeGen: 154
+**     Date/Time   : 2013-09-24, 17:50, # CodeGen: 158
 **     Abstract    :
 **         PE_Types.h - contains definitions of basic types,
 **         register access macros and hardware specific macros
@@ -181,15 +181,15 @@ typedef unsigned long int       uint32;
 #define PE_LDD_COMPONENT_BitIO_NOT_RESET_ID      0x04U
 #define PE_LDD_COMPONENT_BitIO_START_ID          0x05U
 #define PE_LDD_COMPONENT_BitIO_DAISY_IN_ID       0x06U
-#define PE_LDD_COMPONENT_BitIO_CLKSEL_ID         0x07U
-#define PE_LDD_COMPONENT_EINT_NOT_DRDY_ID        0x08U
-#define PE_LDD_COMPONENT_EINT_SYNC_INT_ID        0x09U
-#define PE_LDD_COMPONENT_DMA_CTRL_ID             0x0AU
-#define PE_LDD_COMPONENT_DMAT_M_SPI_TX_ID        0x0BU
-#define PE_LDD_COMPONENT_DMAT_M_SPI_RX_ID        0x0CU
-#define PE_LDD_COMPONENT_DMAT_S_SPI_TX_ID        0x0DU
-#define PE_LDD_COMPONENT_DMAT_S_SPI_RX_ID        0x0EU
-#define PE_LDD_COMPONENT_BitIO_UPRDY_ID          0x0FU
+#define PE_LDD_COMPONENT_BitIO_UPRDY_ID          0x07U
+#define PE_LDD_COMPONENT_BitIO_CLKSEL_ID         0x08U
+#define PE_LDD_COMPONENT_EINT_NOT_DRDY_ID        0x09U
+#define PE_LDD_COMPONENT_EINT_SYNC_INT_ID        0x0AU
+#define PE_LDD_COMPONENT_DMA_CTRL_ID             0x0BU
+#define PE_LDD_COMPONENT_DMAT_M_SPI_TX_ID        0x0CU
+#define PE_LDD_COMPONENT_DMAT_M_SPI_RX_ID        0x0DU
+#define PE_LDD_COMPONENT_DMAT_S_SPI_TX_ID        0x0EU
+#define PE_LDD_COMPONENT_DMAT_S_SPI_RX_ID        0x0FU
 
 /*
 ** ===================================================================

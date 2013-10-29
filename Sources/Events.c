@@ -237,8 +237,8 @@ void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
     /* Write your code here ... */
     extern TADCDataPtr adcDataPtr;
     
-    flagSPI1RxDMATransCompleted = FALSE;
-    ADCReadContinuousData(adcDataPtr->rawData, (LDD_DMA_TByteCount)RAW_DATA_SIZE);
+//    flagSPI1RxDMATransCompleted = FALSE;
+//    ADCReadContinuousData(adcDataPtr->rawData, (LDD_DMA_TByteCount)RAW_DATA_SIZE);
     
     flagDataReady = TRUE;
 }
@@ -261,19 +261,16 @@ void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
 void EINT_SYNC_INT_OnInterrupt(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    extern volatile byte* uploadBufferPtr;
-    extern volatile byte msg[2000];
-    extern volatile byte msg2[2000];
-    byte dummy[2000];
+//    extern volatile byte* uploadBufferPtr;
+//    extern volatile byte msg[2000];
+//    extern volatile byte msg2[2000];
+//    static bool flag1 = TRUE;
+//    byte dummy[2000];
     
-    EIntSyncInterruptDisable(EINT_SYNC_INT);
+//    EIntSyncInterruptDisable(EINT_SYNC_INT);
     
-    flagSPI0RxDMATransCompleted = FALSE;
-    uploadBufferPtr = (uploadBufferPtr == msg) ? msg2 : msg;
-    SPI0ReceiveSendData((LDD_DMA_TAddress)uploadBufferPtr, (LDD_DMA_TAddress)dummy,
-                        (LDD_DMA_TByteCount)2000, (LDD_DMA_TByteCount)2000);
-    
-    IOUploadReadySetVal();
+//    flagSPI0TxDMATransCompleted = FALSE;
+//    uploadBufferPtr = (uploadBufferPtr == msg) ? msg2 : msg;
     
     flagUploadReady = TRUE;
 }
@@ -436,11 +433,7 @@ void DMAT_S_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
   /* Write your code here ... */
     SPI0RxDMADisable();
 //    SPI0DisableRxDMA();
-   
-    IOUploadReadyClrVal();
-    EIntSyncInterruptEnable(NULL);
     
-    flagUploadReady = FALSE;
     flagSPI0RxDMATransCompleted = TRUE;
 }
 
@@ -492,7 +485,14 @@ void DMAT_S_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
   /* Write your code here ... */
     SPI0TxDMADisable();
 //    SPI0RxDMADisable();
+    
+    IOUploadReadySetVal();
+    
+//    flagUploadReady = FALSE;
+    
     flagSPI0TxDMATransCompleted = TRUE;
+    
+//    EIntSyncInterruptEnable(NULL);
 }
 
 /*

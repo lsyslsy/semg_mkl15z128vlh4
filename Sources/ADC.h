@@ -386,8 +386,7 @@ LDD_TError ADCSendCommand(byte* cmd);
  */
 /*!
  *     @brief
- *          Read data from register of ADC via SPI1. The first two bytes are useless,
- *          the real data starts at index 2!!!
+ *          Read data from register of ADC via SPI1.
  *     @param[in]
  *          regAddr         - The first address of register(s) to be read.
  *     @param[out]
@@ -466,8 +465,7 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
  */
 /*!
  *     @brief
- *          Read conversion data from ADC in RDATA mode via SPI1. The first byte is useless,
- *          the real data starts at index 1!!!
+ *          Read conversion data from ADC in RDATA mode via SPI1.
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]

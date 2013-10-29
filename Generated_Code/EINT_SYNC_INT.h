@@ -6,7 +6,7 @@
 **     Component   : ExtInt_LDD
 **     Version     : Component 02.154, Driver 01.00, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-09, 15:24, # CodeGen: 126
+**     Date/Time   : 2013-09-24, 19:03, # CodeGen: 161
 **     Abstract    :
 **         This component, "ExtInt_LDD", provide a low level API 
 **         for unified access of external interrupts handling
@@ -17,7 +17,7 @@
 **          Component name                                 : EINT_SYNC_INT
 **          Pin                                            : TSI0_CH3/PTA2/UART0_TX/TPM2_CH1
 **          Pin signal                                     : SYNC_INT
-**          Generate interrupt on                          : rising edge
+**          Generate interrupt on                          : both edges
 **          Interrupt                                      : INT_PORTA
 **          Interrupt priority                             : low priority
 **          Initialization                                 : 
@@ -89,7 +89,7 @@ extern "C" {
 #define EINT_SYNC_INT_PIN_MASK 0x04U   /*!< Mask of the used pin from the port */
 #define EINT_SYNC_INT_MODULE_BASE_ADDRESS PTA_BASE_PTR /*!< Name of macro used as the base address */
 #define EINT_SYNC_INT_PORTCONTROL_BASE_ADDRESS PORTA_BASE_PTR /*!< Name of macro used as the base address */
-#define EINT_SYNC_INT_IRQ_CONFIG PORT_PDD_INTERRUPT_ON_RISING /*!< Static IRQ configuration */
+#define EINT_SYNC_INT_IRQ_CONFIG PORT_PDD_INTERRUPT_ON_RISING_FALLING /*!< Static IRQ configuration */
 
 /*
 ** ===================================================================

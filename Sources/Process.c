@@ -86,6 +86,7 @@ LDD_TError SplitRawData(TADCDataPtr adcDataPtr)
     {
         err = ERR_PARAM_DATA;
         PrintErrorMessage(err);
+        printf("%#x\n", head);
         return err;
     }
     

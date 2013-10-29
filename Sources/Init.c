@@ -332,8 +332,8 @@ static void SPIInit(void)
 #if USING_SPI0
     SPI0 = SPI0Init(NULL);      /* Initialize SPI0 in slave mode, transmitter data to ARM. */
     SPI0Enable();
-//    SPI0EnableRxDMA();
-//    SPI0EnableTxDMA();
+    SPI0EnableRxDMA();
+    SPI0EnableTxDMA();
 #endif
     
 #if USING_SPI1

@@ -703,8 +703,7 @@ LDD_TError ADCSendCommand(byte* cmd)
  */
 /*!
  *     @brief
- *          Read data from register of ADC via SPI1. The first two bytes are useless,
- *          the real data starts at index 2!!!
+ *          Read data from register of ADC via SPI1.
  *     @param[in]
  *          regAddr         - The first address of register(s) to be read.
  *     @param[out]
@@ -725,6 +724,7 @@ LDD_TError ADCSendCommand(byte* cmd)
 /* ===================================================================*/
 LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
 {
+    uint8 i;
     LDD_TError err;
     byte strCmd[2];                 /* The read register command is a 2-byte command. */
     
@@ -759,11 +759,25 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
     strCmd[0] = ADC_CMD_RREG(regAddr);              /* According to user manual, read ADC register command, */
     strCmd[1] = n - 1;                              /* and if the number of registers to be read is n, n - 1 should be sent to ADC. */
 
-    /* Try to send and receive the data.
+    /* 
+     * Try to send and receive the data.
      * Remember that the dat[0] and dat[1] are useless!!!
-     * The real data begins at dat[2]!!! */
+     * The real data begins at dat[2]!!!
+     */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
                               (LDD_DMA_TByteCount)(n + 2), (LDD_DMA_TByteCount)(n + 2));
+    
+    
+    /* 
+     * Move each bit 2 bits ahead.
+     * Make the data right.
+     * Then the real data begins at dat[0].
+     */ 
+    for(i = 0; i < n; i++)
+    {
+        dat[i] = dat[i + 2];
+    }
+    
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
@@ -924,8 +938,7 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
  */
 /*!
  *     @brief
- *          Read conversion data from ADC in RDATA mode via SPI1. The first byte is useless,
- *          the real data starts at index 1!!!
+ *          Read conversion data from ADC in RDATA mode via SPI1.
  *     @param[out]
  *          dat             - Pointer to buffer where received data in.
  *     @param[in]
@@ -944,6 +957,7 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
 /* ===================================================================*/
 LDD_TError ADCReadData(byte* dat, uint8 n)
 {
+    uint8 i;
     LDD_TError err;
     byte strCmd[RAW_DATA_SIZE + 1];
     
@@ -966,11 +980,24 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
     }
     
     strCmd[0] = ADC_CMD_RDATA;
-    /* Try to send and receive the data.
+    /* 
+     * Try to send and receive the data.
      * Remember that the dat[0] is useless!!!
-     * The real data begins at dat[1]!!! */
+     * The real data begins at dat[1]!!!
+     */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
                         (LDD_DMA_TByteCount)(n + 1), (LDD_DMA_TByteCount)(n + 1));
+    
+    /*
+     * Move each bit 1 bit ahead.
+     * Make the data right.
+     * Then real data begins at dat[0].
+     */
+    for(i = 0; i < n; i++)
+    {
+        dat[i] = dat[i + 1];
+    }
+    
     if(err != ERR_OK)
     {
 #if DEBUG
@@ -999,6 +1026,7 @@ TADCData ADCDataInit(TADCDataPtr userDataPtr)
 {
     TADCData data;
 
+    data.flagReceivingData = FALSE;
     data.head = (!userDataPtr) ? 0xFFU : userDataPtr->head;
     data.loffStatP = (!userDataPtr) ? 0xFFU : userDataPtr->loffStatP;
     data.loffStatN = (!userDataPtr) ? 0xFFU : userDataPtr->loffStatN;

@@ -238,6 +238,7 @@
  */
 struct TADCData
 {
+    bool  flagReceivingData;                        /*!< Flag of receiving raw data from ADC. */
     byte  head;                                     /*!< The head bits of data should always be 0b00001100. */
     byte  loffStatP;                                /*!< The value of the register LOFF_STATP. */
     byte  loffStatN;                                /*!< The value of the register LOFF_STATN. */

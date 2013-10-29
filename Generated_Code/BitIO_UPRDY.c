@@ -6,7 +6,7 @@
 **     Component   : BitIO_LDD
 **     Version     : Component 01.033, Driver 01.00, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-23, 16:24, # CodeGen: 154
+**     Date/Time   : 2013-09-24, 17:58, # CodeGen: 159
 **     Abstract    :
 **         The HAL BitIO component provides a low level API for unified
 **         access to general purpose digital input/output pins across
@@ -21,7 +21,7 @@
 **          Direction                                      : Output
 **          Initialization                                 : 
 **            Init. direction                              : Output
-**            Init. value                                  : 0
+**            Init. value                                  : 1
 **            Auto initialization                          : no
 **          Safe mode                                      : no
 **     Contents    :
@@ -106,8 +106,8 @@ LDD_TDeviceData* BitIO_UPRDY_Init(LDD_TUserData *UserDataPtr)
   GPIOB_PDDR |= GPIO_PDDR_PDD(0x00080000);                                   
 
   /* Set initialization value */
-  /* GPIOB_PDOR: PDO&=~0x00080000 */
-  GPIOB_PDOR &= (uint32_t)~(uint32_t)(GPIO_PDOR_PDO(0x00080000));                                   
+  /* GPIOB_PDOR: PDO|=0x00080000 */
+  GPIOB_PDOR |= GPIO_PDOR_PDO(0x00080000);                                   
 
   /* Initialization of Port Control register */
   /* PORTB_PCR19: ISF=0,MUX=1 */
@@ -116,7 +116,8 @@ LDD_TDeviceData* BitIO_UPRDY_Init(LDD_TUserData *UserDataPtr)
                  PORT_PCR_MUX(0x06)
                 )) | (uint32_t)(
                  PORT_PCR_MUX(0x01)
-                ));                                  
+                )  | (uint32_t)(
+                 PORT_PCR_DSE_MASK));                                  
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_BitIO_UPRDY_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv);
