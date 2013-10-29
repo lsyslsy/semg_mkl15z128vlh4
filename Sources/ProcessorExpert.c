@@ -73,7 +73,6 @@
  * Global Variables
  * ===================================================================
  */
-extern TADCDataPtr adcDataPtr;
 volatile byte* uploadBufferPtr = NULL;
 volatile byte msg[MSG_SIZE] = {0};
 volatile byte msg2[MSG_SIZE] = {0};
@@ -89,10 +88,20 @@ int main(void)
 {
     /* Write your local variable definition here */
     byte cmd;
+    byte reg;
+    byte regVal[25];
+    byte dummy[MSG_SIZE];
+    bool flag1 = TRUE;
+    uint16 i;
     extern volatile bool flagSPI1RxDMATransCompleted;
+    extern volatile bool flagSPI0TxDMATransCompleted;
+    extern volatile bool flagDataReady;
+    extern volatile bool flagUploadReady;
+    extern TADCDataPtr adcDataPtr;
+    
     
     /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
-    PE_low_level_init();
+    PE_low_level_init(); 
     /*** End of Processor Expert internal initialization.                    ***/
 
     /* Write your code here */
@@ -112,8 +121,39 @@ int main(void)
     GPIOTest();
 #endif
     
+    for(i = 0; i < MSG_SIZE; i++)
+    {
+        msg[i] = 0xAAU;
+        msg2[i] = 0xBBU;
+    }
+    msg[MSG_SIZE - 1] = 0x01U;
+    msg2[MSG_SIZE - 1] = 0x20U;
+    
     cmd = ADC_CMD_SDATAC;
     ADCSendCommand(&cmd);
+    
+    regVal[0] = 0x60U;
+    ADCWriteRegister(ADC_REG_CONFIG3, regVal, 1);
+    ADCReadRegister(ADC_REG_CONFIG3, regVal, 1);
+    printf("CONFIG3: %#x\n", regVal[0]);
+
+    regVal[0] = 0x10U;
+    regVal[1] = 0x10U;
+    regVal[2] = 0x10U;
+    regVal[3] = 0x10U;
+    regVal[4] = 0x10U;
+    regVal[5] = 0x10U;
+    regVal[6] = 0x10U;
+    regVal[7] = 0x10U;
+    ADCWriteRegister(ADC_REG_CH1SET, regVal, 8);
+    for(i = 0; i < 8; i++)
+    {
+        regVal[i] = 0x00U;
+    }
+    for(;;)
+    ADCReadRegister(ADC_REG_CH1SET, regVal, 8);
+    printf("%#x, %#x, %#x, %#x, %#x, %#x, %#x, %#x\n", regVal[0], regVal[1], regVal[2], regVal[3], regVal[4], regVal[5], regVal[6], regVal[7]);
+
     
     cmd = ADC_CMD_RDATAC;
     ADCSendCommand(&cmd);
@@ -126,14 +166,49 @@ int main(void)
     
     for(;;)
     {
-        while(!flagSPI1RxDMATransCompleted){}
-        SplitRawData(adcDataPtr);
-//        printf("%#x %#x %#x %#x | %#x %#x %#x %#x %#x %#x %#x %#x\n", adcDataPtr->head, adcDataPtr->loffStatP,
-//                                                                        adcDataPtr->loffStatN, adcDataPtr->regGPIOData,
-//                                                                        adcDataPtr->channelData[0], adcDataPtr->channelData[1],
-//                                                                        adcDataPtr->channelData[2], adcDataPtr->channelData[3],
-//                                                                        adcDataPtr->channelData[4], adcDataPtr->channelData[5],
-//                                                                        adcDataPtr->channelData[6], adcDataPtr->channelData[7]);
+        /* If data of ADC is ready, read it. */
+        if(flagDataReady)
+        {
+            if(!flagSPI1RxDMATransCompleted && !adcDataPtr->flagReceivingData)
+            {
+                ADCReadContinuousData(adcDataPtr->rawData, RAW_DATA_SIZE);
+                adcDataPtr->flagReceivingData = TRUE;
+            }
+            if(flagSPI1RxDMATransCompleted)
+            {
+                flagSPI1RxDMATransCompleted = FALSE;
+                adcDataPtr->flagReceivingData = FALSE;
+                SplitRawData(adcDataPtr);
+                printf("%#x %#x %#x %#x | %#x %#x %#x %#x %#x %#x %#x %#x\n", adcDataPtr->head, adcDataPtr->loffStatP,
+                                                                                adcDataPtr->loffStatN, adcDataPtr->regGPIOData,
+                                                                                adcDataPtr->channelData[0], adcDataPtr->channelData[1],
+                                                                                adcDataPtr->channelData[2], adcDataPtr->channelData[3],
+                                                                                adcDataPtr->channelData[4], adcDataPtr->channelData[5],
+                                                                                adcDataPtr->channelData[6], adcDataPtr->channelData[7]);
+                flagDataReady = FALSE;
+            }
+        }
+        
+        
+        /*  If the ARM requires data, transmit. */
+        if(flagUploadReady && flagSPI0TxDMATransCompleted)
+        {
+            flagUploadReady = FALSE;
+            flagSPI0TxDMATransCompleted = FALSE;
+            IOUploadReadyClrVal();
+            if(flag1)
+            {
+                SPI0ReceiveSendData((LDD_DMA_TAddress)msg, (LDD_DMA_TAddress)dummy,
+                                    (LDD_DMA_TByteCount)MSG_SIZE, (LDD_DMA_TByteCount)MSG_SIZE);
+                flag1 = FALSE;
+            }
+            else
+            {
+                SPI0ReceiveSendData((LDD_DMA_TAddress)msg2, (LDD_DMA_TAddress)dummy,
+                                    (LDD_DMA_TByteCount)MSG_SIZE, (LDD_DMA_TByteCount)MSG_SIZE);
+                flag1 = TRUE;
+            }
+        }
     }
     
     /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
