@@ -5,7 +5,7 @@
 **     Processor   : MKL15Z128VLH4
 **     Version     : Component 01.000, Driver 01.04, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-24, 17:50, # CodeGen: 158
+**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
 **     Abstract    :
 **
 **     Settings    :
@@ -119,7 +119,7 @@ void LDD_SetClockConfiguration(LDD_TClockConfiguration ClockConfiguration);
 /*
 ** ###################################################################
 **
-**     This file was created by Processor Expert 10.2 [05.07]
+**     This file was created by Processor Expert 10.3 [05.08]
 **     for the Freescale Kinetis series of microcontrollers.
 **
 ** ###################################################################

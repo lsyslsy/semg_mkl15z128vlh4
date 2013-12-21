@@ -7,7 +7,7 @@
 **     Version     : Component 01.000, Driver 01.04, CPU db: 3.00.000
 **     Datasheet   : KL15P80M48SF0RM, Rev.3, Sep 2012
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
+**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
 **     Abstract    :
 **
 **     Settings    :
@@ -182,7 +182,7 @@ void __init_hardware(void);
 /*
 ** ###################################################################
 **
-**     This file was created by Processor Expert 10.2 [05.07]
+**     This file was created by Processor Expert 10.3 [05.08]
 **     for the Freescale Kinetis series of microcontrollers.
 **
 ** ###################################################################

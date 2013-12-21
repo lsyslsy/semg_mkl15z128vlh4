@@ -3,15 +3,15 @@
  **     Filename    : Init.c
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-07-12, 15:40, # CodeGen: 0
  **     Author	    : Dong
  **     Abstract    :
  **			This file contains user initialization of data, on-chip and peripheral devices.
- **			
+ **
  **			The followings will be initialized:
  **			    - User data
  **				- On-chip devices
@@ -29,17 +29,17 @@
  **     Settings    :
  **
  **     Contents    :
- **     			UserInit - UserInit(void);        
- **         
+ **     			UserInit - UserInit(void);
+ **
  **     Mail      	: pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
  * @file Init.c
  * @version 01.00
- * @brief   
- *      This file contains user initialization of data, on-chip and peripheral devices. 
+ * @brief
+ *      This file contains user initialization of data, on-chip and peripheral devices.
  *      <p>The followings will be initialized:</p>
  *      <ul>
  *      <li> User data
@@ -63,7 +63,7 @@
  */
 /*!
  *  @addtogroup UserInitialization  User Initialization
- *      This module contains user initialization of data, on-chip and peripheral devices. 
+ *      This module contains user initialization of data, on-chip and peripheral devices.
  *      <p>The followings will be initialized:</p>
  *      <ul>
  *      <li> User data
@@ -112,9 +112,12 @@
 #include "DMAT_M_SPI_RX.h"
 
 #include "MyHeaders.h"
+#include "string.h"
 
 
 static void UserDataInit(void);
+static void MCUDataInit(TMCUDataPtr userDataPtr);
+static void ARMDataInit(TARMDataPtr userDataPtr);
 static void OnChipInit(void);
 static void PeripheralInit(void);
 static void GPIOInit(void);
@@ -128,13 +131,13 @@ static void UARTInit(void);
  */
 /*!
  *     @brief
- *          Initialize on-chip and peripheral devices. 
+ *          Initialize on-chip and peripheral devices.
  *          The method is called in the main function and will be called
  *          only once.
  */
 /* ===================================================================*/
 void UserInit(void)
-{    
+{
 #if DEBUG
     printf("|-+UserDataInit begins...\n");
 #endif
@@ -160,18 +163,103 @@ void UserInit(void)
   */
  /*!
   *     @brief
-  *          Initialize user data. 
+  *          Initialize user data.
   *          The method is called in the UserInit function and will be called
   *          only once.
+  *          Function ADCDataInit is defined in ADC.h. Function MCUDataInit
+  *          and function ARMDataInit is defined below.
   */
  /* ===================================================================*/
 static void UserDataInit(void)
 {
-    extern TADCData adcData;
-    extern TADCDataPtr adcDataPtr;
-    
-    adcData = ADCDataInit(NULL);
-    adcDataPtr = &adcData;
+    ADCDataInit(NULL);
+    MCUDataInit(NULL);
+    ARMDataInit(NULL);
+
+    return;
+}
+
+/*
+ * ===================================================================
+ *     Method      :  MCUDataInit ()
+ */
+/*!
+ *     @brief
+ *         	Initialize MCU data, setting, status.
+ *         	The method is called in the UserDataInit function and will be called
+ *         	only once.
+ *     @param
+ *         	userDataPtr     - Pointer to specific user data.
+ */
+/* ===================================================================*/
+static void MCUDataInit(TMCUDataPtr userDataPtr)
+{
+    extern TMCU tMCU;
+    extern TMCUPtr tMCUPtr;
+    TMCU mcu;
+
+    mcu.mcuStatus.isReceivingADCData = FALSE;
+    mcu.mcuStatus.isMasterReceived = FALSE;
+    mcu.mcuStatus.isMasterSent = FALSE;
+    mcu.mcuStatus.isSlaveReceived = FALSE;
+    mcu.mcuStatus.isSlaveSent = FALSE;
+    mcu.mcuStatus.isSPI0RxDMATransCompleted = FALSE;
+    mcu.mcuStatus.isSPI0TxDMATransCompleted = FALSE;
+    mcu.mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+    mcu.mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    mcu.mcuStatus.isUploadReady = FALSE;
+    mcu.mcuStatus.isDelayed = FALSE;
+    mcu.mcuStatus.isUartReceived = FALSE;
+    mcu.mcuStatus.isUartSent = FALSE;
+
+    memset(mcu.mcuData.filteredChannelData, 0, (sizeof(int16)) * USING_CHANNEL_COUNT * CHANNEL_DATA_COUNT);
+    memset(mcu.mcuData.channelData, 0, (sizeof(int16)) * USING_CHANNEL_COUNT * CHANNEL_DATA_COUNT);
+
+    tMCU = mcu;
+    tMCUPtr = &tMCU;
+
+    return;
+}
+
+/*
+ * ===================================================================
+ *     Method      :  ARMDataInit ()
+ */
+/*!
+ *     @brief
+ *          Initialize ARM data, setting, status.
+ *          The method is called in the UserDataInit function and will be called
+ *          only once.
+ *     @param
+ *          userDataPtr     - Pointer to specific user data.
+ */
+/* ===================================================================*/
+static void ARMDataInit(TARMDataPtr userDataPtr)
+{
+    extern TARM tARM;
+    extern TARMPtr tARMPtr;
+    TARM arm;
+
+    arm.armStatus.isRequiringData = FALSE;
+
+    memset(arm.armDataLeft.dataHigh, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
+    memset(arm.armDataLeft.dataLow, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
+    memset(arm.armDataLeft.dataFrame, 0, (sizeof(byte)) * USING_CHANNEL_COUNT);
+    arm.armDataLeft.dataFrame[0] = DATA_FRAME_HEAD_BIT;
+    arm.armDataLeft.dataFrame[1] = MCU_NUMBER;
+    arm.armDataLeft.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
+
+    memset(arm.armDataRight.dataHigh, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
+    memset(arm.armDataRight.dataLow, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
+    memset(arm.armDataRight.dataFrame, 0, (sizeof(byte)) * USING_CHANNEL_COUNT);
+    arm.armDataRight.dataFrame[0] = DATA_FRAME_HEAD_BIT;
+    arm.armDataRight.dataFrame[1] = MCU_NUMBER;
+    arm.armDataRight.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
+
+    tARM = arm;
+    tARMPtr = &tARM;
+
+    return;
 }
 
 /*
@@ -180,7 +268,7 @@ static void UserDataInit(void)
  */
 /*!
  *     @brief
- *          Initialize on-chip devices. 
+ *          Initialize on-chip devices.
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -222,7 +310,7 @@ static void OnChipInit(void)
  */
 /*!
  *     @brief
- *          Initialize Peripheral devices. 
+ *          Initialize Peripheral devices.
  *          The method is called in the UserInit function and will be called
  *          only once.
  */
@@ -244,7 +332,7 @@ static void PeripheralInit(void)
  */
 /*!
  *     @brief
- *          Initialize GPIO. 
+ *          Initialize GPIO.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -252,62 +340,62 @@ static void PeripheralInit(void)
 static void GPIOInit(void)
 {
     /*
-     * Initialize Port SYNC_INT for external interrupt from ARM. 
+     * Initialize Port SYNC_INT for external interrupt from ARM.
      * When level changes, an interrupt will be triggered on rising edge
      * for synchronization signal for transmitting data to ARM.
      */
     EINT_SYNC_INT = EIntSyncInterruptInit(NULL);
-    
-    /* 
+
+    /*
      * Initialize Port NOT_DRDY for input from ADC.
      * Low when ADC is ready to be read.
      * Meanwhile, an interrupt will be triggered on falling edge
      * calling MCU to read data from ADC.
      */
     EINT_NOT_DRDY = EIntNotReadyInit(NULL);
-    
+
     /*
      * Initialize Port START for output to ADC.
      * High to start the ADC to convert.
      * Default: 0
      */
     IO_START = IOStartInit(NULL);
-    
-    /* 
+
+    /*
      * Initialize Port DAISY_IN for output to ADC.
      * Multiple ADCs connect in daisy mode when high.
      * Default: 0
      */
     IO_DAISY_IN = IODaisyInInit(NULL);
-    
-    /* 
+
+    /*
      * Initialize Port CLKSEL for output to ADC.
      * ADC uses internal clock when high.
      * Default: 1
      */
     IO_CLKSEL = IOClockSelectInit(NULL);
-    
+
     /*
      * Initialize Port NOT_PWDN for output to ADC.
      * ADC power down when low.
      * Default: 1
      */
     IO_NOT_PWDN = IONotPowerDownInit(NULL);
-    
-    /* 
+
+    /*
      * Initialize Port NOT_RESET for output to ADC.
      * Reset ADC when low.
      * Default: 1
      */
     IO_NOT_RESET = IONotResetInit(NULL);
-    
+
     /*
      * Initialize Port UPRDY for output to ARM.
      * Inform arm upload data are ready to retrieve.
      * Default: 0
      */
     IO_UPRDY = IOUploadReadyInit(NULL);
-    
+
 //    /*
 //     * Initialize bidirection Port TEST_SIGNAL for test some functions.
 //     * Initial direction is output.
@@ -322,7 +410,7 @@ static void GPIOInit(void)
  */
 /*!
  *     @brief
- *          Initialize SPI. 
+ *          Initialize SPI.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -335,7 +423,7 @@ static void SPIInit(void)
     SPI0EnableRxDMA();
     SPI0EnableTxDMA();
 #endif
-    
+
 #if USING_SPI1
     SPI1 = SPI1Init(NULL);      /* Initialize SPI1 in master mode, read ADC data. */
     SPI1Enable();
@@ -352,7 +440,7 @@ static void SPIInit(void)
  *     @brief
  *         	Initialize DMA controller. Including SPI transmission and reception DMA method.
  *         	The method is called in the OnChipInit function and will be called
- *         	only once.         	
+ *         	only once.
  */
 /* ===================================================================*/
 static void DMAInit(void)
@@ -361,7 +449,7 @@ static void DMAInit(void)
     DMA_CTRL = DMAControllerInit(NULL);
     DMAControllerEnable();
 #endif
-    
+
 #if USING_SPI0_DMA
     SPI0_TX_DMA = SPI0TxDMAInit(NULL);
     SPI0TxDMADisable();
@@ -370,7 +458,7 @@ static void DMAInit(void)
     SPI0RxDMADisable();
     SPI0RxDMAAllocateChannel();
 #endif
-    
+
 #if USING_SPI1_DMA
     SPI1_TX_DMA = SPI1TxDMAInit(NULL);
     SPI1TxDMADisable();
@@ -387,7 +475,7 @@ static void DMAInit(void)
  */
 /*!
  *     @brief
- *          Initialize UART. 
+ *          Initialize UART.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
  */
@@ -397,7 +485,7 @@ static void UARTInit(void)
 #if USING_UART1
     UART1 = UART1Init(NULL);    /* Initialize UART1. */
 #endif
-    
+
 #if USING_UART2
     UART2 = UART2Init(NULL);     /* Initialize UART2 for printing debug message. */
 #endif

@@ -28,11 +28,11 @@
  *          
  */
 /*!
- *  @addtogroup Ala Alias
- *      This module contains ports and functions aliases.
- *      Aliases guarantee minimum modification of code,
- *      when ports or functions changed.
- *  @{
+ * @addtogroup Ala Alias
+ *     This module contains ports and functions aliases.
+ *     Aliases guarantee minimum modification of code,
+ *     when ports or functions changed.
+ * @{
  */
 
 #ifndef ALIASES_H_

@@ -39,17 +39,17 @@
  **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  **         ReadData           - LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
  **                            - LDD_TError ADCReadData(byte* dat, uint8 n);
- **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
+ **         ADCDataInit        - ADCDataInit(TADCPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
- **         
+ **
  **     Mail      	: pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
  * @file ADC.h
  * @version 01.00
- * @brief	
+ * @brief
  * 		This file contains ADC operation functions.
  */
 /*!
@@ -70,7 +70,7 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
+{
 #endif
 
 /*
@@ -79,7 +79,7 @@ extern "C"
  */
 /*!
  *     @brief
- *          Initializes ADC. 
+ *          Initializes ADC.
  *          The method is called in the PeripheralInit function and will be called
  *          only once.
  */
@@ -92,7 +92,7 @@ void ADCInit(void);
  */
 /*!
  *     @brief
- *         	Configure the registers of ADC via SPI1.  	
+ *         	Configure the registers of ADC via SPI1.
  *     @return
  *         	                - See PE_Error.h
  */
@@ -123,7 +123,7 @@ LDD_TError ADCEnable(void);
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
- *           
+ *
  */
 /* ===================================================================*/
 LDD_TError ADCDisable(void);
@@ -134,7 +134,7 @@ LDD_TError ADCDisable(void);
  */
 /*!
  *     @brief
- *          Signal ~PWDN is high, ADC power up. 
+ *          Signal ~PWDN is high, ADC power up.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -148,7 +148,7 @@ LDD_TError ADCPowerUp(void);
  */
 /*!
  *     @brief
- *          Signal ~PWDN is low, ADC power down. 
+ *          Signal ~PWDN is low, ADC power down.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -162,7 +162,7 @@ LDD_TError ADCPowerDown(void);
  */
 /*!
  *     @brief
- *          Signal CLKSEL is high, ADC uses internal clock. 
+ *          Signal CLKSEL is high, ADC uses internal clock.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -176,7 +176,7 @@ LDD_TError ADCUseInternalClock(void);
  */
 /*!
  *     @brief
- *          Signal CLKSEL is low, ADC uses external clock. 
+ *          Signal CLKSEL is low, ADC uses external clock.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -250,7 +250,7 @@ LDD_TError ADCStopConvertByCommand(void);
  */
 /*!
  *     @brief
- *          Signal ~RESET varies from high to low to high, ADC resets. 
+ *          Signal ~RESET varies from high to low to high, ADC resets.
  *          This function resets ADC via signal RESET.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
@@ -278,7 +278,7 @@ LDD_TError ADCResetByCommand(void);
  */
 /*!
  *     @brief
- *          Signal Daisy_IN is high, ADC connects in daisy mode. 
+ *          Signal Daisy_IN is high, ADC connects in daisy mode.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -292,7 +292,7 @@ LDD_TError ADCDaisyConnect(void);
  */
 /*!
  *     @brief
- *          Signal Daisy_IN is low, ADC connects in direct mode. 
+ *          Signal Daisy_IN is low, ADC connects in direct mode.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -368,7 +368,7 @@ LDD_TError ADCStopReadDataContinuous(void);
  *                            See group ADC Commands in Macros.h.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
@@ -395,15 +395,15 @@ LDD_TError ADCSendCommand(byte* cmd);
  *          n               - The number of registers to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
  *                              - etc.         - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n);
 
@@ -422,15 +422,15 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n);
  *          n               - The number of registers to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK           - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK           - OK.
  *                              - ERR_SPEED        - This device does not work in
- *                                                   the active clock configuration.           
+ *                                                   the active clock configuration.
  *                              - ERR_DISABLED     - Component is disabled.
  *                              - ERR_BUSY         - The previous receive request is
  *                                                   pending.
  *                              - etc.             - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
 
@@ -447,10 +447,10 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
@@ -472,15 +472,15 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
  *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
  *                              - etc.         - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCReadData(byte* dat, uint8 n);
 
@@ -490,20 +490,19 @@ LDD_TError ADCReadData(byte* dat, uint8 n);
  */
 /*!
  *     @brief
- *          This method initialize the ADC data structure.
+ *          This method initialize the ADC device structure, including
+ *          data, setting and status.
  *     @param
- *          userDataPtr     - Pointer to specific user data. 
- *     @return
- *                          - ADC data structure.
+ *          userDataPtr     - Pointer to specific user data.
  */
 /* ===================================================================*/
-TADCData ADCDataInit(TADCDataPtr userDataPtr);
-    
+void ADCDataInit(TADCPtr userDataPtr);
+
     /* END ADC. */
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 #endif
 /* ADC_H_ */

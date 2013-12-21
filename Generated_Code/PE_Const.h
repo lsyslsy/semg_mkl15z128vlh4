@@ -6,7 +6,7 @@
 **     Component   : PE_Const
 **     Version     : Driver 01.00
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
+**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
 **     Abstract    :
 **         This component "PE_Const" contains internal definitions
 **         of the constants.
@@ -63,7 +63,7 @@
 /*
 ** ###################################################################
 **
-**     This file was created by Processor Expert 10.2 [05.07]
+**     This file was created by Processor Expert 10.3 [05.08]
 **     for the Freescale Kinetis series of microcontrollers.
 **
 ** ###################################################################

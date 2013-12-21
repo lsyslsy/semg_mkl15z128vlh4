@@ -3,17 +3,17 @@
  **     Filename    : Globals.h
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
+ **     Component   :
+ **     Version     :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-07-12, 12:30, # CodeGen: 0
  **     Author	    : Dong
  **     Abstract    :
  **          This file defines global variables used in this project.
  **
- **     
+ **
  **     Mail      	: pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
@@ -23,9 +23,9 @@
  *      This file defines global variables used in this project.
  */
 /*!
- *  @addtogroup GlobalVariables Global Variables
- *      This module defines global variables used in this project.
- *  @{
+ * @addtogroup GlobalVariables Global Variables
+ *     This module defines global variables used in this project.
+ * @{
  */
 
 #ifndef GLOBALS_H_
@@ -38,10 +38,10 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
-#endif 
+{
+#endif
 
-/* 
+/*
  * ===================================================================
  * System Global Variables
  * ===================================================================
@@ -50,10 +50,27 @@ extern "C"
      * @addtogroup SysGlbVar System Global Variables
      * @{
      */
-TADCData adcData;               /*!< The structure of ADC data. */
-TADCDataPtr adcDataPtr;         /*!< The pointer to structure of ADC data. */
+TADCData adcData;                       /*!< The structure of ADC data. */
+TADCDataPtr adcDataPtr;                 /*!< The pointer to structure of ADC data. */
+TMCUData mcuData;                       /*!< The structure of MCU data. */
+TMCUDataPtr mcuDataPtr;                 /*!< The pointer to structure of MCU data. */
+TARMData armData;                       /*!< The structure of ARM data. */
+TARMDataPtr armDataPtr;                 /*!< The pointer to structure of ARM data. */
+TADCSetting adcSetting;                 /*!< The structure of ADC setting. */
+TADCSettingPtr adcSettingPtr;           /*!< The pointer to structure of ADC setting. */
+TMCUSetting mcuSetting;                 /*!< The structure of MCU setting. */
+TMCUSettingPtr mcuSettingPtr;           /*!< The pointer to structure of MCU setting. */
+TARMSetting armSetting;                 /*!< The structure of ARM setting. */
+TARMSettingPtr armSettingPtr;           /*!< The pointer to structure of ARM setting. */
+
+TADC tADC[USING_ADC_COUNT];             /*!< The structure of ADC device. */
+TADCPtr tADCPtr[USING_ADC_COUNT];       /*!< The pointer to structure of ADC device. */
+TMCU tMCU;                              /*!< The structure of MCU device. */
+TMCUPtr tMCUPtr;                        /*!< The pointer to structure of MCU device. */
+TARM tARM;                              /*!< The structure of ARM device. */
+TARMPtr tARMPtr;                        /*!< The pointer to structure of ARM device. */
     /*!
-     * @} 
+     * @}
      */
 
 /*
@@ -132,7 +149,7 @@ LDD_TDeviceData* portE19DevData; /*!< Pointer to PortE Pin19 device data structu
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 #endif
 /* #ifndef GLOBALS_H_ */

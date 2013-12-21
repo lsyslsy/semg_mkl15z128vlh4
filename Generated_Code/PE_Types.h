@@ -6,7 +6,7 @@
 **     Component   : PE_Types
 **     Version     : Driver 01.01
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-24, 17:50, # CodeGen: 158
+**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
 **     Abstract    :
 **         PE_Types.h - contains definitions of basic types,
 **         register access macros and hardware specific macros
@@ -257,13 +257,13 @@ extern void PE_FillMemory(register void* SourceAddressPtr, register uint8_t c, r
 #define LDD_TIMERUNIT_ON_COUNTER_RESTART       0x0100u /*!< OnCounterRestart event mask value */
 
 /*! Direction of counting */
-typedef enum {                                                   
+typedef enum {
   DIR_UP,                              /*!< UP */
   DIR_DOWN                             /*!< DOWN */
 } LDD_TimerUnit_TCounterDirection;
 
 /*! Output action type (flip-flop action on overrun or compare match) */
-typedef enum                          {                          
+typedef enum                          {
   OUTPUT_NONE,                         /*!< NONE */
   OUTPUT_TOGGLE,                       /*!< TOGGLE */
   OUTPUT_CLEAR,                        /*!< CLEAR */
@@ -271,7 +271,7 @@ typedef enum                          {
 } LDD_TimerUnit_TOutAction;
 
 /*! Input edge type */
-typedef enum  {                                                  
+typedef enum  {
   EDGE_NONE,                           /*!< NONE */
   EDGE_RISING,                         /*!< RISING */
   EDGE_FALLING,                        /*!< FALLING */
@@ -334,6 +334,45 @@ typedef float LDD_PPG_Tfloat;          /*!< Float type */
 
 /*
 ** ===================================================================
+** FreeCntr types and constants
+** ===================================================================
+*/
+#define LDD_FREECNTR_ON_INTERRUPT              0x01u /*!< OnInterrupt event mask value */
+
+/*
+** ===================================================================
+** RealTime types and constants
+** ===================================================================
+*/
+
+typedef float LDD_RealTime_Tfloat;     /*!< Float type */
+
+/*
+** ===================================================================
+** TimeDate types and constants
+** ===================================================================
+*/
+#define LDD_TIMEDATE_ON_ALARM         0x01u /*!< OnAlarm event mask value */
+#define LDD_TIMEDATE_ON_SECOND        0x02u /*!< OnSecond event mask value */
+
+/*!< Time struct */
+typedef struct {
+  uint16_t Hour;                       /*!< Hours (0 - 23) */
+  uint16_t Min;                        /*!< Minutes (0 - 59) */
+  uint16_t Sec;                        /*!< Seconds (0 - 59) */
+  uint16_t Sec100;                     /*!< Hundredths of seconds (0 - 99) */
+} LDD_TimeDate_TTimeRec;
+
+/*!< Date struct */
+typedef struct {
+  uint16_t Year;                       /*!< Years (1998 - 2099) */
+  uint16_t Month;                      /*!< Months (1 - 12) */
+  uint16_t Day;                        /*!< Days (1 - 31) */
+  uint16_t DayOfWeek;                  /*!< Day of week (0-Sunday, .. 6-Saturday)  */
+} LDD_TimeDate_TDateRec;
+
+/*
+** ===================================================================
 ** UART device types and constants
 ** ===================================================================
 */
@@ -362,7 +401,7 @@ typedef uint16_t LDD_SERIAL_TSize;     /*!< Type specifying the length of the da
 typedef uint8_t LDD_SERIAL_TBaudMode;  /*!< Type specifying the baud mode. */
 
 /*! Type specifying the parity. */
-typedef enum {                                                   
+typedef enum {
   LDD_SERIAL_PARITY_UNDEF,             /*!< Undefined parity */
   LDD_SERIAL_PARITY_NONE,              /*!< Parity none */
   LDD_SERIAL_PARITY_ODD,               /*!< Parity odd */
@@ -372,7 +411,7 @@ typedef enum {
 } LDD_SERIAL_TParity;
 
 /*! Type specifying the stop bit length. */
-typedef enum {                                                   
+typedef enum {
   LDD_SERIAL_STOP_BIT_LEN_UNDEF,       /*!< Undefined bit length */
   LDD_SERIAL_STOP_BIT_LEN_1,           /*!< 1 bit length */
   LDD_SERIAL_STOP_BIT_LEN_1_5,         /*!< 1.5 bit length */
@@ -380,7 +419,7 @@ typedef enum {
 } LDD_SERIAL_TStopBitLen;
 
 /*! Communication statistics */
-typedef struct {                                                 
+typedef struct {
   uint32_t ReceivedChars;              /*!< Number of received characters */
   uint32_t SentChars;                  /*!< Number of transmitted characters */
   uint32_t ReceivedBreaks;             /*!< Number of received break characters */
@@ -391,7 +430,7 @@ typedef struct {
 } LDD_SERIAL_TStats;
 
 /*! Type specifying the loop mode operation. */
-typedef enum {                                                   
+typedef enum {
   LOOPMODE_UNDEF,                      /*!< Undefined loop mode */
   LOOPMODE_NORMAL,                     /*!< Normal operation */
   LOOPMODE_AUTO_ECHO,                  /*!< Auto echo mode */
@@ -478,9 +517,14 @@ typedef enum {
 #define LDD_ADC_HIGH_VOLT_REF_PIN            0x02u /*!< High voltage reference pin mask */
 
 #define LDD_ADC_ON_MEASUREMENT_COMPLETE 0x40u /*!< OnMeasurementComplete event mask */
+#define LDD_ADC_ON_ERROR 0x80u         /*!< OnError event mask */
+
+#define LDD_ADC_DMA_ERROR                   0x01u /*!< DMA error mask */
+
+typedef uint32_t LDD_ADC_TErrorMask;   /*!< ADC error type */
 
 /*! Structure pins for pin connection method */
-typedef struct {                                                 
+typedef struct {
   uint32_t Channel0_31PinMask;         /*!< Channel pin mask for channels 0 through 31 */
   uint32_t Channel32_63PinMask;        /*!< Channel pin mask for channels 32 through 63 */
   uint16_t TriggerPinMask;             /*!< Trigger pin mask */
@@ -488,12 +532,12 @@ typedef struct {
 } LDD_ADC_TPinMask;
 
 /*! Structure used to describing one sample */
-typedef struct {                                                 
+typedef struct {
   uint8_t ChannelIdx;                  /*!< Channel index */
 } LDD_ADC_TSample;
 
 /*! Type specifying the ADC compare mode */
-typedef enum {                                                   
+typedef enum {
   LDD_ADC_LESS_THAN                     = 0x00u, /*!< Compare true if the result is less than the Low compare value */
   LDD_ADC_GREATER_THAN_OR_EQUAL         = 0x01u, /*!< Compare true if the result is greater than or equal to Low compare value */
   LDD_ADC_INSIDE_RANGE_INCLUSIVE        = 0x02u, /*!< Compare true if the result is greater than or equal to Low compare value and the result is less than or equal to High compare value */
@@ -540,26 +584,26 @@ typedef uint16_t LDD_I2C_TErrorMask;   /*!< Type specifying the error mask type.
 typedef bool LDD_I2C_TMode;            /*!< Type specifynng the Actual operating mode */
 
 /*! Type specifying the address type  */
-typedef enum {                                                   
+typedef enum {
   LDD_I2C_ADDRTYPE_7BITS,              /*!< 7 bits address */
   LDD_I2C_ADDRTYPE_10BITS,             /*!< 10 bits address */
   LDD_I2C_ADDRTYPE_GENERAL_CALL        /*!< General call address */
 } LDD_I2C_TAddrType;
 
 /*! Type specifying generate the stop condition  */
-typedef enum {                                                   
+typedef enum {
   LDD_I2C_NO_SEND_STOP,                /*!< Do not send stop signal */
   LDD_I2C_SEND_STOP                    /*!< Send stop signal */
 } LDD_I2C_TSendStop;
 
 /*! Type specifying the I2C state of BUS. */
-typedef enum {                                                  
+typedef enum {
   LDD_I2C_BUSY,                        /*!< The bus is busy */
   LDD_I2C_IDLE                         /*!< The bus is idle */
 } LDD_I2C_TBusState;
 
 /*! Type specifying the I2C byte acknowledge response. */
-typedef enum {                                                  
+typedef enum {
   LDD_I2C_ACK_BYTE,                    /*!< Byte acknowledged */
   LDD_I2C_NACK_BYTE                    /*!< Byte not acknowledged */
 } LDD_I2C_TAckType;
@@ -596,21 +640,21 @@ typedef uint8_t LDD_SegLCD_TFrontplaneData; /*!< Type specifying the frontplane/
 typedef uint8_t LDD_SegLCD_TFaultValue; /*!< Type specifying the frontplane/backplane segment variable */
 
 /*! Types specifying the segment LCD blinking. */
-typedef enum {                                                   
+typedef enum {
   LDD_SEGLCD_BLINK_OFF,                /*!< Disables display blinking */
   LDD_SEGLCD_BLINK_ALL,                /*!< Display blank during the blink period */
   LDD_SEGLCD_BLINK_ALL_ALTERNATE       /*!< Blinking between alternate backplane */
 } LDD_SegLCD_TBlinking;
 
 /*! Segment LCD blank state type. */
-typedef enum {                                                   
+typedef enum {
   LDD_SEGLCD_BLANK_STATE,              /*!< Blank display mode */
   LDD_SEGLCD_NORMAL_STATE,             /*!< Normal display mode */
   LDD_SEGLCD_ALTERNATE_STATE           /*!< Alternate display mode */
 } LDD_SegLCD_TSetBlank;
 
 /*! Segment LCD pin type (frontplane/backplane) */
-typedef enum {                                                   
+typedef enum {
   LDD_SEGLCD_BACKPLANE_PIN,            /*!< Backplane pin */
   LDD_SEGLCD_FRONTPLANE_PIN            /*!< Frontplane pin */
 } LDD_SegLCD_TPinType;
@@ -669,7 +713,45 @@ typedef enum {
   LDD_GPIO_BOTH     = 0x000B0000u      /*!< Event on rising and falling edge */
 } LDD_GPIO_TEventCondition;            /*!< Defines condition when event is invoked. */
 
-#define LDD_GPIO_EVENT_CONDITIONS_MASK 0x000F0000u       
+#define LDD_GPIO_EVENT_CONDITIONS_MASK 0x000F0000u
+
+/*
+** ===================================================================
+** BITSIO device types and constants
+** ===================================================================
+*/
+#define LDD_BITSIO_PIN_0   0x01U       /*!< Pin 0 inside pin list of component */
+#define LDD_BITSIO_PIN_1   0x02U       /*!< Pin 1 inside pin list of component */
+#define LDD_BITSIO_PIN_2   0x04U       /*!< Pin 2 inside pin list of component */
+#define LDD_BITSIO_PIN_3   0x08U       /*!< Pin 3 inside pin list of component */
+#define LDD_BITSIO_PIN_4   0x10U       /*!< Pin 4 inside pin list of component */
+#define LDD_BITSIO_PIN_5   0x20U       /*!< Pin 5 inside pin list of component */
+#define LDD_BITSIO_PIN_6   0x40U       /*!< Pin 6 inside pin list of component */
+#define LDD_BITSIO_PIN_7   0x80U       /*!< Pin 7 inside pin list of component */
+#define LDD_BITSIO_PIN_8   0x0100U     /*!< Pin 8 inside pin list of component */
+#define LDD_BITSIO_PIN_9   0x0200U     /*!< Pin 9 inside pin list of component */
+#define LDD_BITSIO_PIN_10   0x0400U    /*!< Pin 10 inside pin list of component */
+#define LDD_BITSIO_PIN_11   0x0800U    /*!< Pin 11 inside pin list of component */
+#define LDD_BITSIO_PIN_12   0x1000U    /*!< Pin 12 inside pin list of component */
+#define LDD_BITSIO_PIN_13   0x2000U    /*!< Pin 13 inside pin list of component */
+#define LDD_BITSIO_PIN_14   0x4000U    /*!< Pin 14 inside pin list of component */
+#define LDD_BITSIO_PIN_15   0x8000U    /*!< Pin 15 inside pin list of component */
+#define LDD_BITSIO_PIN_16   0x00010000U /*!< Pin 16 inside pin list of component */
+#define LDD_BITSIO_PIN_17   0x00020000U /*!< Pin 17 inside pin list of component */
+#define LDD_BITSIO_PIN_18   0x00040000U /*!< Pin 18 inside pin list of component */
+#define LDD_BITSIO_PIN_19   0x00080000U /*!< Pin 19 inside pin list of component */
+#define LDD_BITSIO_PIN_20   0x00100000U /*!< Pin 20 inside pin list of component */
+#define LDD_BITSIO_PIN_21   0x00200000U /*!< Pin 21 inside pin list of component */
+#define LDD_BITSIO_PIN_22   0x00400000U /*!< Pin 22 inside pin list of component */
+#define LDD_BITSIO_PIN_23   0x00800000U /*!< Pin 23 inside pin list of component */
+#define LDD_BITSIO_PIN_24   0x01000000U /*!< Pin 24 inside pin list of component */
+#define LDD_BITSIO_PIN_25   0x02000000U /*!< Pin 25 inside pin list of component */
+#define LDD_BITSIO_PIN_26   0x04000000U /*!< Pin 26 inside pin list of component */
+#define LDD_BITSIO_PIN_27   0x08000000U /*!< Pin 27 inside pin list of component */
+#define LDD_BITSIO_PIN_28   0x10000000U /*!< Pin 28 inside pin list of component */
+#define LDD_BITSIO_PIN_29   0x20000000U /*!< Pin 29 inside pin list of component */
+#define LDD_BITSIO_PIN_30   0x40000000U /*!< Pin 30 inside pin list of component */
+#define LDD_BITSIO_PIN_31   0x80000000U /*!< Pin 31 inside pin list of component */
 
 /*
 ** ===================================================================
@@ -707,27 +789,27 @@ typedef enum {
 typedef uint8_t LDD_ETH_TMACAddress[6]; /*!< Ethernet MAC address */
 
 /*! Ethernet duplex mode */
-typedef enum {                                                   
+typedef enum {
   LDD_ETH_FULL_DUPLEX,                 /*!< Full duplex mode */
   LDD_ETH_HALF_DUPLEX                  /*!< Half duplex mode */
 } LDD_ETH_TDuplexMode;
 
 /*! Ethernet address filter mode options */
-typedef enum {                                                   
+typedef enum {
   LDD_ETH_PROMISC,                     /*!< Promiscuous mode */
   LDD_ETH_REJECT_BC,                   /*!< Reject broadcast frames */
   LDD_ETH_ACCEPT_BC                    /*!< Accept broadcast frames */
 } LDD_ETH_TFilterMode;
 
 /*! Ethernet sleep mode options */
-typedef enum {                                                   
+typedef enum {
   LDD_ETH_ENABLED,                     /*!< Sleep mode enabled */
   LDD_ETH_ENABLED_WITH_WAKEUP,         /*!< Sleep mode enabled, waiting for wake-up */
   LDD_ETH_DISABLED                     /*!< Sleep mode disabled */
 } LDD_ETH_TSleepMode;
 
 /*! Ethernet frame buffer (fragment) descriptor */
-typedef struct {                                                 
+typedef struct {
   uint8_t  *DataPtr;                   /*!< Pointer to buffer data */
   uint16_t Size;                       /*!< Buffer data size */
 } LDD_ETH_TBufferDesc;
@@ -735,7 +817,7 @@ typedef struct {
 typedef LDD_ETH_TBufferDesc* LDD_ETH_TBufferDescPtr; /*!< Frame buffer descriptor pointer type */
 
 /*! Ethernet communication statistics */
-typedef struct {                                                 
+typedef struct {
   uint32_t TxRMONDropEvents;           /*!< Count of frames not counted correctly */
   uint32_t TxRMONOctets;               /*!< Octet count for frames transmitted without error */
   uint32_t TxRMONPackets;              /*!< Transmitted packet count */
@@ -826,7 +908,7 @@ typedef uint16_t LDD_CAN_TBufferMask;  /*!< Type specifying the message buffer m
 #define LDD_CAN_MESSAGE_ID_EXT    0x80000000UL /*!< Value specifying extended Mask, ID */
 
 /*! Type specifying the CAN frame type. */
-typedef enum {                                                   
+typedef enum {
   LDD_CAN_MB_RX_NOT_ACTIVE = 0x00U,
   LDD_CAN_MB_RX_FULL       = 0x02U,
   LDD_CAN_MB_RX_EMPTY      = 0x04U,
@@ -836,7 +918,7 @@ typedef enum {
 } LDD_CAN_TRxBufferState;
 
 /*! Type specifying the CAN frame type. */
-typedef enum {                                                   
+typedef enum {
   LDD_CAN_DATA_FRAME,                  /*!< Data frame type received or transmitted */
   LDD_CAN_REMOTE_FRAME,                /*!< Remote frame type  */
   LDD_CAN_RESPONSE_FRAME               /*!< Response frame type - Tx buffer send data after receiving remote frame with the same ID */
@@ -1150,9 +1232,9 @@ typedef void (LDD_USB_Device_TTransferDoneCalback)(LDD_TDeviceData *DevDataPtr, 
 
 /*! Device transfer descriptor structure - head part */
 typedef struct LDD_USB_Device_TTD_Head_Struct {
-  uint8_t    EpNum;                    /*!< Endpoint number */                   
-  LDD_TData *BufferPtr;                /*!< Buffer address */                    
-  uint16_t   BufferSize;               /*!< Buffer size */                       
+  uint8_t    EpNum;                    /*!< Endpoint number */
+  LDD_TData *BufferPtr;                /*!< Buffer address */
+  uint16_t   BufferSize;               /*!< Buffer size */
   uint8_t    Flags;                    /*!< Transfer flags - see constants definition */
 } LDD_USB_Device_TTD_Head;
 
@@ -1198,9 +1280,9 @@ typedef enum {
 
 /*! USB otg mode states symbolic names */
 typedef enum {
-  LDD_USB_OTG_DISABLED                   = ERR_USB_OTG_DISABLED, /*!< OTG device is in DISABLED state */ 
-  LDD_USB_OTG_ENABLED                    = ERR_USB_OTG_ENABLED_PENDING, /*!< OTG device is in ENABLED_PENDING state */ 
-  LDD_USB_OTG_A_IDLE                     = ERR_USB_OTG_A_IDLE, /*!< OTG device is in A_IDLE state */ 
+  LDD_USB_OTG_DISABLED                   = ERR_USB_OTG_DISABLED, /*!< OTG device is in DISABLED state */
+  LDD_USB_OTG_ENABLED                    = ERR_USB_OTG_ENABLED_PENDING, /*!< OTG device is in ENABLED_PENDING state */
+  LDD_USB_OTG_A_IDLE                     = ERR_USB_OTG_A_IDLE, /*!< OTG device is in A_IDLE state */
   LDD_USB_OTG_A_WAIT_VRISE               = ERR_USB_OTG_A_WAIT_VRISE, /*!< OTG device is in A_WAIT_VRISE state */
   LDD_USB_OTG_A_WAIT_VFALL               = ERR_USB_OTG_A_WAIT_VFALL, /*!< OTG device is in A_WAIT_VFALL state */
   LDD_USB_OTG_A_WAIT_BCON                = ERR_USB_OTG_A_WAIT_BCON, /*!< OTG device is in A_WAIT_BCON state */
@@ -1355,7 +1437,7 @@ typedef struct LDD_USB_Host_TTD_Struct {
 typedef struct LDD_USB_TGetDecriptorRequest_Struct {
   uint8_t            bmRequestType;    /*!< Characteristics of request */
   uint8_t            bRequest;         /*!< Request ID */
-  uint8_t            bDescriptorIndex; /*!< Descriptor index */ 
+  uint8_t            bDescriptorIndex; /*!< Descriptor index */
   uint8_t            bDescriptorType;  /*!< Descriptor type */
   uint16_t           wLanguageID;      /*!< Language ID */
   uint16_t           wLength;          /*!< Requested data size */
@@ -1451,22 +1533,26 @@ typedef struct LDD_USB_TSetConfigRequest_Struct {
 #define LDD_DAC_ON_ERROR              LDD_DMA_ON_ERROR /*!< OnError event mask */
 
 /*! Type specifying the DAC buffer work mode */
-typedef enum {                                            
+typedef enum {
   LDD_DAC_BUFFER_NORMAL_MODE          = 0x00U, /*!< Normal (cyclic) mode */
   LDD_DAC_BUFFER_SWING_MODE           = 0x01U, /*!< Swing mode  */
   LDD_DAC_BUFFER_SCAN_MODE            = 0x02U /*!< One-time scan mode */
 } LDD_DAC_TBufferMode;
 
 /*! Type specifying the DAC buffer watermark levels */
-typedef enum {                                            
-  LDD_DAC_BUFFER_WATERMARK_L1         = 0x00U,                   
-  LDD_DAC_BUFFER_WATERMARK_L2         = 0x01U,                   
-  LDD_DAC_BUFFER_WATERMARK_L3         = 0x02U,                   
-  LDD_DAC_BUFFER_WATERMARK_L4         = 0x03U                    
+typedef enum {
+  LDD_DAC_BUFFER_WATERMARK_L1         = 0x00U,
+  LDD_DAC_BUFFER_WATERMARK_L2         = 0x01U,
+  LDD_DAC_BUFFER_WATERMARK_L3         = 0x02U,
+  LDD_DAC_BUFFER_WATERMARK_L4         = 0x03U
 } LDD_DAC_TBufferWatermark;
+
+#define LDD_DAC_DMA_ERROR                   0x01u /*!< DMA error mask */
 
 typedef void* LDD_DAC_TDataPtr;        /*!< Type specifying the pointer to the DAC data variable */
 typedef uint32_t LDD_DAC_TData;        /*!< The DAC data variable type */
+typedef uint32_t LDD_DAC_TErrorMask;   /*!< Error mask */
+typedef uint32_t LDD_DAC_TArrayLength; /*!< Array length type */
 
 /*
 ** ===================================================================
@@ -1483,7 +1569,7 @@ typedef uint32_t LDD_DAC_TData;        /*!< The DAC data variable type */
 #define LDD_FLASH_MULTIPLE_WRITE_ERROR     0x04u /*!< Multiple write to one flash memory location error flag's mask */
 
 /*! Type specifying HW commands for a flash device */
-typedef enum {                                          
+typedef enum {
   LDD_FLASH_READ_1S_BLOCK             = 0x00u, /*!< Checks if an entire program flash or data flash logical block has been erased to the specified margin level */
   LDD_FLASH_READ_1S_SECTION           = 0x01u, /*!< Checks if a section of program flash or data flash memory is erased to the specified read margin level */
   LDD_FLASH_WRITE_BYTE                = 0x04u, /*!< Program byte */
@@ -1496,7 +1582,7 @@ typedef enum {
 } LDD_FLASH_TCommand;
 
 /*! Type specifying possible FLASH component operation types */
-typedef enum {                                          
+typedef enum {
   LDD_FLASH_NO_OPERATION,              /*!< No operation - initial state */
   LDD_FLASH_READ,                      /*!< Read operation */
   LDD_FLASH_WRITE,                     /*!< Write operation */
@@ -1506,13 +1592,13 @@ typedef enum {
 } LDD_FLASH_TOperationType;
 
 /*! Type specifying possible FLASH component operation states */
-typedef enum {                                          
-  LDD_FLASH_IDLE,                      /*!< No operation in progress */
-  LDD_FLASH_STOP,                      /*!< The operation has been stopped */
-  LDD_FLASH_STOP_REQ,                  /*!< The operation is in the STOP request mode */
-  LDD_FLASH_START,                     /*!< Start of the operation, no operation steps have been done yet */
-  LDD_FLASH_RUNNING,                   /*!< Operation is in progress */
-  LDD_FLASH_FAILED                     /*!< Operation has failed */
+typedef enum {
+  LDD_FLASH_FAILED                    = 0x00u, /*!< Operation has failed */
+  LDD_FLASH_STOP                      = 0x01u, /*!< The operation has been stopped */
+  LDD_FLASH_IDLE                      = 0x02u, /*!< No operation in progress */
+  LDD_FLASH_STOP_REQ                  = 0x03u, /*!< The operation is in the STOP request mode */
+  LDD_FLASH_START                     = 0x04u, /*!< Start of the operation, no operation steps have been done yet */
+  LDD_FLASH_RUNNING                   = 0x05u /*!< Operation is in progress */
 } LDD_FLASH_TOperationStatus;
 
 typedef uint8_t LDD_FLASH_TErrorFlags; /*!< Type specifying FLASH component's error flags bit field */
@@ -1524,7 +1610,7 @@ typedef uint32_t LDD_FLASH_TDataSize;  /*!< Type specifying the Size parameter u
 typedef uint16_t LDD_FLASH_TErasableUnitSize; /*!< Type specifying the Size output parameter of the GetErasableUnitSize method (pointer to a variable of this type is passed to the method) */
 
 /*! Type specifying the FLASH component's rrror status information */
-typedef struct {                                        
+typedef struct {
   LDD_FLASH_TOperationType CurrentOperation; /*!< Current operation */
   LDD_FLASH_TCommand       CurrentCommand; /*!< Last flash controller command */
   LDD_FLASH_TErrorFlags    CurrentErrorFlags; /*!< Bitfield with error flags. See FLASH2.h for details */
@@ -1578,7 +1664,7 @@ typedef enum {
   LDD_ANALOGCOMP_INPUT_6 = 0x06U,      /*!< Analog input 6 selected */
   LDD_ANALOGCOMP_INPUT_7 = 0x07U,      /*!< Analog input 7 selected */
   LDD_ANALOGCOMP_INPUT_DISABLED = 0x08U /*!< Analog input disabled */
-} LDD_AnalogComp_TComparatorInput;                      
+} LDD_AnalogComp_TComparatorInput;
 
 /*! Type specifying current comparator output status */
 typedef enum {
@@ -1586,14 +1672,14 @@ typedef enum {
   LDD_ANALOGCOMP_FALLING_EDGE = 0x02U, /*!< Falling edge detected on output */
   LDD_ANALOGCOMP_RISING_EDGE = 0x04U,  /*!< Rising edge detected on output */
   LDD_ANALOGCOMP_BOTH_EDGES = 0x06U    /*!< Both edges detected on output */
-} LDD_AnalogComp_TCompareStatus;                        
+} LDD_AnalogComp_TCompareStatus;
 
 /*! Type specifying requested comparator mode */
 typedef enum {
   LDD_ANALOGCOMP_RISING_EDGE_MODE = 0x10U, /*!< Rising edge detection */
   LDD_ANALOGCOMP_FALLING_EDGE_MODE = 0x08U, /*!< Falling edge detection */
   LDD_ANALOGCOMP_BOTH_EDGES_MODE = 0x18U /*!< Both edges detection */
-} LDD_AnalogComp_TComparatorMode;                       
+} LDD_AnalogComp_TComparatorMode;
 
 typedef uint8_t LDD_AnalogComp_TOutputValue; /*!< Type specifying comparator output value */
 
@@ -1632,7 +1718,7 @@ typedef uint8_t LDD_AnalogComp_TOutputValue; /*!< Type specifying comparator out
 #define LDD_SDHC_ON_FINISHED      0x04u /*!< OnFinished event mask */
 
 /*! Card types */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_SD,                         /*!< Secure Digital memory card */
   LDD_SDHC_SDIO,                       /*!< Secure Digital IO card */
   LDD_SDHC_SDCOMBO,                    /*!< Combined Secure Digital memory and IO card */
@@ -1641,26 +1727,26 @@ typedef enum {
 } LDD_SDHC_TCardType;
 
 /*! Card access properties */
-typedef struct {                                                 
+typedef struct {
   uint16_t MaxBlockLength;             /*!< Max. transferable block length */
   bool     MisalignBlock;              /*!< Indicates if the data block can be spread over more than one physical block of the memory device */
   bool     PartialBlock;               /*!< Indicates whether partial block sizes can be used in block access */
 } LDD_SDHC_TCardAccess;
 
 /*! Card erasion properties */
-typedef struct {                                                 
+typedef struct {
   uint16_t SectorSize;                 /*!< The size of an erasable unit */
   uint8_t  Pattern;                    /*!< Memory content after erase */
 } LDD_SDHC_TCardErase;
 
 /*! Card write protection properties */
-typedef struct {                                                 
+typedef struct {
   uint16_t GroupSize;                  /*!< The size of write protected group in number of erase groups */
   bool     Permanent;                  /*!< Indicates whether card is permanently write protected (read-only) */
 } LDD_SDHC_TCardWriteProtect;
 
 /*! Card capabilities */
-typedef struct {                                                 
+typedef struct {
   uint8_t              DataWidths;     /*!< Bit mask of supported data bus widths */
   uint8_t              Operations;     /*!< Bit mask of supported operations */
   bool                 HighSpeed;      /*!< Indicates whether the card supports high clock configuration (SD bus clock frequency higher than about 25MHz) */
@@ -1673,7 +1759,7 @@ typedef struct {
 } LDD_SDHC_TCardCaps;
 
 /*! Card features description */
-typedef struct {                                                 
+typedef struct {
   LDD_SDHC_TCardType Type;             /*!< Card type */
   uint16_t           BlockLength;      /*!< Physical memory block length */
   uint32_t           BlockCount;       /*!< Number of physical memory blocks */
@@ -1681,31 +1767,31 @@ typedef struct {
 } LDD_SDHC_TCardInfo;
 
 /*! Transfer operations */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_READ,                       /*!< Read operation */
   LDD_SDHC_WRITE                       /*!< Write operation */
 } LDD_SDHC_TTransferOperation;
 
 /*! Transfer buffer descriptor */
-typedef struct {                                                 
+typedef struct {
   uint16_t Size;                       /*!< Buffer data size */
   uint8_t  *DataPtr;                   /*!< Pointer to buffer data */
 } LDD_SDHC_TBufferDesc;
 
 /*! Voltage options */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_LOW_VOLTAGE,                /*!< Low voltage */
   LDD_SDHC_HIGH_VOLTAGE                /*!< High voltage */
 } LDD_SDHC_TVoltage;
 
 /*! Write protection types */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_GROUP,                      /*!< Write protection by groups */
   LDD_SDHC_CARD                        /*!< Whole card write protection */
 } LDD_SDHC_TWriteProtectType;
 
 /*! Component states */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_DISABLED,                   /*!< Disabled */
   LDD_SDHC_RESET,                      /*!< Resetting card */
   LDD_SDHC_IDLE,                       /*!< Idling */
@@ -1723,7 +1809,7 @@ typedef enum {
 } LDD_SDHC_TStatus;
 
 /*! Operation completion error codes */
-typedef enum {                                                   
+typedef enum {
   LDD_SDHC_ERR_OK,                     /*!< No error */
   LDD_SDHC_ERR_DMA,                    /*!< DMA or block size error */
   LDD_SDHC_ERR_NOT_SUPPORTED,          /*!< Initiated operation is not supported by the card (supported operations are contained in the card information structure) */
@@ -1786,6 +1872,12 @@ typedef enum {
 #define LDD_DMA_ADDRESS_ADJUSTMENT             0x01U /*!< Address adjustment after transfer completed. */
 #define LDD_DMA_SCATTER_GATHER                 0x02U /*!< Scatter/gather performed after transfer completed. */
 
+typedef void  LDD_DMA_TData;
+typedef uint8_t  LDD_DMA_TTransactionSize; /* Type specifying the transfer size parameter used by the DMA component's methods. See the DMA_PDD header file for detail description of allowed values. */
+typedef uint32_t LDD_DMA_TTransactionCount;
+typedef uint32_t LDD_DMA_TRequestCount;
+typedef uint32_t LDD_DMA_TTransferDataSize;
+
 typedef uint32_t LDD_DMA_TAddress;     /*!< Type specifying the address parameter used by the DMA component's methods. */
 typedef int32_t  LDD_DMA_TAddressOffset; /*!< Type specifying the address signed offset parameter used by the DMA component's methods. */
 typedef uint32_t LDD_DMA_TByteCount;   /*!< Type specifying the byte count/minor loop count parameter used by the DMA component's methods. */
@@ -1804,29 +1896,36 @@ typedef uint8_t  LDD_DMA_TBandwidthControl; /*!< Type specifying the bandwidth c
 typedef uint32_t LDD_DMA_TErrorFlags;  /*!< DMA controller error flags. See the DMA_LDD component's header file for detail description of allowed values. */
 
 /*! Type specifying a DMA channel status. */
-typedef enum {                                                   
+typedef enum {
   LDD_DMA_IDLE,                        /*!< Channel is idle, no request is serviced nor transfer completed. */
   LDD_DMA_BUSY,                        /*!< Channel is active, request is serviced. */
   LDD_DMA_DONE,                        /*!< Transfer is completed, waiting to start of next transfer. */
   LDD_DMA_ERROR                        /*!< Error detected. */
 } LDD_DMA_TChannelStatus;
 
+/*! Type specifying a DMA transfer state. */
+typedef enum {
+  LDD_DMA_TRANSFER_IDLE,               /*!< Channel is idle, no request is serviced nor transfer completed. */
+  LDD_DMA_TRANSFER_BUSY,               /*!< Channel is active, request is serviced. */
+  LDD_DMA_TRANSFER_ERROR               /*!< Error detected. */
+} LDD_DMA_TTransferState;
+
 /*! Type specifying the DMA transfer mode. */
-typedef enum {                                                   
+typedef enum {
   LDD_DMA_CYCLE_STEAL_TRANSFERS,       /*!< Only single read/write transfer is done per one service request. */
   LDD_DMA_SINGLE_TRANSFER,             /*!< Transfer of all bytes defined by Data size is done after single service request. */
   LDD_DMA_NESTED_TRANSFERS             /*!< Sequence of transfers triggered by service requests. One request transfers number of bytes defined by Byte count value. */
 } LDD_DMA_TTransferMode;
 
 /*! Type specifying the DMA trigger source type. */
-typedef enum {                                                   
+typedef enum {
   LDD_DMA_SW_TRIGGER,                  /*!< Explicit software trigger. */
   LDD_DMA_HW_TRIGGER,                  /*!< Peripheral device trigger. */
   LDD_DMA_ALWAYS_ENABLED_TRIGGER       /*!< Always enabled trigger. */
 } LDD_DMA_TTriggerType;
 
 /*! Type specifying the DMA channel linking mode. */
-typedef enum {                                                   
+typedef enum {
   LDD_DMA_LINKING_DISABLED,            /*!< No linking. */
   LDD_DMA_CYCLE_STEAL_AND_TRANSFER_COMPLETE_LINKING, /*!< Channel linked after each particular read-write operation and after transfer byte count reaches zero. */
   LDD_DMA_CYCLE_STEAL_LINKING,         /*!< Channel linked after each particular read-write operation. */
@@ -1834,13 +1933,13 @@ typedef enum {
 } LDD_DMA_TChannelLinkingMode;
 
 /*! Type specifying the DMA error information structure. */
-typedef struct {                                                 
+typedef struct {
   LDD_DMA_TChannelNumber ChannelNumber; /*!< Last error recorded channel number. */
   LDD_DMA_TErrorFlags ErrorFlags;      /*!< Channel error flags. */
 } LDD_DMA_TError;
 
 /*! Type specifying the DMA Transfer descriptor information structure. */
-typedef struct {                                                 
+typedef struct {
   LDD_TUserData                  *UserDataPtr; /*!< User device data structure pointer to be returned by the DMA_LDD component's ISR to the dynamic callback of this transfer descriptor. */
   LDD_DMA_TAddress               SourceAddress; /*!< Address of a DMA transfer source data. */
   bool                           SourceAddressIncrement; /*!< TRUE - Source address incrementrf after each elemental read operation. */
@@ -1879,30 +1978,32 @@ typedef LDD_DMA_TTransferDescriptor *LDD_DMA_TTransferDescriptorPtr; /*!< Type s
 ** ===================================================================
 */
 
-#define LDD_SPIMASTER_INPUT_PIN                      0x01u /*!< Input pin mask */
-#define LDD_SPIMASTER_OUTPUT_PIN                     0x02u /*!< Output pin mask */
-#define LDD_SPIMASTER_CLK_PIN                        0x04u /*!< Clock pin mask */
-#define LDD_SPIMASTER_CS_0_PIN                       0x08u /*!< Chip select 0 pin mask */
-#define LDD_SPIMASTER_CS_1_PIN                       0x10u /*!< Chip select 1 pin mask */
-#define LDD_SPIMASTER_CS_2_PIN                       0x20u /*!< Chip select 2 pin mask */
-#define LDD_SPIMASTER_CS_3_PIN                       0x40u /*!< Chip select 3 pin mask */
-#define LDD_SPIMASTER_CS_4_PIN                       0x80u /*!< Chip select 4 pin mask */
-#define LDD_SPIMASTER_CS_5_PIN                       0x0100u /*!< Chip select 5 pin mask */
-#define LDD_SPIMASTER_CS_6_PIN                       0x0200u /*!< Chip select 6 pin mask */
-#define LDD_SPIMASTER_CS_7_PIN                       0x0400u /*!< Chip select 7 pin mask */
-#define LDD_SPIMASTER_CSS_PIN                        0x0800u /*!< Chip select strobe pin mask */
+#define LDD_SPIMASTER_INPUT_PIN                      0x01U /*!< Input pin mask */
+#define LDD_SPIMASTER_OUTPUT_PIN                     0x02U /*!< Output pin mask */
+#define LDD_SPIMASTER_CLK_PIN                        0x04U /*!< Clock pin mask */
+#define LDD_SPIMASTER_CS_0_PIN                       0x08U /*!< Chip select 0 pin mask */
+#define LDD_SPIMASTER_CS_1_PIN                       0x10U /*!< Chip select 1 pin mask */
+#define LDD_SPIMASTER_CS_2_PIN                       0x20U /*!< Chip select 2 pin mask */
+#define LDD_SPIMASTER_CS_3_PIN                       0x40U /*!< Chip select 3 pin mask */
+#define LDD_SPIMASTER_CS_4_PIN                       0x80U /*!< Chip select 4 pin mask */
+#define LDD_SPIMASTER_CS_5_PIN                       0x0100U /*!< Chip select 5 pin mask */
+#define LDD_SPIMASTER_CS_6_PIN                       0x0200U /*!< Chip select 6 pin mask */
+#define LDD_SPIMASTER_CS_7_PIN                       0x0400U /*!< Chip select 7 pin mask */
+#define LDD_SPIMASTER_CSS_PIN                        0x0800U /*!< Chip select strobe pin mask */
 
-#define LDD_SPIMASTER_ON_BLOCK_RECEIVED 0x01u /*!< OnBlockReceived event mask */
-#define LDD_SPIMASTER_ON_BLOCK_SENT     0x02u /*!< OnBlockSent event mask */
-#define LDD_SPIMASTER_ON_ERROR          0x04u /*!< OnError event mask */
+#define LDD_SPIMASTER_ON_BLOCK_RECEIVED 0x01U /*!< OnBlockReceived event mask */
+#define LDD_SPIMASTER_ON_BLOCK_SENT     0x02U /*!< OnBlockSent event mask */
+#define LDD_SPIMASTER_ON_ERROR          0x04U /*!< OnError event mask */
 
-#define LDD_SPIMASTER_RX_OVERFLOW   (SPI_SR_RFOF_MASK) /*!< Receiver overflow */
-#define LDD_SPIMASTER_PARITY_ERROR  (SPI_SR_SPEF_MASK) /*!< Parity error */
+#define LDD_SPIMASTER_RX_OVERFLOW       0x01U /*!< Receiver overflow */
+#define LDD_SPIMASTER_PARITY_ERROR      0x02U /*!< Parity error */
+#define LDD_SPIMASTER_RX_DMA_ERROR      0x04U /*!< Receive DMA channel error */
+#define LDD_SPIMASTER_TX_DMA_ERROR      0x08U /*!< Transmit DMA channel error */
 
 typedef uint32_t LDD_SPIMASTER_TError; /*!< Communication error type */
 
 /*! Communication statistics */
-typedef struct {                                                 
+typedef struct {
   uint32_t RxChars;                    /*!< Number of received characters */
   uint32_t TxChars;                    /*!< Number of transmitted characters */
   uint32_t RxParityErrors;             /*!< Number of receiver parity errors, which have occured */
@@ -1915,23 +2016,25 @@ typedef struct {
 ** ===================================================================
 */
 
-#define LDD_SPISLAVE_INPUT_PIN                      0x01u /*!< Input pin mask */
-#define LDD_SPISLAVE_OUTPUT_PIN                     0x02u /*!< Output pin mask */
-#define LDD_SPISLAVE_CLK_PIN                        0x04u /*!< Clock pin mask */
-#define LDD_SPISLAVE_SS_PIN                         0x08u /*!< Slave select pin mask */
+#define LDD_SPISLAVE_INPUT_PIN                      0x01U /*!< Input pin mask */
+#define LDD_SPISLAVE_OUTPUT_PIN                     0x02U /*!< Output pin mask */
+#define LDD_SPISLAVE_CLK_PIN                        0x04U /*!< Clock pin mask */
+#define LDD_SPISLAVE_SS_PIN                         0x08U /*!< Slave select pin mask */
 
-#define LDD_SPISLAVE_ON_BLOCK_RECEIVED 0x01u /*!< OnBlockReceived event mask */
-#define LDD_SPISLAVE_ON_BLOCK_SENT     0x02u /*!< OnBlockSent event mask */
-#define LDD_SPISLAVE_ON_ERROR          0x04u /*!< OnError event mask */
+#define LDD_SPISLAVE_ON_BLOCK_RECEIVED 0x01U /*!< OnBlockReceived event mask */
+#define LDD_SPISLAVE_ON_BLOCK_SENT     0x02U /*!< OnBlockSent event mask */
+#define LDD_SPISLAVE_ON_ERROR          0x04U /*!< OnError event mask */
 
-#define LDD_SPISLAVE_RX_OVERFLOW   (SPI_SR_RFOF_MASK) /*!< Receiver overflow */
-#define LDD_SPISLAVE_TX_UNDERFLOW  (SPI_SR_TFUF_MASK) /*!< Transmitter underflow */
-#define LDD_SPISLAVE_PARITY_ERROR  (SPI_SR_SPEF_MASK) /*!< Parity error */
+#define LDD_SPISLAVE_RX_OVERFLOW       0x01U /*!< Receiver overflow */
+#define LDD_SPISLAVE_TX_UNDERFLOW      0x02U /*!< Transmitter underflow */
+#define LDD_SPISLAVE_PARITY_ERROR      0x04U /*!< Parity error */
+#define LDD_SPISLAVE_RX_DMA_ERROR      0x08U /*!< Receive DMA channel error */
+#define LDD_SPISLAVE_TX_DMA_ERROR      0x10U /*!< Transmit DMA channel error */
 
 typedef uint32_t LDD_SPISLAVE_TError;  /*!< Communication error type */
 
 /*! Communication statistics */
-typedef struct {                                                 
+typedef struct {
   uint32_t RxChars;                    /*!< Number of received characters */
   uint32_t TxChars;                    /*!< Number of transmitted characters */
   uint32_t RxParityErrors;             /*!< Number of receiver parity errors, which have occured */
@@ -2000,26 +2103,26 @@ typedef uint32_t LDD_SSI_TError;       /*!< Communication error type */
 typedef uint32_t LDD_SSI_TComStatus;   /*!< Communication status type */
 
 /*! Group of pointers to data blocks. */
-typedef struct {                                                 
+typedef struct {
   LDD_TData *Channel0Ptr;              /*!< Pointer to data block to send/received via data channel 0 */
   LDD_TData *Channel1Ptr;              /*!< Pointer to data block to send/received via data channel 1 */
 } LDD_SSI_TDataBlocks;
 
 /*! Command type */
 typedef enum {
-  LDD_SSI_READ_COMMAND  = 0x08u,                     
-  LDD_SSI_WRITE_COMMAND = 0x10u                      
-} LDD_SSI_TAC97CommandType;                                      
+  LDD_SSI_READ_COMMAND  = 0x08u,
+  LDD_SSI_WRITE_COMMAND = 0x10u
+} LDD_SSI_TAC97CommandType;
 
 /*! AC97 command */
-typedef struct {                                                 
+typedef struct {
   LDD_SSI_TAC97CommandType Type;       /*!< Command type */
   uint32_t Address;                    /*!< Command address */
   uint32_t Data;                       /*!< Command data */
 } LDD_SSI_TAC97Command;
 
 /*! Communication statistics */
-typedef struct {                                                 
+typedef struct {
   uint32_t RxChars;                    /*!< Number of received characters */
   uint32_t TxChars;                    /*!< Number of transmitted characters */
   uint32_t RxOverruns;                 /*!< Number of receiver overruns, which have occured */
@@ -2044,7 +2147,7 @@ typedef struct {
 #define LDD_RTC_ON_STOPWATCH           0x0100u /*!< OnStopwatch event mask */
 
 /*! Structure used for time operation */
-typedef struct {                                                 
+typedef struct {
   uint32_t Second;                     /*!< seconds (0 - 59) */
   uint32_t Minute;                     /*!< minutes (0 - 59) */
   uint32_t Hour;                       /*!< hours (0 - 23) */
@@ -2078,7 +2181,7 @@ typedef struct {
 #define LDD_CRC_DNP_POLY_LOW 0x3D65U   /*!< CRC DNP poly low */
 
 /*! Transpose type */
-typedef enum  {                                                  
+typedef enum  {
   LDD_CRC_NO_TRANSPOSE = 0,            /*!< No transposition */
   LDD_CRC_BITS = 1,                    /*!< Bits are transposed */
   LDD_CRC_BITS_AND_BYTES = 2,          /*!< Bits and bytes are transposed */
@@ -2086,7 +2189,7 @@ typedef enum  {
 } LDD_CRC_TTransposeType;
 
 /*! CRC standard  */
-typedef enum  {                                                  
+typedef enum  {
   LDD_CRC_16,                          /*!< CRC16 standard */
   LDD_CRC_CCITT,                       /*!< CCITT standard */
   LDD_CRC_MODBUS_16,                   /*!< MODBUS16 standard */
@@ -2097,8 +2200,8 @@ typedef enum  {
 } LDD_CRC_TCRCStandard;
 
 /*! User CRC standard  */
-typedef struct  {                                                
-  bool Width32bit;                     /*!< 32bir CRC? */
+typedef struct  {
+  bool Width32bit;                     /*!< 32bit CRC? */
   bool ResultXORed;                    /*!< Result XORed? */
   uint16_t SeedLow;                    /*!< Seed low value */
   uint16_t SeedHigh;                   /*!< Seed high value */
@@ -2166,7 +2269,7 @@ typedef struct  {
 #define LDD_RNG_STATUS_SLEEP_MODE 0x10U /*!< Sleep mode enabled */
 
 /*! RNGA sleep mode */
-typedef enum {                                                   
+typedef enum {
   LDD_RNG_SLEEP_ENABLED,               /*!< RNGA is in sleep mode */
   LDD_RNG_SLEEP_DISABLED               /*!< RNGA is running */
 } LDD_RNG_TSleepMode;
@@ -2377,7 +2480,7 @@ typedef enum {
 /*
 ** ###################################################################
 **
-**     This file was created by Processor Expert 10.2 [05.07]
+**     This file was created by Processor Expert 10.3 [05.08]
 **     for the Freescale Kinetis series of microcontrollers.
 **
 ** ###################################################################

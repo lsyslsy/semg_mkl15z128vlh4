@@ -3,9 +3,9 @@
  **     Filename    : Process.h
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Aug 5, 2013, 8:54:36 PM, # CodeGen: 1
  **     Author      : Dong
@@ -16,7 +16,7 @@
  **     Contents    :
  **         Process         - void Process(void);
  **         SplitRawData    - LDD_TError SplitRawData(TADCDataPtr adcDataPtr);
- **     
+ **
  **     Mail        : pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
@@ -24,7 +24,7 @@
 /*!
  * @file Process.h
  * @version 01.00
- * @brief   
+ * @brief
  *      This file contains functions for kinds of data processing.
  */
 /*!
@@ -52,7 +52,7 @@
 /* ===================================================================*/
 void Process(void)
 {
-    
+
 }
 
 /*
@@ -80,7 +80,7 @@ LDD_TError SplitRawData(TADCDataPtr adcDataPtr)
     byte loffStatN;
     byte regGPIOData;
     int16 channelData;
-    
+
     head = ((adcDataPtr->rawData[0] & 0xF0) >> 4) & 0x0F;       /* Split head byte from raw data. */
     if(head != RAW_DATA_HEAD)                                   /* If the head byte is not right(0x0C), return with error. */
     {
@@ -89,27 +89,27 @@ LDD_TError SplitRawData(TADCDataPtr adcDataPtr)
         printf("%#x\n", head);
         return err;
     }
-    
+
     loffStatP  = ((byte)(adcDataPtr->rawData[0] & 0x0F) << 4) & 0xF0;
     loffStatP |= ((byte)(adcDataPtr->rawData[1] & 0xF0) >> 4) & 0x0F;
-    
+
     loffStatN  = ((byte)(adcDataPtr->rawData[1] & 0x0F) << 4) & 0xF0;
     loffStatN |= ((byte)(adcDataPtr->rawData[2] & 0xF0) >> 4) & 0x0F;
-    
+
     regGPIOData =  (byte)adcDataPtr->rawData[2] & 0x0F;
-    
-    for(i = 0; i < USING_CHANNEL_NUMBER * BYTE_NUMBER_PER_CHANNEL; i += 2)    /* Every channel's data is 2 Bytes. */
+
+    for(i = 0; i < USING_CHANNEL_COUNT * BYTE_COUNT_PER_CHANNEL; i += 2)    /* Every channel's data is 2 Bytes. */
     {
         channelData = ((int16)adcDataPtr->rawData[RAW_DATA_HEAD_SIZE + i] << 8) & 0xFF00;
         channelData |= (int16)adcDataPtr->rawData[RAW_DATA_HEAD_SIZE + i + 1] & 0x00FF;
         adcDataPtr->channelData[i / 2] = (int16)channelData;
     }
-    
+
     adcDataPtr->head = (byte)head;
     adcDataPtr->loffStatP = (byte)loffStatP;
     adcDataPtr->loffStatN = (byte)loffStatN;
     adcDataPtr->regGPIOData = (byte)regGPIOData;
-    
+
     return ERR_OK;
 }
 

@@ -4,9 +4,9 @@
 **     Project     : ProcessorExpert
 **     Processor   : MKL15Z128VLH4
 **     Component   : Serial_LDD
-**     Version     : Component 01.168, Driver 01.10, CPU db: 3.00.000
+**     Version     : Component 01.168, Driver 01.11, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-09-21, 19:46, # CodeGen: 148
+**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -67,7 +67,7 @@
 ** ###################################################################*/
 /*!
 ** @file IO2.c
-** @version 01.10
+** @version 01.11
 ** @brief
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -90,7 +90,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 /*! The mask of available events used to enable/disable events during runtime. */
 #define AVAILABLE_EVENTS_MASK 0x00U
@@ -258,7 +258,7 @@ void IO2_Main(LDD_TDeviceData *DeviceDataPtr)
 
 #ifdef __cplusplus
 }  /* extern "C" */
-#endif 
+#endif
 
 /*!
 ** @}
@@ -266,7 +266,7 @@ void IO2_Main(LDD_TDeviceData *DeviceDataPtr)
 /*
 ** ###################################################################
 **
-**     This file was created by Processor Expert 10.2 [05.07]
+**     This file was created by Processor Expert 10.3 [05.08]
 **     for the Freescale Kinetis series of microcontrollers.
 **
 ** ###################################################################

@@ -39,17 +39,17 @@
  **         WriteRegister      - LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n);
  **         ReadData           - LDD_TError ADCReadContinuousData(byte* dat, uint8 n);
  **                            - LDD_TError ADCReadData(byte* dat, uint8 n);
- **         ADCDataInit        - ADCDataInit(TADCDataPtr userDataPtr);
+ **         ADCDataInit        - ADCDataInit(TADCPtr userDataPtr);
  **         CheckCommand       - LDD_TError CheckCommand(byte cmd);
  **
  **     Mail      	: pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
  * @file ADC.c
  * @version 01.00
- * @brief	
+ * @brief
  * 		This file contains ADC operation functions.
  */
 /*!
@@ -83,7 +83,7 @@
 
 static LDD_TError CheckCommand(byte cmd);
 
-/* 
+/*
  * ===================================================================
  * Global Variables
  * ===================================================================
@@ -95,13 +95,13 @@ static LDD_TError CheckCommand(byte cmd);
  */
 /*!
  *     @brief
- *          Initializes ADC. 
+ *          Initializes ADC.
  *          The method is called in the PeripheralInit function and will be called
  *          only once.
  */
 /* ===================================================================*/
 void ADCInit(void)
-{ 
+{
     ADCEnable();                /* Clear ~CS, select ADC */
     DelaySomeMs(1);
     ADCUseInternalClock();      /* Set CLKSEL, ADC uses internal clock  */
@@ -131,7 +131,7 @@ void ADCInit(void)
 LDD_TError ADCEnable(void)
 {
 //    LDD_TError err;
-    
+
     return ERR_OK;
 }
 
@@ -141,7 +141,7 @@ LDD_TError ADCEnable(void)
  */
 /*!
  *     @brief
- *          Signal ~CS is High, disable ADC. 
+ *          Signal ~CS is High, disable ADC.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -150,7 +150,7 @@ LDD_TError ADCEnable(void)
 LDD_TError ADCDisable(void)
 {
 //    LDD_TError err;
-    
+
     return ERR_OK;
 }
 
@@ -160,7 +160,7 @@ LDD_TError ADCDisable(void)
  */
 /*!
  *     @brief
- *          Configure the registers of ADC via SPI1.    
+ *          Configure the registers of ADC via SPI1.
  *     @return
  *                          - See PE_Error.h
  */
@@ -168,7 +168,7 @@ LDD_TError ADCDisable(void)
 LDD_TError ADCConfigure(void)
 {
 //    LDD_TError err;
-    
+
     return ERR_OK;
 }
 
@@ -178,7 +178,7 @@ LDD_TError ADCConfigure(void)
  */
 /*!
  *     @brief
- *          Signal ~PWDN is high, ADC power up. 
+ *          Signal ~PWDN is high, ADC power up.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -187,9 +187,9 @@ LDD_TError ADCConfigure(void)
 LDD_TError ADCPowerUp(void)
 {
     LDD_TError err;
-    
+
     IONotResetSetVal(); /* Set ~PWDN, ADC power up */
-    
+
     if(!IONotResetGetVal())
     {
         err = ERR_COMMON;
@@ -199,7 +199,7 @@ LDD_TError ADCPowerUp(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -209,7 +209,7 @@ LDD_TError ADCPowerUp(void)
  */
 /*!
  *     @brief
- *          Signal ~PWDN is low, ADC power down. 
+ *          Signal ~PWDN is low, ADC power down.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -218,9 +218,9 @@ LDD_TError ADCPowerUp(void)
 LDD_TError ADCPowerDown(void)
 {
     LDD_TError err;
-    
+
     IONotResetClrVal(); /* Clear ~PWDN, ADC power down */
-    
+
     if(IONotResetGetVal())
     {
         err = ERR_COMMON;
@@ -230,7 +230,7 @@ LDD_TError ADCPowerDown(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -240,7 +240,7 @@ LDD_TError ADCPowerDown(void)
  */
 /*!
  *     @brief
- *          Signal CLKSEL is high, ADC uses internal clock. 
+ *          Signal CLKSEL is high, ADC uses internal clock.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -249,9 +249,9 @@ LDD_TError ADCPowerDown(void)
 LDD_TError ADCUseInternalClock(void)
 {
     LDD_TError err;
-    
+
     IOClockSelectSetVal(); /* Set CLKSEL, use internal clock */
-    
+
     if(!IOClockSelectGetVal())
     {
         err = ERR_COMMON;
@@ -261,7 +261,7 @@ LDD_TError ADCUseInternalClock(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -271,7 +271,7 @@ LDD_TError ADCUseInternalClock(void)
  */
 /*!
  *     @brief
- *          Signal CLKSEL is low, ADC uses external clock. 
+ *          Signal CLKSEL is low, ADC uses external clock.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -280,9 +280,9 @@ LDD_TError ADCUseInternalClock(void)
 LDD_TError ADCUseExternalClock(void)
 {
     LDD_TError err;
-    
+
     IOClockSelectClrVal(); /* Clear CLKSEL, use external clock */
-    
+
     if(IOClockSelectGetVal())
     {
         err = ERR_COMMON;
@@ -292,7 +292,7 @@ LDD_TError ADCUseExternalClock(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -312,9 +312,9 @@ LDD_TError ADCUseExternalClock(void)
 LDD_TError ADCStartConvertByHardware(void)
 {
     LDD_TError err;
-    
+
     IOStartSetVal(); /* Set START, ADC starts to convert */
-    
+
     if(!IOStartGetVal())
     {
         err = ERR_COMMON;
@@ -324,7 +324,7 @@ LDD_TError ADCStartConvertByHardware(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -345,18 +345,18 @@ LDD_TError ADCStartConvertByCommand(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_START;
-    
+
     IOStartClrVal(); /* Clear START, in this method, signal START must be low */
-    
+
     /* Sends START command via SPI1 */
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -376,9 +376,9 @@ LDD_TError ADCStartConvertByCommand(void)
 LDD_TError ADCStopConvertByHardware(void)
 {
     LDD_TError err;
-    
+
     IOStartClrVal(); /* Clear START, ADC does not convert */
-    
+
     if(IOStartGetVal())
     {
         err = ERR_COMMON;
@@ -388,7 +388,7 @@ LDD_TError ADCStopConvertByHardware(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -409,18 +409,18 @@ LDD_TError ADCStopConvertByCommand(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_STOP;
-    
+
     IOStartClrVal(); /* Clear START, in this method, signal START must be low */
-    
+
     /* Sends STOP command via SPI1 */
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -430,7 +430,7 @@ LDD_TError ADCStopConvertByCommand(void)
  */
 /*!
  *     @brief
- *          Signal ~RESET varies from high to low to high, ADC resets. 
+ *          Signal ~RESET varies from high to low to high, ADC resets.
  *          This function resets ADC via signal RESET.
  */
 /* ===================================================================*/
@@ -460,26 +460,26 @@ LDD_TError ADCResetByCommand(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_RESET;
-    
+
     /* Sends RESET command via SPI1 */
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
-/*  
+/*
  * ===================================================================
  *     Method      :  ADCDaisyConnect (Component ADC)
  */
 /*!
  *     @brief
- *          Signal Daisy_IN is high, ADC connects in daisy mode. 
+ *          Signal Daisy_IN is high, ADC connects in daisy mode.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -488,9 +488,9 @@ LDD_TError ADCResetByCommand(void)
 LDD_TError ADCDaisyConnect(void)
 {
     LDD_TError err;
-    
+
     IODaisyInSetVal(); /* Set DIASY_IN high, connect ADC in daisy mode */
-    
+
     if(!IODaisyInGetVal())
     {
         err = ERR_COMMON;
@@ -500,7 +500,7 @@ LDD_TError ADCDaisyConnect(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -510,7 +510,7 @@ LDD_TError ADCDaisyConnect(void)
  */
 /*!
  *     @brief
- *          Signal Daisy_IN is low, ADC connects in direct mode. 
+ *          Signal Daisy_IN is low, ADC connects in direct mode.
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -519,9 +519,9 @@ LDD_TError ADCDaisyConnect(void)
 LDD_TError ADCDirectConnect(void)
 {
     LDD_TError err;
-    
+
     IODaisyInClrVal(); /* Clear DIASY_IN high, connect ADC in direct mode */
-    
+
     if(IODaisyInGetVal())
     {
         err = ERR_COMMON;
@@ -531,7 +531,7 @@ LDD_TError ADCDirectConnect(void)
     {
         err = ERR_OK;
     }
-    
+
     return err;
 }
 
@@ -554,12 +554,12 @@ LDD_TError ADCWakeUp(void)
 
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -579,15 +579,15 @@ LDD_TError ADCStandBy(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_STANDBY;
-    
+
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -607,15 +607,15 @@ LDD_TError ADCReadDataContinuous(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_RDATAC;
-    
+
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -634,15 +634,15 @@ LDD_TError ADCStopReadDataContinuous(void)
 {
     LDD_TError err;
     byte cmd = ADC_CMD_SDATAC;
-    
+
     err = ADCSendCommand(&cmd);
     DelaySomeMs(1);
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
     }
-    
+
     return err;
 }
 
@@ -659,7 +659,7 @@ LDD_TError ADCStopReadDataContinuous(void)
  *                            See group ADC Commands in Macros.h.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
@@ -674,7 +674,7 @@ LDD_TError ADCSendCommand(byte* cmd)
     LDD_TError err;
     uint8 len;
     byte dummy;
-    
+
     /* Check the command. */
     err = CheckCommand(*cmd);
     if(err != ERR_OK)
@@ -682,9 +682,9 @@ LDD_TError ADCSendCommand(byte* cmd)
         PrintErrorMessage(err);
         return err;
     }
-    
+
     len = ((*cmd) < ADC_CMD_RREG(0x00)) ? 1 : 2;
-    
+
     /* Try to send the command to ADC. */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)cmd, (LDD_DMA_TAddress)(&dummy),
                               (LDD_DMA_TByteCount)len, (LDD_DMA_TByteCount)len);
@@ -693,7 +693,7 @@ LDD_TError ADCSendCommand(byte* cmd)
         PrintErrorMessage(err);         /* If error occurred, print the error message, */
         return err;                     /* then return error type. */
     }
-    
+
     return err;
 }
 
@@ -712,72 +712,72 @@ LDD_TError ADCSendCommand(byte* cmd)
  *          n               - The number of registers to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
  *                              - etc.         - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
 {
     uint8 i;
     LDD_TError err;
     byte strCmd[2];                 /* The read register command is a 2-byte command. */
-    
+
     /* Check if the register address is valid. */
     if(regAddr < ADC_REG_ID || regAddr > ADC_REG_WCT2)
     {
         err = ERR_PARAM_ADDRESS;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the reception buffer is valid. */
     if(!dat)
     {
         err = ERR_PARAM_BUFFER_COUNT;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the number of registers to be read is valid. */
     if(n < MIN_REGISTER_READ_NUMBER || n > MAX_REGISTER_READ_NUMBER)
     {
         err = ERR_RANGE;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Prepare the command and the register number. */
     strCmd[0] = ADC_CMD_RREG(regAddr);              /* According to user manual, read ADC register command, */
     strCmd[1] = n - 1;                              /* and if the number of registers to be read is n, n - 1 should be sent to ADC. */
 
-    /* 
+    /*
      * Try to send and receive the data.
      * Remember that the dat[0] and dat[1] are useless!!!
      * The real data begins at dat[2]!!!
      */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
                               (LDD_DMA_TByteCount)(n + 2), (LDD_DMA_TByteCount)(n + 2));
-    
-    
-    /* 
+
+
+    /*
      * Move each bit 2 bits ahead.
      * Make the data right.
      * Then the real data begins at dat[0].
-     */ 
+     */
     for(i = 0; i < n; i++)
     {
         dat[i] = dat[i + 2];
     }
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
@@ -786,7 +786,7 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
 #endif
         return err;                                 /* then return the error type. */
     }
-    
+
     return err;
 }
 
@@ -805,47 +805,47 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
  *          n               - The number of registers to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK           - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK           - OK.
  *                              - ERR_SPEED        - This device does not work in
- *                                                   the active clock configuration.           
+ *                                                   the active clock configuration.
  *                              - ERR_DISABLED     - Component is disabled.
  *                              - ERR_BUSY         - The previous receive request is
  *                                                   pending.
  *                              - etc.             - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
 {
     LDD_TError err;
-    byte strCmd[REGISTER_NUMBER + 2];                   /* Write register command is a double-byte command. */
-    byte dummy[REGISTER_NUMBER + 2];                    /* Receive dummy message. */
+    byte strCmd[REGISTER_COUNT + 2];                   /* Write register command is a double-byte command. */
+    byte dummy[REGISTER_COUNT + 2];                    /* Receive dummy message. */
     uint8 i;
-    
+
     /* Check if the register address is valid. */
     if(regAddr < ADC_REG_ID || regAddr > ADC_REG_WCT2)
     {
         err = ERR_PARAM_ADDRESS;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the transmission buffer is valid. */
     if(!dat)
     {
         err = ERR_PARAM_BUFFER_COUNT;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the number of registers to be written is valid. */
     if(n < MIN_REGISTER_READ_NUMBER || n > MAX_REGISTER_READ_NUMBER)
     {
         err = ERR_RANGE;
         PrintErrorMessage(err);
-        
+
         return err;
     }
 
@@ -856,18 +856,18 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
     {
         strCmd[i + 2] = dat[i];
     }
-    
+
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dummy,
                               (LDD_DMA_TByteCount)(n + 2), (LDD_DMA_TByteCount)(n + 2));
-    
+
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
         printf("Send command error\n");             /* If error occurred, print message, */
-        
+
         return err;                                 /* then return the error type. */
     }
-    
+
     return err;
 }
 
@@ -884,39 +884,39 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
  *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
  *                              - etc.         - See PE_Error.h.
- */  
+ */
 /* ===================================================================*/
 LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
 {
     LDD_TError err;
     byte dummy[RAW_DATA_SIZE];
-    
+
     /* Check if the reception buffer is valid. */
     if(!dat)
     {
         err = ERR_PARAM_BUFFER_COUNT;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the length of data bytes is valid. */
     if(n < 0 || n > RAW_DATA_SIZE)
     {
         err = ERR_PARAM_LENGTH;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Try to receive data. */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)dummy, (LDD_DMA_TAddress)dat,
                               (LDD_DMA_TByteCount)n, (LDD_DMA_TByteCount)n);
@@ -925,10 +925,10 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
         PrintErrorMessage(err);
 #if DEBUG
         printf("Send dummy error\n");
-#endif        
+#endif
         return err;
     }
-    
+
     return err;
 }
 
@@ -945,49 +945,49 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
  *          n               - The length of data bytes to be read.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
- *                              - ERR_OK       - OK.             
+ *                          - Possible codes:
+ *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
- *                                               the active clock configuration.           
+ *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
  *                              - etc.         - See PE_Error.h.
- */                                
+ */
 /* ===================================================================*/
 LDD_TError ADCReadData(byte* dat, uint8 n)
 {
     uint8 i;
     LDD_TError err;
     byte strCmd[RAW_DATA_SIZE + 1];
-    
+
     /* Check if the reception buffer is valid. */
     if(!dat)
     {
         err = ERR_PARAM_BUFFER_COUNT;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     /* Check if the length of data bytes is valid. */
     if(n < 0 || n > RAW_DATA_SIZE)
     {
         err = ERR_PARAM_LENGTH;
         PrintErrorMessage(err);
-        
+
         return err;
     }
-    
+
     strCmd[0] = ADC_CMD_RDATA;
-    /* 
+    /*
      * Try to send and receive the data.
      * Remember that the dat[0] is useless!!!
      * The real data begins at dat[1]!!!
      */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
                         (LDD_DMA_TByteCount)(n + 1), (LDD_DMA_TByteCount)(n + 1));
-    
+
     /*
      * Move each bit 1 bit ahead.
      * Make the data right.
@@ -997,7 +997,7 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
     {
         dat[i] = dat[i + 1];
     }
-    
+
     if(err != ERR_OK)
     {
 #if DEBUG
@@ -1005,7 +1005,7 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
 #endif
         return err;                                 /* then return the error type. */
     }
-    
+
     return err;
 }
 
@@ -1015,26 +1015,40 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
  */
 /*!
  *     @brief
- *         	This method initialize the ADC data structure.
+ *         	This method initialize the ADC device structure, including
+ *         	data, setting and status.
  *     @param
- *         	userDataPtr     - Pointer to specific user data. 
- *     @return
- *         	                - ADC data structure.
+ *         	userDataPtr     - Pointer to specific user data.
  */
 /* ===================================================================*/
-TADCData ADCDataInit(TADCDataPtr userDataPtr)
+void ADCDataInit(TADCPtr userDataPtr)
 {
-    TADCData data;
+    extern TADC tADC[USING_ADC_COUNT];
+    extern TADCPtr tADCPtr[USING_ADC_COUNT];
+    TADC adc;
+    int i;
 
-    data.flagReceivingData = FALSE;
-    data.head = (!userDataPtr) ? 0xFFU : userDataPtr->head;
-    data.loffStatP = (!userDataPtr) ? 0xFFU : userDataPtr->loffStatP;
-    data.loffStatN = (!userDataPtr) ? 0xFFU : userDataPtr->loffStatN;
-    data.regGPIOData = (!userDataPtr) ? 0xFFU : userDataPtr->regGPIOData;
-    memset(data.rawData, 0xFFU, sizeof(data.rawData));
-    memset(data.channelData, 0xFF, sizeof(data.channelData));
+    for(i = 0; i < CHANNEL_COUNT; i++)
+    {
+        adc.adcSetting.isChannelEnabled[i] = TRUE;
+    }
 
-    return data;
+    adc.adcStatus.isDataReady = FALSE;
+
+    adc.adcData.head = (!userDataPtr) ? 0xFFU : userDataPtr->adcData.head;
+    adc.adcData.loffStatP = (!userDataPtr) ? 0xFFU : userDataPtr->adcData.loffStatP;
+    adc.adcData.loffStatN = (!userDataPtr) ? 0xFFU : userDataPtr->adcData.loffStatN;
+    adc.adcData.regGPIOData = (!userDataPtr) ? 0xFFU : userDataPtr->adcData.regGPIOData;
+    memset(adc.adcData.rawData, 0xFFU, sizeof(adc.adcData.rawData));
+    memset(adc.adcData.channelData, 0xFF, sizeof(adc.adcData.channelData));
+
+   for(i = 0; i < USING_ADC_COUNT; i++)
+   {
+       tADC[i] = adc;
+       tADCPtr[i] = &tADC[i];
+   }
+
+    return;
 }
 
 /*
@@ -1066,9 +1080,9 @@ static LDD_TError CheckCommand(byte cmd)
        (cmd < ADC_CMD_WREG(ADC_REG_ID) || cmd > ADC_CMD_WREG(ADC_REG_WCT2))
       )
     {
-        return ERR_PARAM_COMMAND; 
+        return ERR_PARAM_COMMAND;
     }
-    
+
     return ERR_OK;
 }
 

@@ -36,29 +36,16 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
-#endif 
+{
+#endif
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 
-/* 
+/*
  * ===================================================================
  * Global Variables
  * ===================================================================
  */
-volatile bool flagMasterReceived = FALSE;
-volatile bool flagMasterSent = FALSE;
-volatile bool flagSlaveReceived = FALSE;
-volatile bool flagSlaveSent = FALSE;
-volatile bool flagUartReceived = FALSE;
-volatile bool flagUartSent = FALSE;
-volatile bool flagDataReady = FALSE;
-volatile bool flagUploadReady = FALSE;
-volatile bool flagSPI0TxDMATransCompleted = FALSE;
-volatile bool flagSPI0RxDMATransCompleted = FALSE;
-volatile bool flagSPI1TxDMATransCompleted = FALSE;
-volatile bool flagSPI1RxDMATransCompleted = FALSE;
-volatile bool flagDelayed = FALSE;
 
 /*
  ** ===================================================================
@@ -92,13 +79,15 @@ void Cpu_OnNMIINT(void)
  **     @param
  **         UserDataPtr     - Pointer to the user or
  **                           RTOS specific data. The pointer is passed
- **                           as the parameter of Init method. 
+ **                           as the parameter of Init method.
  */
 /* ===================================================================*/
 void SS_SPI0_OnBlockSent(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    flagSlaveSent = TRUE;
+    extern TMCUPtr tMCUPtr;
+
+    tMCUPtr->mcuStatus.isSlaveReceived = TRUE;
 }
 
 /*
@@ -115,16 +104,15 @@ void SS_SPI0_OnBlockSent(LDD_TUserData *UserDataPtr)
  **     @param
  **         UserDataPtr     - Pointer to the user or
  **                           RTOS specific data. The pointer is passed
- **                           as the parameter of Init method. 
+ **                           as the parameter of Init method.
  */
 /* ===================================================================*/
 void SS_SPI0_OnBlockReceived(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    
-    
-    
-    flagSlaveReceived = TRUE;
+    extern TMCUPtr tMCUPtr;
+
+    tMCUPtr->mcuStatus.isSlaveReceived = TRUE;
 }
 
 /*
@@ -141,13 +129,15 @@ void SS_SPI0_OnBlockReceived(LDD_TUserData *UserDataPtr)
  **     @param
  **         UserDataPtr     - Pointer to the user or
  **                           RTOS specific data. The pointer is passed
- **                           as the parameter of Init method. 
+ **                           as the parameter of Init method.
  */
 /* ===================================================================*/
 void SM_SPI1_OnBlockSent(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    flagMasterSent = TRUE;
+    extern TMCUPtr tMCUPtr;
+
+    tMCUPtr->mcuStatus.isMasterSent = TRUE;
 }
 
 /*
@@ -164,13 +154,15 @@ void SM_SPI1_OnBlockSent(LDD_TUserData *UserDataPtr)
  **     @param
  **         UserDataPtr     - Pointer to the user or
  **                           RTOS specific data. The pointer is passed
- **                           as the parameter of Init method. 
+ **                           as the parameter of Init method.
  */
 /* ===================================================================*/
 void SM_SPI1_OnBlockReceived(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    flagMasterReceived = TRUE;
+    extern TMCUPtr tMCUPtr;
+
+    tMCUPtr->mcuStatus.isMasterReceived = TRUE;
 }
 
 /*
@@ -192,7 +184,6 @@ void SM_SPI1_OnBlockReceived(LDD_TUserData *UserDataPtr)
 void AS_UART2_OnBlockReceived(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    flagUartReceived = TRUE;
 }
 
 /*
@@ -204,7 +195,7 @@ void AS_UART2_OnBlockReceived(LDD_TUserData *UserDataPtr)
 /*!
  **     @brief
  **         This event is called after the last character from the
- **         output buffer is moved to the transmitter. 
+ **         output buffer is moved to the transmitter.
  **     @param
  **         UserDataPtr     - Pointer to the user or
  **                           RTOS specific data. This pointer is passed
@@ -214,7 +205,6 @@ void AS_UART2_OnBlockReceived(LDD_TUserData *UserDataPtr)
 void AS_UART2_OnBlockSent(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    flagUartSent = TRUE;
 }
 
 /*
@@ -235,12 +225,13 @@ void AS_UART2_OnBlockSent(LDD_TUserData *UserDataPtr)
 void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
-    extern TADCDataPtr adcDataPtr;
-    
+    extern TADCPtr tADCPtr[USING_ADC_COUNT];
+
 //    flagSPI1RxDMATransCompleted = FALSE;
 //    ADCReadContinuousData(adcDataPtr->rawData, (LDD_DMA_TByteCount)RAW_DATA_SIZE);
-    
-    flagDataReady = TRUE;
+
+    tADCPtr[0]->adcStatus.isDataReady = TRUE;
+    //flagDataReady = TRUE;
 }
 
 /*
@@ -261,18 +252,19 @@ void EINT_NOT_DRDY_OnInterrupt(LDD_TUserData *UserDataPtr)
 void EINT_SYNC_INT_OnInterrupt(LDD_TUserData *UserDataPtr)
 {
     /* Write your code here ... */
+    extern TARMPtr tARMPtr;
 //    extern volatile byte* uploadBufferPtr;
 //    extern volatile byte msg[2000];
 //    extern volatile byte msg2[2000];
 //    static bool flag1 = TRUE;
 //    byte dummy[2000];
-    
+
 //    EIntSyncInterruptDisable(EINT_SYNC_INT);
-    
+
 //    flagSPI0TxDMATransCompleted = FALSE;
 //    uploadBufferPtr = (uploadBufferPtr == msg) ? msg2 : msg;
-    
-    flagUploadReady = TRUE;
+
+    tARMPtr->armStatus.isRequiringData = TRUE;
 }
 
 /*
@@ -281,12 +273,12 @@ void EINT_SYNC_INT_OnInterrupt(LDD_TUserData *UserDataPtr)
  */
 /*!
  *     @brief
- *          This event is called when a SysTick countdown has been 0.  	
+ *          This event is called when a SysTick countdown has been 0.
  */
 /* ===================================================================*/
 void SysTick_OnInterrupt(void)
 {
-    
+
 }
 
 /*
@@ -300,7 +292,9 @@ void SysTick_OnInterrupt(void)
  */
 PE_ISR(SysTick_Interrupt)
 {
-    flagDelayed = TRUE;
+    extern TMCUPtr tMCUPtr;
+
+    tMCUPtr->mcuStatus.isDelayed = TRUE;
     SysTickDisable();
     SysTickClearCountFlag();
 }
@@ -328,9 +322,11 @@ PE_ISR(SysTick_Interrupt)
 void DMAT_M_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    extern TMCUPtr tMCUPtr;
+
     SPI1RxDMADisable();
 //    SPI1DisableRxDMA();
-    flagSPI1RxDMATransCompleted = TRUE;    
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = TRUE;
 }
 
 /*
@@ -379,10 +375,13 @@ void DMAT_M_SPI_RX_OnError(LDD_TUserData *UserDataPtr)
 void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    extern TMCUPtr tMCUPtr;
+
     SPI1TxDMADisable();
 //    SPI1DisableTxDMA();
-    flagSPI1TxDMATransCompleted = TRUE;
-    flagDataReady = FALSE;
+
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = TRUE;
+    //flagDataReady = FALSE;
 }
 
 /*
@@ -431,10 +430,12 @@ void DMAT_M_SPI_TX_OnError(LDD_TUserData *UserDataPtr)
 void DMAT_S_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    extern TMCUPtr tMCUPtr;
+
     SPI0RxDMADisable();
 //    SPI0DisableRxDMA();
-    
-    flagSPI0RxDMATransCompleted = TRUE;
+
+    tMCUPtr->mcuStatus.isSPI0RxDMATransCompleted = TRUE;
 }
 
 /*
@@ -483,15 +484,17 @@ void DMAT_S_SPI_RX_OnError(LDD_TUserData *UserDataPtr)
 void DMAT_S_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
 {
   /* Write your code here ... */
+    extern TMCUPtr tMCUPtr;
+
     SPI0TxDMADisable();
 //    SPI0RxDMADisable();
-    
+
     IOUploadReadySetVal();
-    
+
 //    flagUploadReady = FALSE;
-    
-    flagSPI0TxDMATransCompleted = TRUE;
-    
+
+    tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted = TRUE;
+
 //    EIntSyncInterruptEnable(NULL);
 }
 
@@ -522,7 +525,7 @@ void DMAT_S_SPI_TX_OnError(LDD_TUserData *UserDataPtr)
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 /*!
  ** @}

@@ -170,7 +170,7 @@ LDD_TError SPI1ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receive
  *     @param[in]
  *          srcAddr         - The address of source buffer.
  *     @param[in]
- *          sendbyteCount  - The number of bytes to be written.
+ *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
  *                          - Possible codes:             

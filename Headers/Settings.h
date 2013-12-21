@@ -3,9 +3,9 @@
  **     Filename    : Settings.h
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Jul 17, 2013, 12:59:01 PM, # CodeGen: 1
  **     Author	    : Dong
@@ -14,7 +14,7 @@
  **     Settings    :
  **
  **     Contents    :
- **        
+ **
  **     Mail      	: pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
@@ -22,20 +22,20 @@
 /*!
  * @file Settings.h
  * @version 01.00
- * @brief	
+ * @brief
  *      This file contains device and environment settings.
  */
 /*!
- *  @addtogroup DevEnvSet Device and Environment Settings
- *      This module contains device and environment settings.
- *  @{
+ * @addtogroup DevEnvSet Device and Environment Settings
+ *     This module contains device and environment settings.
+ * @{
  */
 
 #ifndef SETTINGS_H_
 #define SETTINGS_H_
 /* Module Settings */
 
-    /* 
+    /*
      * ===================================================================
      * Others
      * ===================================================================
@@ -49,7 +49,7 @@
      ** @}
      */
 
-    /* 
+    /*
      * ===================================================================
      * Device In Use
      * ===================================================================
@@ -64,7 +64,7 @@
      * @}
      */
 
-    /* 
+    /*
      * ===================================================================
      * Component Switch - Decide what component will be used
      * ===================================================================
@@ -81,6 +81,20 @@
 #define USING_UART0    0    /*!< UART0 will not be used. */
 #define USING_UART1    0    /*!< UART1 will not be used. */
 #define USING_UART2    0    /*!< UART1 will not be used. */
+    /*!
+     * @}
+     */
+
+    /*
+     * ===================================================================
+     * Component Parameters - The parameters of Component settings
+     * ===================================================================
+     */
+    /*!
+     * @addtogroup CmpPara Component Parameters
+     * @{
+     */
+#define PROCESSOR_CLOCK_48MHZ 1 /*!< Processor clock frequency is 48MHz. */
     /*!
      * @}
      */

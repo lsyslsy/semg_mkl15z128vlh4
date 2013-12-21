@@ -3,9 +3,9 @@
  **     Filename    : Utilities.c
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Jul 25, 2013, 7:28:29 PM, # CodeGen: 0
  **     Author	    : Dong
@@ -25,8 +25,8 @@
  **                           - uint32 GetCurrentMs(void);
  **                           - uint32 GetCurrentS(void);
  **         PrintErrorMessage - void PrintErrorMessage(LDD_TError err);
- **                         
- **                         
+ **
+ **
  **     Mail      	: pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
@@ -34,7 +34,7 @@
 /*!
  * @file Utilities.c
  * @version 01.00
- * @brief	
+ * @brief
  *      This file contains general functions used in this project.
  */
 /*!
@@ -58,12 +58,11 @@
 #include "stdio.h"
 #include "string.h"
 
-/* 
+/*
  * ===================================================================
  * Global Variables
  * ===================================================================
  */
-extern volatile bool flagDelayed;   /*!< Flag of delay status. */
 
 
 /*
@@ -103,16 +102,18 @@ void Delay1Us()
 /* ===================================================================*/
 LDD_TError DelayUs(uint32 n)
 {
+    extern TMCUPtr tMCUPtr;
+
     if(n < MIN_DELAY_US || n > MAX_DELAY_US_PROCESSOR_CLOCK)
     {
         return ERR_PARAM_VALUE;     /* If the value is invalid, return error. */
     }
     SysTickWriteReloadValueReg(TICK_TO_US_PROCESSOR_CLOCK * (n - 4) - 1);      /* ReloadValueReg = Ticks/us - 1. 4 is a correction. */
-    
-    flagDelayed = FALSE;
+
+    tMCUPtr->mcuStatus.isDelayed = FALSE;
     SysTickEnable();        /* Enable SysTick, start countdown. */
-    while(!flagDelayed);    /* Wait. */
-    
+    while(!tMCUPtr->mcuStatus.isDelayed);    /* Wait. */
+
     return ERR_OK;
 }
 
@@ -134,10 +135,12 @@ LDD_TError DelayUs(uint32 n)
 /* ===================================================================*/
 LDD_TError DelayMs(uint32 n)
 {
-    if(n > 300)      
-    {   
-        /* 
-         * If delay time is more than 300ms, select external clock to allow longer delay.           
+    extern TMCUPtr tMCUPtr;
+
+    if(n > 300)
+    {
+        /*
+         * If delay time is more than 300ms, select external clock to allow longer delay.
          * Processor clock allow a maximum delay of 349.525ms,
          * while external clock allow a maximum delay of 5.592s.
          */
@@ -147,14 +150,14 @@ LDD_TError DelayMs(uint32 n)
     {
         SysTickSetClockSource(SYSTICK_USE_PROCESSOR_CLOCK);
     }
-    
+
     if(SysTickGetClockSource())     /* 1 - Processor Clock. */
     {
         if(n < MIN_DELAY_TIME || n > MAX_DELAY_MS_PROCESSOR_CLOCK)
         {
             return ERR_PARAM_VALUE;      /* If the value is invalid, return error. */
         }
-        
+
         SysTickWriteReloadValueReg(TICK_TO_MS_PROCESSOR_CLOCK * n - TICK_TO_US_PROCESSOR_CLOCK * 4 - 1);      /* ReloadValueReg = Ticks/ms * n - 1. TICK_TO_US_CLOCK * 4 is a correction. */
     }
     else                            /* 0 - External Clock. */
@@ -163,15 +166,15 @@ LDD_TError DelayMs(uint32 n)
         {
             return ERR_PARAM_VALUE;      /* If the value is invalid, return error. */
         }
-        
+
         SysTickWriteReloadValueReg(TICK_TO_MS_EXTERNAL_CLOCK * n - TICK_TO_US_EXTERNAL_CLOCK * 4 - 1);
     }
-    
-    flagDelayed = FALSE;
+
+    tMCUPtr->mcuStatus.isDelayed = FALSE;
     SysTickEnable();        /* Enable SysTick, start countdown. */
-    while(!flagDelayed);    /* Wait. */
+    while(!tMCUPtr->mcuStatus.isDelayed);    /* Wait. */
     SysTickSetClockSource(SYSTICK_USE_PROCESSOR_CLOCK);     /* Make sure processor clock is available before return. */
-    
+
     return ERR_OK;
 }
 
@@ -197,13 +200,13 @@ LDD_TError DelayS(uint32 n)
     {
         return ERR_PARAM_VALUE;         /* If the value is invalid, return error. */
     }
-    
+
     while(n > 0)
     {
         DelayMs(1000);
         n--;
     }
-    
+
     return ERR_OK;
 }
 
@@ -226,16 +229,16 @@ LDD_TError DelayS(uint32 n)
 LDD_TError DelaySomeUs(uint32 n)
 {
     uint32 counter;
-    
+
     if(n < MIN_DELAY_TIME || n > ULONG_MAX)
     {
         return ERR_PARAM_VALUE;         /* If the value is invalid, return error. */
     }
-    
+
     counter = (PROCESSOR_CLOCK * n - 38) / 10;       /* Counters equal to n us. */
-    
+
     for(; counter > 0; counter--);      /* Waiting. */
-    
+
     return ERR_OK;
 }
 
@@ -258,16 +261,16 @@ LDD_TError DelaySomeUs(uint32 n)
 LDD_TError DelaySomeMs(uint32 n)
 {
     uint32 counter;
-    
+
     if(n < MIN_DELAY_TIME || n > ULONG_MAX)
     {
         return ERR_PARAM_VALUE;         /* If the value is invalid, return error. */
     }
-    
+
     counter = (PROCESSOR_CLOCK * n * 1000 - 38) / 10;            /* Counters equal to n ms. */
-    
+
     for(; counter > 0; counter--);      /* Waiting. */
-    
+
     return ERR_OK;
 }
 
@@ -290,16 +293,16 @@ LDD_TError DelaySomeMs(uint32 n)
 LDD_TError DelaySomeS(uint32 n)
 {
     uint32 counter;
-    
+
     if(n < MIN_DELAY_TIME || n > ULONG_MAX)
     {
         return ERR_PARAM_VALUE;         /* If the value is invalid, return error. */
     }
-    
+
     counter = (PROCESSOR_CLOCK * n * 1000 * 1000 - 38) / 10;         /* Counters equal to n s. */
-    
+
     for(; counter > 0; counter--);      /* Waiting. */
-    
+
     return ERR_OK;
 }
 
@@ -309,8 +312,8 @@ LDD_TError DelaySomeS(uint32 n)
  */
 /*!
  *     @brief
- *          This method returns the current value of total microseconds 
- *          since power on.         
+ *          This method returns the current value of total microseconds
+ *          since power on.
  *     @return
  *                          - Total microseconds since power on.
  */
@@ -326,14 +329,14 @@ uint32 GetCurrentUs(void)
  */
 /*!
  *     @brief
- *          This method returns the current value of total milliseconds 
- *          since power on.         
+ *          This method returns the current value of total milliseconds
+ *          since power on.
  *     @return
  *                          - Total milliseconds since power on.
  */
 /* ===================================================================*/
 uint32 GetCurrentMs(void)
-{    
+{
     return 0;
 }
 
@@ -343,8 +346,8 @@ uint32 GetCurrentMs(void)
  */
 /*!
  *     @brief
- *          This method returns the current value of total seconds since 
- *          power on.         
+ *          This method returns the current value of total seconds since
+ *          power on.
  *     @return
  *                          - Total seconds since power on.
  */
@@ -362,7 +365,7 @@ uint32 GetCurrentS(void)
  *     @brief
  *          this method catches the error and print the right error message.
  *     @param[in]
- *          err             - The error occurred.           
+ *          err             - The error occurred.
  */
 /* ===================================================================*/
 void PrintErrorMessage(LDD_TError err)
@@ -496,7 +499,7 @@ void PrintErrorMessage(LDD_TError err)
     case ERR_PARAM_WIDTH:
         printf(ERR_MSG_PARAM_WIDTH);
         break;
-    case ERR_PARAM_LENGTH:       
+    case ERR_PARAM_LENGTH:
         printf(ERR_MSG_PARAM_LENGTH);
         break;
     case ERR_PARAM_ADDRESS_TYPE:
@@ -540,6 +543,8 @@ void PrintErrorMessage(LDD_TError err)
         break;
     }
 #endif  /* #if DEBUG */
+
+    return;
 }
 
 /* End Utilities */

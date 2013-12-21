@@ -67,9 +67,9 @@
 **         serial master-slave communication.
 */         
 /*!
-**  @addtogroup SS_SPI0_module SS_SPI0 module documentation
-**  @{
-*/         
+** @addtogroup SS_SPI0_module SS_SPI0 module documentation
+** @{
+*/       
 
 #ifndef __SS_SPI0_H
 #define __SS_SPI0_H

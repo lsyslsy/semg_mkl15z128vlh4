@@ -12,13 +12,13 @@
 **                          IAR ANSI C/C++ Compiler for ARM
 **
 **     Reference manual:    KL15P80M48SF0RM, Rev.3, Sep 2012
-**     Version:             rev. 1.3, 2012-11-22
+**     Version:             rev. 1.4, 2013-04-05
 **
 **     Abstract:
 **         This header file implements peripheral memory map for MKL15Z4
 **         processor.
 **
-**     Copyright: 1997 - 2012 Freescale, Inc. All Rights Reserved.
+**     Copyright: 1997 - 2013 Freescale, Inc. All Rights Reserved.
 **
 **     http:                 www.freescale.com
 **     mail:                 support@freescale.com
@@ -33,14 +33,16 @@
 **     - rev. 1.3 (2012-11-22)
 **         MCG module - bit LOLS in MCG_S register renamed to LOLS0.
 **         NV registers - bit EZPORT_DIS in NV_FOPT register removed.
+**     - rev. 1.4 (2013-04-05)
+**         Changed start of doxygen comment.
 **
 ** ###################################################################
 */
 
-/**
+/*!
  * @file MKL15Z4.h
- * @version 1.3
- * @date 2012-11-22
+ * @version 1.4
+ * @date 2013-04-05
  * @brief Peripheral memory map for MKL15Z4
  *
  * This header file implements peripheral memory map for MKL15Z4 processor.
@@ -67,14 +69,14 @@
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100u
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0003u
+#define MCU_MEM_MAP_VERSION_MINOR 0x0004u
 
 
 /* ----------------------------------------------------------------------------
    -- Interrupt vector numbers
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Interrupt_vector_numbers Interrupt vector numbers
  * @{
  */
@@ -131,7 +133,7 @@ typedef enum {
   INT_PORTD                    = 47                /**< Port D interrupt */
 } IRQInterruptIndex;
 
-/**
+/*!
  * @}
  */ /* end of group Interrupt_vector_numbers */
 
@@ -140,7 +142,7 @@ typedef enum {
    -- Peripheral type defines
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Peripheral_defines Peripheral type defines
  * @{
  */
@@ -168,7 +170,7 @@ typedef enum {
    -- ADC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Peripheral ADC
  * @{
  */
@@ -207,7 +209,7 @@ typedef struct ADC_MemMap {
    -- ADC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Register_Accessor_Macros ADC - Register accessor macros
  * @{
  */
@@ -240,7 +242,7 @@ typedef struct ADC_MemMap {
 #define ADC_CLM1_REG(base)                       ((base)->CLM1)
 #define ADC_CLM0_REG(base)                       ((base)->CLM0)
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Register_Accessor_Macros */
 
@@ -249,7 +251,7 @@ typedef struct ADC_MemMap {
    -- ADC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Register_Masks ADC Register Masks
  * @{
  */
@@ -397,7 +399,7 @@ typedef struct ADC_MemMap {
 #define ADC_CLM0_CLM0_SHIFT                      0
 #define ADC_CLM0_CLM0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM0_CLM0_SHIFT))&ADC_CLM0_CLM0_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Register_Masks */
 
@@ -412,7 +414,7 @@ typedef struct ADC_MemMap {
    -- ADC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Register_Accessor_Macros ADC - Register accessor macros
  * @{
  */
@@ -452,12 +454,12 @@ typedef struct ADC_MemMap {
 #define ADC0_SC1(index)                          ADC_SC1_REG(ADC0_BASE_PTR,index)
 #define ADC0_R(index)                            ADC_R_REG(ADC0_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Peripheral */
 
@@ -466,7 +468,7 @@ typedef struct ADC_MemMap {
    -- BP
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup BP_Peripheral BP
  * @{
  */
@@ -495,7 +497,7 @@ typedef struct BP_MemMap {
    -- BP - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup BP_Register_Accessor_Macros BP - Register accessor macros
  * @{
  */
@@ -517,7 +519,7 @@ typedef struct BP_MemMap {
 #define BP_CID2_REG(base)                        ((base)->CID2)
 #define BP_CID3_REG(base)                        ((base)->CID3)
 
-/**
+/*!
  * @}
  */ /* end of group BP_Register_Accessor_Macros */
 
@@ -526,13 +528,13 @@ typedef struct BP_MemMap {
    -- BP Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup BP_Register_Masks BP Register Masks
  * @{
  */
 
 
-/**
+/*!
  * @}
  */ /* end of group BP_Register_Masks */
 
@@ -547,7 +549,7 @@ typedef struct BP_MemMap {
    -- BP - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup BP_Register_Accessor_Macros BP - Register accessor macros
  * @{
  */
@@ -574,12 +576,12 @@ typedef struct BP_MemMap {
 /* BP - Register array accessors */
 #define BP_COMP(index)                           BP_COMP_REG(BP_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group BP_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group BP_Peripheral */
 
@@ -588,7 +590,7 @@ typedef struct BP_MemMap {
    -- CMP
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Peripheral CMP
  * @{
  */
@@ -607,7 +609,7 @@ typedef struct CMP_MemMap {
    -- CMP - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Register_Accessor_Macros CMP - Register accessor macros
  * @{
  */
@@ -621,7 +623,7 @@ typedef struct CMP_MemMap {
 #define CMP_DACCR_REG(base)                      ((base)->DACCR)
 #define CMP_MUXCR_REG(base)                      ((base)->MUXCR)
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Register_Accessor_Macros */
 
@@ -630,7 +632,7 @@ typedef struct CMP_MemMap {
    -- CMP Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Register_Masks CMP Register Masks
  * @{
  */
@@ -694,7 +696,7 @@ typedef struct CMP_MemMap {
 #define CMP_MUXCR_PSTM_MASK                      0x80u
 #define CMP_MUXCR_PSTM_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Register_Masks */
 
@@ -709,7 +711,7 @@ typedef struct CMP_MemMap {
    -- CMP - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Register_Accessor_Macros CMP - Register accessor macros
  * @{
  */
@@ -724,12 +726,12 @@ typedef struct CMP_MemMap {
 #define CMP0_DACCR                               CMP_DACCR_REG(CMP0_BASE_PTR)
 #define CMP0_MUXCR                               CMP_MUXCR_REG(CMP0_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Peripheral */
 
@@ -738,7 +740,7 @@ typedef struct CMP_MemMap {
    -- CoreDebug
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CoreDebug_Peripheral CoreDebug
  * @{
  */
@@ -758,7 +760,7 @@ typedef struct CoreDebug_MemMap {
    -- CoreDebug - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CoreDebug_Register_Accessor_Macros CoreDebug - Register accessor macros
  * @{
  */
@@ -771,7 +773,7 @@ typedef struct CoreDebug_MemMap {
 #define CoreDebug_base_DCRDR_REG(base)           ((base)->base_DCRDR)
 #define CoreDebug_base_DEMCR_REG(base)           ((base)->base_DEMCR)
 
-/**
+/*!
  * @}
  */ /* end of group CoreDebug_Register_Accessor_Macros */
 
@@ -780,13 +782,13 @@ typedef struct CoreDebug_MemMap {
    -- CoreDebug Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CoreDebug_Register_Masks CoreDebug Register Masks
  * @{
  */
 
 
-/**
+/*!
  * @}
  */ /* end of group CoreDebug_Register_Masks */
 
@@ -801,7 +803,7 @@ typedef struct CoreDebug_MemMap {
    -- CoreDebug - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CoreDebug_Register_Accessor_Macros CoreDebug - Register accessor macros
  * @{
  */
@@ -815,12 +817,12 @@ typedef struct CoreDebug_MemMap {
 #define DCRDR                                    CoreDebug_base_DCRDR_REG(CoreDebug_BASE_PTR)
 #define DEMCR                                    CoreDebug_base_DEMCR_REG(CoreDebug_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group CoreDebug_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group CoreDebug_Peripheral */
 
@@ -829,7 +831,7 @@ typedef struct CoreDebug_MemMap {
    -- DAC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DAC_Peripheral DAC
  * @{
  */
@@ -851,7 +853,7 @@ typedef struct DAC_MemMap {
    -- DAC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DAC_Register_Accessor_Macros DAC - Register accessor macros
  * @{
  */
@@ -865,7 +867,7 @@ typedef struct DAC_MemMap {
 #define DAC_C1_REG(base)                         ((base)->C1)
 #define DAC_C2_REG(base)                         ((base)->C2)
 
-/**
+/*!
  * @}
  */ /* end of group DAC_Register_Accessor_Macros */
 
@@ -874,7 +876,7 @@ typedef struct DAC_MemMap {
    -- DAC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DAC_Register_Masks DAC Register Masks
  * @{
  */
@@ -920,7 +922,7 @@ typedef struct DAC_MemMap {
 #define DAC_C2_DACBFRP_MASK                      0x10u
 #define DAC_C2_DACBFRP_SHIFT                     4
 
-/**
+/*!
  * @}
  */ /* end of group DAC_Register_Masks */
 
@@ -935,7 +937,7 @@ typedef struct DAC_MemMap {
    -- DAC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DAC_Register_Accessor_Macros DAC - Register accessor macros
  * @{
  */
@@ -956,12 +958,12 @@ typedef struct DAC_MemMap {
 #define DAC0_DATL(index)                         DAC_DATL_REG(DAC0_BASE_PTR,index)
 #define DAC0_DATH(index)                         DAC_DATH_REG(DAC0_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group DAC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group DAC_Peripheral */
 
@@ -970,7 +972,7 @@ typedef struct DAC_MemMap {
    -- DMA
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Peripheral DMA
  * @{
  */
@@ -996,7 +998,7 @@ typedef struct DMA_MemMap {
    -- DMA - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Register_Accessor_Macros DMA - Register accessor macros
  * @{
  */
@@ -1009,7 +1011,7 @@ typedef struct DMA_MemMap {
 #define DMA_DSR_REG(base,index)                  ((base)->DMA[index].DMA_DSR_ACCESS8BIT.DSR)
 #define DMA_DCR_REG(base,index)                  ((base)->DMA[index].DCR)
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Register_Accessor_Macros */
 
@@ -1018,7 +1020,7 @@ typedef struct DMA_MemMap {
    -- DMA Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Register_Masks DMA Register Masks
  * @{
  */
@@ -1088,7 +1090,7 @@ typedef struct DMA_MemMap {
 #define DMA_DCR_EINT_MASK                        0x80000000u
 #define DMA_DCR_EINT_SHIFT                       31
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Register_Masks */
 
@@ -1103,7 +1105,7 @@ typedef struct DMA_MemMap {
    -- DMA - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Register_Accessor_Macros DMA - Register accessor macros
  * @{
  */
@@ -1139,12 +1141,12 @@ typedef struct DMA_MemMap {
 #define DMA_DSR(index)                           DMA_DSR_REG(DMA_BASE_PTR,index)
 #define DMA_DCR(index)                           DMA_DCR_REG(DMA_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Peripheral */
 
@@ -1153,7 +1155,7 @@ typedef struct DMA_MemMap {
    -- DMAMUX
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Peripheral DMAMUX
  * @{
  */
@@ -1167,7 +1169,7 @@ typedef struct DMAMUX_MemMap {
    -- DMAMUX - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Register_Accessor_Macros DMAMUX - Register accessor macros
  * @{
  */
@@ -1176,7 +1178,7 @@ typedef struct DMAMUX_MemMap {
 /* DMAMUX - Register accessors */
 #define DMAMUX_CHCFG_REG(base,index)             ((base)->CHCFG[index])
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Register_Accessor_Macros */
 
@@ -1185,7 +1187,7 @@ typedef struct DMAMUX_MemMap {
    -- DMAMUX Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Register_Masks DMAMUX Register Masks
  * @{
  */
@@ -1199,7 +1201,7 @@ typedef struct DMAMUX_MemMap {
 #define DMAMUX_CHCFG_ENBL_MASK                   0x80u
 #define DMAMUX_CHCFG_ENBL_SHIFT                  7
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Register_Masks */
 
@@ -1214,7 +1216,7 @@ typedef struct DMAMUX_MemMap {
    -- DMAMUX - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Register_Accessor_Macros DMAMUX - Register accessor macros
  * @{
  */
@@ -1230,12 +1232,12 @@ typedef struct DMAMUX_MemMap {
 /* DMAMUX - Register array accessors */
 #define DMAMUX0_CHCFG(index)                     DMAMUX_CHCFG_REG(DMAMUX0_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Peripheral */
 
@@ -1244,7 +1246,7 @@ typedef struct DMAMUX_MemMap {
    -- DWT
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DWT_Peripheral DWT
  * @{
  */
@@ -1266,7 +1268,7 @@ typedef struct DWT_MemMap {
    -- DWT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DWT_Register_Accessor_Macros DWT - Register accessor macros
  * @{
  */
@@ -1279,7 +1281,7 @@ typedef struct DWT_MemMap {
 #define DWT_MASK_REG(base,index)                 ((base)->COMPARATOR[index].MASK)
 #define DWT_FUNCTION_REG(base,index)             ((base)->COMPARATOR[index].FUNCTION)
 
-/**
+/*!
  * @}
  */ /* end of group DWT_Register_Accessor_Macros */
 
@@ -1288,13 +1290,13 @@ typedef struct DWT_MemMap {
    -- DWT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DWT_Register_Masks DWT Register Masks
  * @{
  */
 
 
-/**
+/*!
  * @}
  */ /* end of group DWT_Register_Masks */
 
@@ -1309,7 +1311,7 @@ typedef struct DWT_MemMap {
    -- DWT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DWT_Register_Accessor_Macros DWT - Register accessor macros
  * @{
  */
@@ -1331,12 +1333,12 @@ typedef struct DWT_MemMap {
 #define DWT_MASK(index)                          DWT_MASK_REG(DWT_BASE_PTR,index)
 #define DWT_FUNCTION(index)                      DWT_FUNCTION_REG(DWT_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group DWT_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group DWT_Peripheral */
 
@@ -1345,7 +1347,7 @@ typedef struct DWT_MemMap {
    -- FGPIO
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Peripheral FGPIO
  * @{
  */
@@ -1364,7 +1366,7 @@ typedef struct FGPIO_MemMap {
    -- FGPIO - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Register_Accessor_Macros FGPIO - Register accessor macros
  * @{
  */
@@ -1378,7 +1380,7 @@ typedef struct FGPIO_MemMap {
 #define FGPIO_PDIR_REG(base)                     ((base)->PDIR)
 #define FGPIO_PDDR_REG(base)                     ((base)->PDDR)
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Register_Accessor_Macros */
 
@@ -1387,7 +1389,7 @@ typedef struct FGPIO_MemMap {
    -- FGPIO Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Register_Masks FGPIO Register Masks
  * @{
  */
@@ -1417,7 +1419,7 @@ typedef struct FGPIO_MemMap {
 #define FGPIO_PDDR_PDD_SHIFT                     0
 #define FGPIO_PDDR_PDD(x)                        (((uint32_t)(((uint32_t)(x))<<FGPIO_PDDR_PDD_SHIFT))&FGPIO_PDDR_PDD_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Register_Masks */
 
@@ -1440,7 +1442,7 @@ typedef struct FGPIO_MemMap {
    -- FGPIO - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Register_Accessor_Macros FGPIO - Register accessor macros
  * @{
  */
@@ -1483,12 +1485,12 @@ typedef struct FGPIO_MemMap {
 #define FGPIOE_PDIR                              FGPIO_PDIR_REG(FPTE_BASE_PTR)
 #define FGPIOE_PDDR                              FGPIO_PDDR_REG(FPTE_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Peripheral */
 
@@ -1497,7 +1499,7 @@ typedef struct FGPIO_MemMap {
    -- FTFA
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Peripheral FTFA
  * @{
  */
@@ -1530,7 +1532,7 @@ typedef struct FTFA_MemMap {
    -- FTFA - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Register_Accessor_Macros FTFA - Register accessor macros
  * @{
  */
@@ -1558,7 +1560,7 @@ typedef struct FTFA_MemMap {
 #define FTFA_FPROT1_REG(base)                    ((base)->FPROT1)
 #define FTFA_FPROT0_REG(base)                    ((base)->FPROT0)
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Register_Accessor_Macros */
 
@@ -1567,7 +1569,7 @@ typedef struct FTFA_MemMap {
    -- FTFA Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Register_Masks FTFA Register Masks
  * @{
  */
@@ -1674,7 +1676,7 @@ typedef struct FTFA_MemMap {
 #define FTFA_FPROT0_PROT_SHIFT                   0
 #define FTFA_FPROT0_PROT(x)                      (((uint8_t)(((uint8_t)(x))<<FTFA_FPROT0_PROT_SHIFT))&FTFA_FPROT0_PROT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Register_Masks */
 
@@ -1689,7 +1691,7 @@ typedef struct FTFA_MemMap {
    -- FTFA - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Register_Accessor_Macros FTFA - Register accessor macros
  * @{
  */
@@ -1718,12 +1720,12 @@ typedef struct FTFA_MemMap {
 #define FTFA_FPROT1                              FTFA_FPROT1_REG(FTFA_BASE_PTR)
 #define FTFA_FPROT0                              FTFA_FPROT0_REG(FTFA_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Peripheral */
 
@@ -1732,7 +1734,7 @@ typedef struct FTFA_MemMap {
    -- GPIO
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Peripheral GPIO
  * @{
  */
@@ -1751,7 +1753,7 @@ typedef struct GPIO_MemMap {
    -- GPIO - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Register_Accessor_Macros GPIO - Register accessor macros
  * @{
  */
@@ -1765,7 +1767,7 @@ typedef struct GPIO_MemMap {
 #define GPIO_PDIR_REG(base)                      ((base)->PDIR)
 #define GPIO_PDDR_REG(base)                      ((base)->PDDR)
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Register_Accessor_Macros */
 
@@ -1774,7 +1776,7 @@ typedef struct GPIO_MemMap {
    -- GPIO Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Register_Masks GPIO Register Masks
  * @{
  */
@@ -1804,7 +1806,7 @@ typedef struct GPIO_MemMap {
 #define GPIO_PDDR_PDD_SHIFT                      0
 #define GPIO_PDDR_PDD(x)                         (((uint32_t)(((uint32_t)(x))<<GPIO_PDDR_PDD_SHIFT))&GPIO_PDDR_PDD_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Register_Masks */
 
@@ -1827,7 +1829,7 @@ typedef struct GPIO_MemMap {
    -- GPIO - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Register_Accessor_Macros GPIO - Register accessor macros
  * @{
  */
@@ -1870,12 +1872,12 @@ typedef struct GPIO_MemMap {
 #define GPIOE_PDIR                               GPIO_PDIR_REG(PTE_BASE_PTR)
 #define GPIOE_PDDR                               GPIO_PDDR_REG(PTE_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Peripheral */
 
@@ -1884,7 +1886,7 @@ typedef struct GPIO_MemMap {
    -- I2C
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Peripheral I2C
  * @{
  */
@@ -1909,7 +1911,7 @@ typedef struct I2C_MemMap {
    -- I2C - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Register_Accessor_Macros I2C - Register accessor macros
  * @{
  */
@@ -1929,7 +1931,7 @@ typedef struct I2C_MemMap {
 #define I2C_SLTH_REG(base)                       ((base)->SLTH)
 #define I2C_SLTL_REG(base)                       ((base)->SLTL)
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Register_Accessor_Macros */
 
@@ -1938,7 +1940,7 @@ typedef struct I2C_MemMap {
    -- I2C Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Register_Masks I2C Register Masks
  * @{
  */
@@ -2050,7 +2052,7 @@ typedef struct I2C_MemMap {
 #define I2C_SLTL_SSLT_SHIFT                      0
 #define I2C_SLTL_SSLT(x)                         (((uint8_t)(((uint8_t)(x))<<I2C_SLTL_SSLT_SHIFT))&I2C_SLTL_SSLT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Register_Masks */
 
@@ -2067,7 +2069,7 @@ typedef struct I2C_MemMap {
    -- I2C - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Register_Accessor_Macros I2C - Register accessor macros
  * @{
  */
@@ -2101,12 +2103,12 @@ typedef struct I2C_MemMap {
 #define I2C1_SLTH                                I2C_SLTH_REG(I2C1_BASE_PTR)
 #define I2C1_SLTL                                I2C_SLTL_REG(I2C1_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Peripheral */
 
@@ -2115,7 +2117,7 @@ typedef struct I2C_MemMap {
    -- LLWU
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Peripheral LLWU
  * @{
  */
@@ -2138,7 +2140,7 @@ typedef struct LLWU_MemMap {
    -- LLWU - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Register_Accessor_Macros LLWU - Register accessor macros
  * @{
  */
@@ -2156,7 +2158,7 @@ typedef struct LLWU_MemMap {
 #define LLWU_FILT1_REG(base)                     ((base)->FILT1)
 #define LLWU_FILT2_REG(base)                     ((base)->FILT2)
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Register_Accessor_Macros */
 
@@ -2165,7 +2167,7 @@ typedef struct LLWU_MemMap {
    -- LLWU Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Register_Masks LLWU Register Masks
  * @{
  */
@@ -2309,7 +2311,7 @@ typedef struct LLWU_MemMap {
 #define LLWU_FILT2_FILTF_MASK                    0x80u
 #define LLWU_FILT2_FILTF_SHIFT                   7
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Register_Masks */
 
@@ -2324,7 +2326,7 @@ typedef struct LLWU_MemMap {
    -- LLWU - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Register_Accessor_Macros LLWU - Register accessor macros
  * @{
  */
@@ -2343,12 +2345,12 @@ typedef struct LLWU_MemMap {
 #define LLWU_FILT1                               LLWU_FILT1_REG(LLWU_BASE_PTR)
 #define LLWU_FILT2                               LLWU_FILT2_REG(LLWU_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Peripheral */
 
@@ -2357,7 +2359,7 @@ typedef struct LLWU_MemMap {
    -- LPTMR
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Peripheral LPTMR
  * @{
  */
@@ -2374,7 +2376,7 @@ typedef struct LPTMR_MemMap {
    -- LPTMR - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Register_Accessor_Macros LPTMR - Register accessor macros
  * @{
  */
@@ -2386,7 +2388,7 @@ typedef struct LPTMR_MemMap {
 #define LPTMR_CMR_REG(base)                      ((base)->CMR)
 #define LPTMR_CNR_REG(base)                      ((base)->CNR)
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Register_Accessor_Macros */
 
@@ -2395,7 +2397,7 @@ typedef struct LPTMR_MemMap {
    -- LPTMR Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Register_Masks LPTMR Register Masks
  * @{
  */
@@ -2434,7 +2436,7 @@ typedef struct LPTMR_MemMap {
 #define LPTMR_CNR_COUNTER_SHIFT                  0
 #define LPTMR_CNR_COUNTER(x)                     (((uint32_t)(((uint32_t)(x))<<LPTMR_CNR_COUNTER_SHIFT))&LPTMR_CNR_COUNTER_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Register_Masks */
 
@@ -2449,7 +2451,7 @@ typedef struct LPTMR_MemMap {
    -- LPTMR - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Register_Accessor_Macros LPTMR - Register accessor macros
  * @{
  */
@@ -2462,12 +2464,12 @@ typedef struct LPTMR_MemMap {
 #define LPTMR0_CMR                               LPTMR_CMR_REG(LPTMR0_BASE_PTR)
 #define LPTMR0_CNR                               LPTMR_CNR_REG(LPTMR0_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Peripheral */
 
@@ -2476,7 +2478,7 @@ typedef struct LPTMR_MemMap {
    -- MCG
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Peripheral MCG
  * @{
  */
@@ -2505,7 +2507,7 @@ typedef struct MCG_MemMap {
    -- MCG - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Register_Accessor_Macros MCG - Register accessor macros
  * @{
  */
@@ -2527,7 +2529,7 @@ typedef struct MCG_MemMap {
 #define MCG_C9_REG(base)                         ((base)->C9)
 #define MCG_C10_REG(base)                        ((base)->C10)
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Register_Accessor_Macros */
 
@@ -2536,7 +2538,7 @@ typedef struct MCG_MemMap {
    -- MCG Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Register_Masks MCG Register Masks
  * @{
  */
@@ -2643,7 +2645,7 @@ typedef struct MCG_MemMap {
 #define MCG_C8_LOLRE_MASK                        0x40u
 #define MCG_C8_LOLRE_SHIFT                       6
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Register_Masks */
 
@@ -2658,7 +2660,7 @@ typedef struct MCG_MemMap {
    -- MCG - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Register_Accessor_Macros MCG - Register accessor macros
  * @{
  */
@@ -2681,12 +2683,12 @@ typedef struct MCG_MemMap {
 #define MCG_C9                                   MCG_C9_REG(MCG_BASE_PTR)
 #define MCG_C10                                  MCG_C10_REG(MCG_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Peripheral */
 
@@ -2695,7 +2697,7 @@ typedef struct MCG_MemMap {
    -- MCM
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Peripheral MCM
  * @{
  */
@@ -2714,7 +2716,7 @@ typedef struct MCM_MemMap {
    -- MCM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Register_Accessor_Macros MCM - Register accessor macros
  * @{
  */
@@ -2726,7 +2728,7 @@ typedef struct MCM_MemMap {
 #define MCM_PLACR_REG(base)                      ((base)->PLACR)
 #define MCM_CPO_REG(base)                        ((base)->CPO)
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Register_Accessor_Macros */
 
@@ -2735,7 +2737,7 @@ typedef struct MCM_MemMap {
    -- MCM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Register_Masks MCM Register Masks
  * @{
  */
@@ -2773,7 +2775,7 @@ typedef struct MCM_MemMap {
 #define MCM_CPO_CPOWOI_MASK                      0x4u
 #define MCM_CPO_CPOWOI_SHIFT                     2
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Register_Masks */
 
@@ -2788,7 +2790,7 @@ typedef struct MCM_MemMap {
    -- MCM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Register_Accessor_Macros MCM - Register accessor macros
  * @{
  */
@@ -2801,12 +2803,12 @@ typedef struct MCM_MemMap {
 #define MCM_PLACR                                MCM_PLACR_REG(MCM_BASE_PTR)
 #define MCM_CPO                                  MCM_CPO_REG(MCM_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Peripheral */
 
@@ -2815,7 +2817,7 @@ typedef struct MCM_MemMap {
    -- MTB
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Peripheral MTB
  * @{
  */
@@ -2847,7 +2849,7 @@ typedef struct MTB_MemMap {
    -- MTB - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Register_Accessor_Macros MTB - Register accessor macros
  * @{
  */
@@ -2870,7 +2872,7 @@ typedef struct MTB_MemMap {
 #define MTB_PERIPHID_REG(base,index)             ((base)->PERIPHID[index])
 #define MTB_COMPID_REG(base,index)               ((base)->COMPID[index])
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Register_Accessor_Macros */
 
@@ -2879,7 +2881,7 @@ typedef struct MTB_MemMap {
    -- MTB Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Register_Masks MTB Register Masks
  * @{
  */
@@ -2968,7 +2970,7 @@ typedef struct MTB_MemMap {
 #define MTB_COMPID_COMPID_SHIFT                  0
 #define MTB_COMPID_COMPID(x)                     (((uint32_t)(((uint32_t)(x))<<MTB_COMPID_COMPID_SHIFT))&MTB_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Register_Masks */
 
@@ -2983,7 +2985,7 @@ typedef struct MTB_MemMap {
    -- MTB - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Register_Accessor_Macros MTB - Register accessor macros
  * @{
  */
@@ -3021,12 +3023,12 @@ typedef struct MTB_MemMap {
 #define MTB_PERIPHID(index)                      MTB_PERIPHID_REG(MTB_BASE_PTR,index)
 #define MTB_COMPID(index)                        MTB_COMPID_REG(MTB_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Peripheral */
 
@@ -3035,7 +3037,7 @@ typedef struct MTB_MemMap {
    -- MTBDWT
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Peripheral MTBDWT
  * @{
  */
@@ -3063,7 +3065,7 @@ typedef struct MTBDWT_MemMap {
    -- MTBDWT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Register_Accessor_Macros MTBDWT - Register accessor macros
  * @{
  */
@@ -3080,7 +3082,7 @@ typedef struct MTBDWT_MemMap {
 #define MTBDWT_PERIPHID_REG(base,index)          ((base)->PERIPHID[index])
 #define MTBDWT_COMPID_REG(base,index)            ((base)->COMPID[index])
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Register_Accessor_Macros */
 
@@ -3089,7 +3091,7 @@ typedef struct MTBDWT_MemMap {
    -- MTBDWT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Register_Masks MTBDWT Register Masks
  * @{
  */
@@ -3148,7 +3150,7 @@ typedef struct MTBDWT_MemMap {
 #define MTBDWT_COMPID_COMPID_SHIFT               0
 #define MTBDWT_COMPID_COMPID(x)                  (((uint32_t)(((uint32_t)(x))<<MTBDWT_COMPID_COMPID_SHIFT))&MTBDWT_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Register_Masks */
 
@@ -3163,7 +3165,7 @@ typedef struct MTBDWT_MemMap {
    -- MTBDWT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Register_Accessor_Macros MTBDWT - Register accessor macros
  * @{
  */
@@ -3201,12 +3203,12 @@ typedef struct MTBDWT_MemMap {
 #define MTBDWT_PERIPHID(index)                   MTBDWT_PERIPHID_REG(MTBDWT_BASE_PTR,index)
 #define MTBDWT_COMPID(index)                     MTBDWT_COMPID_REG(MTBDWT_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Peripheral */
 
@@ -3215,7 +3217,7 @@ typedef struct MTBDWT_MemMap {
    -- NV
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Peripheral NV
  * @{
  */
@@ -3242,7 +3244,7 @@ typedef struct NV_MemMap {
    -- NV - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Register_Accessor_Macros NV - Register accessor macros
  * @{
  */
@@ -3264,7 +3266,7 @@ typedef struct NV_MemMap {
 #define NV_FSEC_REG(base)                        ((base)->FSEC)
 #define NV_FOPT_REG(base)                        ((base)->FOPT)
 
-/**
+/*!
  * @}
  */ /* end of group NV_Register_Accessor_Macros */
 
@@ -3273,7 +3275,7 @@ typedef struct NV_MemMap {
    -- NV Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Register_Masks NV Register Masks
  * @{
  */
@@ -3351,7 +3353,7 @@ typedef struct NV_MemMap {
 #define NV_FOPT_FAST_INIT_MASK                   0x20u
 #define NV_FOPT_FAST_INIT_SHIFT                  5
 
-/**
+/*!
  * @}
  */ /* end of group NV_Register_Masks */
 
@@ -3366,7 +3368,7 @@ typedef struct NV_MemMap {
    -- NV - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Register_Accessor_Macros NV - Register accessor macros
  * @{
  */
@@ -3389,12 +3391,12 @@ typedef struct NV_MemMap {
 #define NV_FSEC                                  NV_FSEC_REG(FTFA_FlashConfig_BASE_PTR)
 #define NV_FOPT                                  NV_FOPT_REG(FTFA_FlashConfig_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group NV_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group NV_Peripheral */
 
@@ -3403,7 +3405,7 @@ typedef struct NV_MemMap {
    -- NVIC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NVIC_Peripheral NVIC
  * @{
  */
@@ -3425,7 +3427,7 @@ typedef struct NVIC_MemMap {
    -- NVIC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NVIC_Register_Accessor_Macros NVIC - Register accessor macros
  * @{
  */
@@ -3438,7 +3440,7 @@ typedef struct NVIC_MemMap {
 #define NVIC_ICPR_REG(base)                      ((base)->ICPR)
 #define NVIC_IP_REG(base,index)                  ((base)->IP[index])
 
-/**
+/*!
  * @}
  */ /* end of group NVIC_Register_Accessor_Macros */
 
@@ -3447,7 +3449,7 @@ typedef struct NVIC_MemMap {
    -- NVIC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NVIC_Register_Masks NVIC Register Masks
  * @{
  */
@@ -3566,7 +3568,7 @@ typedef struct NVIC_MemMap {
 #define NVIC_IP_PRI_7_SHIFT                      24
 #define NVIC_IP_PRI_7(x)                         (((uint32_t)(((uint32_t)(x))<<NVIC_IP_PRI_7_SHIFT))&NVIC_IP_PRI_7_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group NVIC_Register_Masks */
 
@@ -3581,7 +3583,7 @@ typedef struct NVIC_MemMap {
    -- NVIC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NVIC_Register_Accessor_Macros NVIC - Register accessor macros
  * @{
  */
@@ -3605,12 +3607,12 @@ typedef struct NVIC_MemMap {
 /* NVIC - Register array accessors */
 #define NVIC_IP(index)                           NVIC_IP_REG(NVIC_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group NVIC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group NVIC_Peripheral */
 
@@ -3619,7 +3621,7 @@ typedef struct NVIC_MemMap {
    -- OSC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Peripheral OSC
  * @{
  */
@@ -3633,7 +3635,7 @@ typedef struct OSC_MemMap {
    -- OSC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Register_Accessor_Macros OSC - Register accessor macros
  * @{
  */
@@ -3642,7 +3644,7 @@ typedef struct OSC_MemMap {
 /* OSC - Register accessors */
 #define OSC_CR_REG(base)                         ((base)->CR)
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Register_Accessor_Macros */
 
@@ -3651,7 +3653,7 @@ typedef struct OSC_MemMap {
    -- OSC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Register_Masks OSC Register Masks
  * @{
  */
@@ -3670,7 +3672,7 @@ typedef struct OSC_MemMap {
 #define OSC_CR_ERCLKEN_MASK                      0x80u
 #define OSC_CR_ERCLKEN_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Register_Masks */
 
@@ -3685,7 +3687,7 @@ typedef struct OSC_MemMap {
    -- OSC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Register_Accessor_Macros OSC - Register accessor macros
  * @{
  */
@@ -3695,12 +3697,12 @@ typedef struct OSC_MemMap {
 /* OSC0 */
 #define OSC0_CR                                  OSC_CR_REG(OSC0_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Peripheral */
 
@@ -3709,7 +3711,7 @@ typedef struct OSC_MemMap {
    -- PIT
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Peripheral PIT
  * @{
  */
@@ -3733,7 +3735,7 @@ typedef struct PIT_MemMap {
    -- PIT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Register_Accessor_Macros PIT - Register accessor macros
  * @{
  */
@@ -3748,7 +3750,7 @@ typedef struct PIT_MemMap {
 #define PIT_TCTRL_REG(base,index)                ((base)->CHANNEL[index].TCTRL)
 #define PIT_TFLG_REG(base,index)                 ((base)->CHANNEL[index].TFLG)
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Register_Accessor_Macros */
 
@@ -3757,7 +3759,7 @@ typedef struct PIT_MemMap {
    -- PIT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Register_Masks PIT Register Masks
  * @{
  */
@@ -3794,7 +3796,7 @@ typedef struct PIT_MemMap {
 #define PIT_TFLG_TIF_MASK                        0x1u
 #define PIT_TFLG_TIF_SHIFT                       0
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Register_Masks */
 
@@ -3809,7 +3811,7 @@ typedef struct PIT_MemMap {
    -- PIT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Register_Accessor_Macros PIT - Register accessor macros
  * @{
  */
@@ -3835,12 +3837,12 @@ typedef struct PIT_MemMap {
 #define PIT_TCTRL(index)                         PIT_TCTRL_REG(PIT_BASE_PTR,index)
 #define PIT_TFLG(index)                          PIT_TFLG_REG(PIT_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Peripheral */
 
@@ -3849,7 +3851,7 @@ typedef struct PIT_MemMap {
    -- PMC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Peripheral PMC
  * @{
  */
@@ -3865,7 +3867,7 @@ typedef struct PMC_MemMap {
    -- PMC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Register_Accessor_Macros PMC - Register accessor macros
  * @{
  */
@@ -3876,7 +3878,7 @@ typedef struct PMC_MemMap {
 #define PMC_LVDSC2_REG(base)                     ((base)->LVDSC2)
 #define PMC_REGSC_REG(base)                      ((base)->REGSC)
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Register_Accessor_Macros */
 
@@ -3885,7 +3887,7 @@ typedef struct PMC_MemMap {
    -- PMC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Register_Masks PMC Register Masks
  * @{
  */
@@ -3922,7 +3924,7 @@ typedef struct PMC_MemMap {
 #define PMC_REGSC_BGEN_MASK                      0x10u
 #define PMC_REGSC_BGEN_SHIFT                     4
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Register_Masks */
 
@@ -3937,7 +3939,7 @@ typedef struct PMC_MemMap {
    -- PMC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Register_Accessor_Macros PMC - Register accessor macros
  * @{
  */
@@ -3949,12 +3951,12 @@ typedef struct PMC_MemMap {
 #define PMC_LVDSC2                               PMC_LVDSC2_REG(PMC_BASE_PTR)
 #define PMC_REGSC                                PMC_REGSC_REG(PMC_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Peripheral */
 
@@ -3963,7 +3965,7 @@ typedef struct PMC_MemMap {
    -- PORT
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Peripheral PORT
  * @{
  */
@@ -3981,7 +3983,7 @@ typedef struct PORT_MemMap {
    -- PORT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Register_Accessor_Macros PORT - Register accessor macros
  * @{
  */
@@ -3993,7 +3995,7 @@ typedef struct PORT_MemMap {
 #define PORT_GPCHR_REG(base)                     ((base)->GPCHR)
 #define PORT_ISFR_REG(base)                      ((base)->ISFR)
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Register_Accessor_Macros */
 
@@ -4002,7 +4004,7 @@ typedef struct PORT_MemMap {
    -- PORT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Register_Masks PORT Register Masks
  * @{
  */
@@ -4045,7 +4047,7 @@ typedef struct PORT_MemMap {
 #define PORT_ISFR_ISF_SHIFT                      0
 #define PORT_ISFR_ISF(x)                         (((uint32_t)(((uint32_t)(x))<<PORT_ISFR_ISF_SHIFT))&PORT_ISFR_ISF_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Register_Masks */
 
@@ -4068,7 +4070,7 @@ typedef struct PORT_MemMap {
    -- PORT - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Register_Accessor_Macros PORT - Register accessor macros
  * @{
  */
@@ -4263,12 +4265,12 @@ typedef struct PORT_MemMap {
 #define PORTD_PCR(index)                         PORT_PCR_REG(PORTD_BASE_PTR,index)
 #define PORTE_PCR(index)                         PORT_PCR_REG(PORTE_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Peripheral */
 
@@ -4277,7 +4279,7 @@ typedef struct PORT_MemMap {
    -- RCM
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Peripheral RCM
  * @{
  */
@@ -4295,7 +4297,7 @@ typedef struct RCM_MemMap {
    -- RCM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Register_Accessor_Macros RCM - Register accessor macros
  * @{
  */
@@ -4307,7 +4309,7 @@ typedef struct RCM_MemMap {
 #define RCM_RPFC_REG(base)                       ((base)->RPFC)
 #define RCM_RPFW_REG(base)                       ((base)->RPFW)
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Register_Accessor_Macros */
 
@@ -4316,7 +4318,7 @@ typedef struct RCM_MemMap {
    -- RCM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Register_Masks RCM Register Masks
  * @{
  */
@@ -4356,7 +4358,7 @@ typedef struct RCM_MemMap {
 #define RCM_RPFW_RSTFLTSEL_SHIFT                 0
 #define RCM_RPFW_RSTFLTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<RCM_RPFW_RSTFLTSEL_SHIFT))&RCM_RPFW_RSTFLTSEL_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Register_Masks */
 
@@ -4371,7 +4373,7 @@ typedef struct RCM_MemMap {
    -- RCM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Register_Accessor_Macros RCM - Register accessor macros
  * @{
  */
@@ -4384,12 +4386,12 @@ typedef struct RCM_MemMap {
 #define RCM_RPFC                                 RCM_RPFC_REG(RCM_BASE_PTR)
 #define RCM_RPFW                                 RCM_RPFW_REG(RCM_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Peripheral */
 
@@ -4398,7 +4400,7 @@ typedef struct RCM_MemMap {
    -- ROM
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Peripheral ROM
  * @{
  */
@@ -4424,7 +4426,7 @@ typedef struct ROM_MemMap {
    -- ROM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Register_Accessor_Macros ROM - Register accessor macros
  * @{
  */
@@ -4444,7 +4446,7 @@ typedef struct ROM_MemMap {
 #define ROM_PERIPHID3_REG(base)                  ((base)->PERIPHID3)
 #define ROM_COMPID_REG(base,index)               ((base)->COMPID[index])
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Register_Accessor_Macros */
 
@@ -4453,7 +4455,7 @@ typedef struct ROM_MemMap {
    -- ROM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Register_Masks ROM Register Masks
  * @{
  */
@@ -4507,7 +4509,7 @@ typedef struct ROM_MemMap {
 #define ROM_COMPID_COMPID_SHIFT                  0
 #define ROM_COMPID_COMPID(x)                     (((uint32_t)(((uint32_t)(x))<<ROM_COMPID_COMPID_SHIFT))&ROM_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Register_Masks */
 
@@ -4522,7 +4524,7 @@ typedef struct ROM_MemMap {
    -- ROM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Register_Accessor_Macros ROM - Register accessor macros
  * @{
  */
@@ -4552,12 +4554,12 @@ typedef struct ROM_MemMap {
 #define ROM_ENTRY(index)                         ROM_ENTRY_REG(ROM_BASE_PTR,index)
 #define ROM_COMPID(index)                        ROM_COMPID_REG(ROM_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Peripheral */
 
@@ -4566,7 +4568,7 @@ typedef struct ROM_MemMap {
    -- RTC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Peripheral RTC
  * @{
  */
@@ -4587,7 +4589,7 @@ typedef struct RTC_MemMap {
    -- RTC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Register_Accessor_Macros RTC - Register accessor macros
  * @{
  */
@@ -4603,7 +4605,7 @@ typedef struct RTC_MemMap {
 #define RTC_LR_REG(base)                         ((base)->LR)
 #define RTC_IER_REG(base)                        ((base)->IER)
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Register_Accessor_Macros */
 
@@ -4612,7 +4614,7 @@ typedef struct RTC_MemMap {
    -- RTC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Register_Masks RTC Register Masks
  * @{
  */
@@ -4693,7 +4695,7 @@ typedef struct RTC_MemMap {
 #define RTC_IER_WPON_MASK                        0x80u
 #define RTC_IER_WPON_SHIFT                       7
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Register_Masks */
 
@@ -4708,7 +4710,7 @@ typedef struct RTC_MemMap {
    -- RTC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Register_Accessor_Macros RTC - Register accessor macros
  * @{
  */
@@ -4725,12 +4727,12 @@ typedef struct RTC_MemMap {
 #define RTC_LR                                   RTC_LR_REG(RTC_BASE_PTR)
 #define RTC_IER                                  RTC_IER_REG(RTC_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Peripheral */
 
@@ -4739,7 +4741,7 @@ typedef struct RTC_MemMap {
    -- SCB
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SCB_Peripheral SCB
  * @{
  */
@@ -4767,7 +4769,7 @@ typedef struct SCB_MemMap {
    -- SCB - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SCB_Register_Accessor_Macros SCB - Register accessor macros
  * @{
  */
@@ -4786,7 +4788,7 @@ typedef struct SCB_MemMap {
 #define SCB_SHCSR_REG(base)                      ((base)->SHCSR)
 #define SCB_DFSR_REG(base)                       ((base)->DFSR)
 
-/**
+/*!
  * @}
  */ /* end of group SCB_Register_Accessor_Macros */
 
@@ -4795,7 +4797,7 @@ typedef struct SCB_MemMap {
    -- SCB Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SCB_Register_Masks SCB Register Masks
  * @{
  */
@@ -4884,7 +4886,7 @@ typedef struct SCB_MemMap {
 #define SCB_DFSR_EXTERNAL_MASK                   0x10u
 #define SCB_DFSR_EXTERNAL_SHIFT                  4
 
-/**
+/*!
  * @}
  */ /* end of group SCB_Register_Masks */
 
@@ -4899,7 +4901,7 @@ typedef struct SCB_MemMap {
    -- SCB - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SCB_Register_Accessor_Macros SCB - Register accessor macros
  * @{
  */
@@ -4919,12 +4921,12 @@ typedef struct SCB_MemMap {
 #define SCB_SHCSR                                SCB_SHCSR_REG(SystemControl_BASE_PTR)
 #define SCB_DFSR                                 SCB_DFSR_REG(SystemControl_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group SCB_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group SCB_Peripheral */
 
@@ -4933,7 +4935,7 @@ typedef struct SCB_MemMap {
    -- SIM
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Peripheral SIM
  * @{
  */
@@ -4973,7 +4975,7 @@ typedef struct SIM_MemMap {
    -- SIM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Register_Accessor_Macros SIM - Register accessor macros
  * @{
  */
@@ -5000,7 +5002,7 @@ typedef struct SIM_MemMap {
 #define SIM_COPC_REG(base)                       ((base)->COPC)
 #define SIM_SRVCOP_REG(base)                     ((base)->SRVCOP)
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Register_Accessor_Macros */
 
@@ -5009,7 +5011,7 @@ typedef struct SIM_MemMap {
    -- SIM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Register_Masks SIM Register Masks
  * @{
  */
@@ -5186,7 +5188,7 @@ typedef struct SIM_MemMap {
 #define SIM_SRVCOP_SRVCOP_SHIFT                  0
 #define SIM_SRVCOP_SRVCOP(x)                     (((uint32_t)(((uint32_t)(x))<<SIM_SRVCOP_SRVCOP_SHIFT))&SIM_SRVCOP_SRVCOP_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Register_Masks */
 
@@ -5201,7 +5203,7 @@ typedef struct SIM_MemMap {
    -- SIM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Register_Accessor_Macros SIM - Register accessor macros
  * @{
  */
@@ -5229,12 +5231,12 @@ typedef struct SIM_MemMap {
 #define SIM_COPC                                 SIM_COPC_REG(SIM_BASE_PTR)
 #define SIM_SRVCOP                               SIM_SRVCOP_REG(SIM_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Peripheral */
 
@@ -5243,7 +5245,7 @@ typedef struct SIM_MemMap {
    -- SMC
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Peripheral SMC
  * @{
  */
@@ -5260,7 +5262,7 @@ typedef struct SMC_MemMap {
    -- SMC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Register_Accessor_Macros SMC - Register accessor macros
  * @{
  */
@@ -5272,7 +5274,7 @@ typedef struct SMC_MemMap {
 #define SMC_VLLSCTRL_REG(base)                   ((base)->VLLSCTRL)
 #define SMC_PMSTAT_REG(base)                     ((base)->PMSTAT)
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Register_Accessor_Macros */
 
@@ -5281,7 +5283,7 @@ typedef struct SMC_MemMap {
    -- SMC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Register_Masks SMC Register Masks
  * @{
  */
@@ -5313,7 +5315,7 @@ typedef struct SMC_MemMap {
 #define SMC_PMSTAT_PMSTAT_SHIFT                  0
 #define SMC_PMSTAT_PMSTAT(x)                     (((uint8_t)(((uint8_t)(x))<<SMC_PMSTAT_PMSTAT_SHIFT))&SMC_PMSTAT_PMSTAT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Register_Masks */
 
@@ -5328,7 +5330,7 @@ typedef struct SMC_MemMap {
    -- SMC - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Register_Accessor_Macros SMC - Register accessor macros
  * @{
  */
@@ -5341,12 +5343,12 @@ typedef struct SMC_MemMap {
 #define SMC_VLLSCTRL                             SMC_VLLSCTRL_REG(SMC_BASE_PTR)
 #define SMC_PMSTAT                               SMC_PMSTAT_REG(SMC_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Peripheral */
 
@@ -5355,7 +5357,7 @@ typedef struct SMC_MemMap {
    -- SPI
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Peripheral SPI
  * @{
  */
@@ -5376,7 +5378,7 @@ typedef struct SPI_MemMap {
    -- SPI - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Register_Accessor_Macros SPI - Register accessor macros
  * @{
  */
@@ -5390,7 +5392,7 @@ typedef struct SPI_MemMap {
 #define SPI_D_REG(base)                          ((base)->D)
 #define SPI_M_REG(base)                          ((base)->M)
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Register_Accessor_Macros */
 
@@ -5399,7 +5401,7 @@ typedef struct SPI_MemMap {
    -- SPI Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Register_Masks SPI Register Masks
  * @{
  */
@@ -5461,7 +5463,7 @@ typedef struct SPI_MemMap {
 #define SPI_M_Bits_SHIFT                         0
 #define SPI_M_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_M_Bits_SHIFT))&SPI_M_Bits_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Register_Masks */
 
@@ -5478,7 +5480,7 @@ typedef struct SPI_MemMap {
    -- SPI - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Register_Accessor_Macros SPI - Register accessor macros
  * @{
  */
@@ -5500,12 +5502,12 @@ typedef struct SPI_MemMap {
 #define SPI1_D                                   SPI_D_REG(SPI1_BASE_PTR)
 #define SPI1_M                                   SPI_M_REG(SPI1_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Peripheral */
 
@@ -5514,7 +5516,7 @@ typedef struct SPI_MemMap {
    -- SysTick
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SysTick_Peripheral SysTick
  * @{
  */
@@ -5531,7 +5533,7 @@ typedef struct SysTick_MemMap {
    -- SysTick - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SysTick_Register_Accessor_Macros SysTick - Register accessor macros
  * @{
  */
@@ -5543,7 +5545,7 @@ typedef struct SysTick_MemMap {
 #define SysTick_CVR_REG(base)                    ((base)->CVR)
 #define SysTick_CALIB_REG(base)                  ((base)->CALIB)
 
-/**
+/*!
  * @}
  */ /* end of group SysTick_Register_Accessor_Macros */
 
@@ -5552,7 +5554,7 @@ typedef struct SysTick_MemMap {
    -- SysTick Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SysTick_Register_Masks SysTick Register Masks
  * @{
  */
@@ -5583,7 +5585,7 @@ typedef struct SysTick_MemMap {
 #define SysTick_CALIB_NOREF_MASK                 0x80000000u
 #define SysTick_CALIB_NOREF_SHIFT                31
 
-/**
+/*!
  * @}
  */ /* end of group SysTick_Register_Masks */
 
@@ -5598,7 +5600,7 @@ typedef struct SysTick_MemMap {
    -- SysTick - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SysTick_Register_Accessor_Macros SysTick - Register accessor macros
  * @{
  */
@@ -5611,12 +5613,12 @@ typedef struct SysTick_MemMap {
 #define SYST_CVR                                 SysTick_CVR_REG(SysTick_BASE_PTR)
 #define SYST_CALIB                               SysTick_CALIB_REG(SysTick_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group SysTick_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group SysTick_Peripheral */
 
@@ -5625,7 +5627,7 @@ typedef struct SysTick_MemMap {
    -- TPM
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Peripheral TPM
  * @{
  */
@@ -5649,7 +5651,7 @@ typedef struct TPM_MemMap {
    -- TPM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Register_Accessor_Macros TPM - Register accessor macros
  * @{
  */
@@ -5664,7 +5666,7 @@ typedef struct TPM_MemMap {
 #define TPM_STATUS_REG(base)                     ((base)->STATUS)
 #define TPM_CONF_REG(base)                       ((base)->CONF)
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Register_Accessor_Macros */
 
@@ -5673,7 +5675,7 @@ typedef struct TPM_MemMap {
    -- TPM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Register_Masks TPM Register Masks
  * @{
  */
@@ -5753,7 +5755,7 @@ typedef struct TPM_MemMap {
 #define TPM_CONF_TRGSEL_SHIFT                    24
 #define TPM_CONF_TRGSEL(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_CONF_TRGSEL_SHIFT))&TPM_CONF_TRGSEL_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Register_Masks */
 
@@ -5772,7 +5774,7 @@ typedef struct TPM_MemMap {
    -- TPM - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Register_Accessor_Macros TPM - Register accessor macros
  * @{
  */
@@ -5826,12 +5828,12 @@ typedef struct TPM_MemMap {
 #define TPM1_CnV(index)                          TPM_CnV_REG(TPM1_BASE_PTR,index)
 #define TPM2_CnV(index)                          TPM_CnV_REG(TPM2_BASE_PTR,index)
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Peripheral */
 
@@ -5840,7 +5842,7 @@ typedef struct TPM_MemMap {
    -- TSI
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TSI_Peripheral TSI
  * @{
  */
@@ -5856,7 +5858,7 @@ typedef struct TSI_MemMap {
    -- TSI - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TSI_Register_Accessor_Macros TSI - Register accessor macros
  * @{
  */
@@ -5867,7 +5869,7 @@ typedef struct TSI_MemMap {
 #define TSI_DATA_REG(base)                       ((base)->DATA)
 #define TSI_TSHD_REG(base)                       ((base)->TSHD)
 
-/**
+/*!
  * @}
  */ /* end of group TSI_Register_Accessor_Macros */
 
@@ -5876,7 +5878,7 @@ typedef struct TSI_MemMap {
    -- TSI Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TSI_Register_Masks TSI Register Masks
  * @{
  */
@@ -5937,7 +5939,7 @@ typedef struct TSI_MemMap {
 #define TSI_TSHD_THRESH_SHIFT                    16
 #define TSI_TSHD_THRESH(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_TSHD_THRESH_SHIFT))&TSI_TSHD_THRESH_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group TSI_Register_Masks */
 
@@ -5952,7 +5954,7 @@ typedef struct TSI_MemMap {
    -- TSI - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TSI_Register_Accessor_Macros TSI - Register accessor macros
  * @{
  */
@@ -5964,12 +5966,12 @@ typedef struct TSI_MemMap {
 #define TSI0_DATA                                TSI_DATA_REG(TSI0_BASE_PTR)
 #define TSI0_TSHD                                TSI_TSHD_REG(TSI0_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group TSI_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group TSI_Peripheral */
 
@@ -5978,7 +5980,7 @@ typedef struct TSI_MemMap {
    -- UART
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Peripheral UART
  * @{
  */
@@ -6000,7 +6002,7 @@ typedef struct UART_MemMap {
    -- UART - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Register_Accessor_Macros UART - Register accessor macros
  * @{
  */
@@ -6017,7 +6019,7 @@ typedef struct UART_MemMap {
 #define UART_D_REG(base)                         ((base)->D)
 #define UART_C4_REG(base)                        ((base)->C4)
 
-/**
+/*!
  * @}
  */ /* end of group UART_Register_Accessor_Macros */
 
@@ -6026,7 +6028,7 @@ typedef struct UART_MemMap {
    -- UART Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Register_Masks UART Register Masks
  * @{
  */
@@ -6151,7 +6153,7 @@ typedef struct UART_MemMap {
 #define UART_C4_TDMAS_MASK                       0x80u
 #define UART_C4_TDMAS_SHIFT                      7
 
-/**
+/*!
  * @}
  */ /* end of group UART_Register_Masks */
 
@@ -6168,7 +6170,7 @@ typedef struct UART_MemMap {
    -- UART - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Register_Accessor_Macros UART - Register accessor macros
  * @{
  */
@@ -6196,12 +6198,12 @@ typedef struct UART_MemMap {
 #define UART2_D                                  UART_D_REG(UART2_BASE_PTR)
 #define UART2_C4                                 UART_C4_REG(UART2_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group UART_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group UART_Peripheral */
 
@@ -6210,7 +6212,7 @@ typedef struct UART_MemMap {
    -- UART0
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Peripheral UART0
  * @{
  */
@@ -6235,7 +6237,7 @@ typedef struct UART0_MemMap {
    -- UART0 - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Register_Accessor_Macros UART0 - Register accessor macros
  * @{
  */
@@ -6255,7 +6257,7 @@ typedef struct UART0_MemMap {
 #define UART0_C4_REG(base)                       ((base)->C4)
 #define UART0_C5_REG(base)                       ((base)->C5)
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Register_Accessor_Macros */
 
@@ -6264,7 +6266,7 @@ typedef struct UART0_MemMap {
    -- UART0 Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Register_Masks UART0 Register Masks
  * @{
  */
@@ -6413,7 +6415,7 @@ typedef struct UART0_MemMap {
 #define UART0_C5_TDMAE_MASK                      0x80u
 #define UART0_C5_TDMAE_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Register_Masks */
 
@@ -6428,7 +6430,7 @@ typedef struct UART0_MemMap {
    -- UART0 - Register accessor macros
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Register_Accessor_Macros UART0 - Register accessor macros
  * @{
  */
@@ -6449,12 +6451,12 @@ typedef struct UART0_MemMap {
 #define UART0_C4                                 UART0_C4_REG(UART0_BASE_PTR)
 #define UART0_C5                                 UART0_C5_REG(UART0_BASE_PTR)
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Register_Accessor_Macros */
 
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Peripheral */
 
@@ -6475,7 +6477,7 @@ typedef struct UART0_MemMap {
   #error Not supported compiler type
 #endif
 
-/**
+/*!
  * @}
  */ /* end of group Peripheral_defines */
 
@@ -6484,7 +6486,7 @@ typedef struct UART0_MemMap {
    -- Backward Compatibility
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Backward_Compatibility_Symbols Backward Compatibility
  * @{
  */
@@ -6662,7 +6664,7 @@ typedef struct UART0_MemMap {
 #define NV_FOPT_EZPORT_DIS_MASK                  This_symbol_has_been_deprecated
 #define NV_FOPT_EZPORT_DIS_SHIFT                 This_symbol_has_been_deprecated
 
-/**
+/*!
  * @}
  */ /* end of group Backward_Compatibility_Symbols */
 
