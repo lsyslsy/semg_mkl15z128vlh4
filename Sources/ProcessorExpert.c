@@ -92,7 +92,7 @@ int main(void)
     extern TARMPtr tARMPtr;
     byte cmd;
     //byte reg;
-    byte regVal[25];
+    byte regVal[25] = {0};
     //byte dummy[MSG_SIZE];
     bool flag1 = TRUE;
     uint16 i;
@@ -126,30 +126,54 @@ int main(void)
 //    msg[MSG_SIZE - 1] = 0x01U;
 //    msg2[MSG_SIZE - 1] = 0x20U;
 
+
+
     cmd = ADC_CMD_SDATAC;
     ADCSendCommand(&cmd);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
 
-    regVal[0] = 0x60U;
-    ADCWriteRegister(ADC_REG_CONFIG3, regVal, 1);
-    ADCReadRegister(ADC_REG_CONFIG3, regVal, 1);
-    printf("CONFIG3: %#x\n", regVal[0]);
-
-    regVal[0] = 0x10U;
-    regVal[1] = 0x10U;
-    regVal[2] = 0x10U;
-    regVal[3] = 0x10U;
-    regVal[4] = 0x10U;
-    regVal[5] = 0x10U;
-    regVal[6] = 0x10U;
-    regVal[7] = 0x10U;
-    ADCWriteRegister(ADC_REG_CH1SET, regVal, 8);
-    for(i = 0; i < 8; i++)
+    for(;;)
     {
-        regVal[i] = 0x00U;
+        cmd = ADC_REG_ID;
+        ADCReadRegister(cmd, regVal, 1);
+        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+        printf("ID: %#x\t", regVal[0]);
+
+        cmd = ADC_REG_CONFIG3;
+        regVal[0] = 0x60U;
+        ADCWriteRegister(cmd, regVal, 1);
+        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+        ADCReadRegister(cmd, regVal, 1);
+        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+        printf("CONFIG3: %#x\n", regVal[0]);
     }
-//    for(;;)
-    ADCReadRegister(ADC_REG_CH1SET, regVal, 8);
-    printf("%#x, %#x, %#x, %#x, %#x, %#x, %#x, %#x\n", regVal[0], regVal[1], regVal[2], regVal[3], regVal[4], regVal[5], regVal[6], regVal[7]);
+    for(;;);
+
+//
+//    regVal[0] = 0x10U;
+//    regVal[1] = 0x10U;
+//    regVal[2] = 0x10U;
+//    regVal[3] = 0x10U;
+//    regVal[4] = 0x10U;
+//    regVal[5] = 0x10U;
+//    regVal[6] = 0x10U;
+//    regVal[7] = 0x10U;
+//    ADCWriteRegister(ADC_REG_CH1SET, regVal, 8);
+//    for(i = 0; i < 8; i++)
+//    {
+//        regVal[i] = 0x00U;
+//    }
+////    for(;;)
+//    ADCReadRegister(ADC_REG_CH1SET, regVal, 8);
+//    printf("%#x, %#x, %#x, %#x, %#x, %#x, %#x, %#x\n", regVal[0], regVal[1], regVal[2], regVal[3], regVal[4], regVal[5], regVal[6], regVal[7]);
 
 
     cmd = ADC_CMD_RDATAC;
@@ -166,14 +190,14 @@ int main(void)
         /* If data of ADC is ready, read it. */
         if(tADCPtr[0]->adcStatus.isDataReady)
         {
-            if(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isReceivingADCData)
+            if(!tMCUPtr->mcuStatus.isReceivingADCData && tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted)
             {
                 ADCReadContinuousData(tADCPtr[0]->adcData.rawData, RAW_DATA_SIZE);
                 tMCUPtr->mcuStatus.isReceivingADCData = TRUE;
-            }
-            if(tMCUPtr->mcuStatus.isSPI0RxDMATransCompleted)
-            {
                 tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+            }
+            if(tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted)
+            {
                 tMCUPtr->mcuStatus.isReceivingADCData = FALSE;
                 SplitRawData(&(tADCPtr[0]->adcData));
                 printf("%#x %#x %#x %#x | %#x %#x %#x %#x %#x %#x %#x %#x\n", tADCPtr[0]->adcData.head, tADCPtr[0]->adcData.loffStatP,

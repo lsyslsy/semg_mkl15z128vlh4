@@ -54,17 +54,17 @@
       <File Name="Generated_Code/SM_SPI1.c" FileDate="2013-09-20, 15:44:15" FileAge="1379663055414" FileType="45637" CompNumb="7" />
       <File Name="Generated_Code/Cpu.c" FileDate="2013-12-12, 21:58:18" FileAge="1386856698643" FileType="45637" CompNumb="6" />
       <File Name="Generated_Code/EINT_SYNC_INT.h" FileDate="2013-09-24, 19:03:21" FileAge="1380020601925" FileType="45637" CompNumb="60" />
-      <File Name="Documentation/ProcessorExpert_SIGNALS.txt" FileDate="2013-12-20, 11:00:07" FileAge="1387508407701" FileType="3072" />
+      <File Name="Documentation/ProcessorExpert_SIGNALS.txt" FileDate="2014-01-06, 20:14:47" FileAge="1389010487536" FileType="3072" />
       <File Name="Documentation/doxygen/BitIO_CLKSEL.txt" FileDate="2013-08-03, 15:56:28" FileAge="1375516588581" FileType="45637" CompNumb="23" />
       <File Name="Generated_Code/EINT_SYNC_INT.c" FileDate="2013-09-24, 19:03:21" FileAge="1380020601695" FileType="45637" CompNumb="60" />
       <File Name="Documentation/doxygen/BitIO_UPRDY.txt" FileDate="2013-09-24, 17:58:37" FileAge="1380016717167" FileType="45637" CompNumb="110" />
       <File Name="Documentation/doxygen/DMAT_S_SPI_RX.txt" FileDate="2013-09-20, 16:20:36" FileAge="1379665236462" FileType="45637" CompNumb="106" />
       <File Name="Documentation/doxygen/BitIO_NOT_PWDN.txt" FileDate="2013-08-03, 15:56:28" FileAge="1375516588662" FileType="45637" CompNumb="18" />
       <File Name="Generated_Code/PE_LDD.h" FileDate="2013-12-12, 21:58:18" FileAge="1386856698082" FileType="45637" CompNumb="6" />
-      <File Name="Sources/ProcessorExpert.c" FileDate="2013-12-19, 14:06:35" FileAge="1387433195101" FileType="128" />
+      <File Name="Sources/ProcessorExpert.c" FileDate="2014-01-06, 19:34:15" FileAge="1389008055846" FileType="128" />
       <File Name="Generated_Code/PE_LDD.c" FileDate="2013-12-12, 21:58:18" FileAge="1386856698105" FileType="45637" CompNumb="6" />
       <File Name="Documentation/doxygen/BitIO_START.txt" FileDate="2013-08-03, 15:56:28" FileAge="1375516588602" FileType="45637" CompNumb="21" />
-      <File Name="Sources/Events.h" FileDate="2013-12-20, 11:00:07" FileAge="1387508407238" FileType="131328" />
+      <File Name="Sources/Events.h" FileDate="2014-01-06, 20:14:46" FileAge="1389010486375" FileType="131328" />
       <File Name="Sources/Events.c" FileDate="2013-12-18, 22:25:29" FileAge="1387376729508" FileType="131328" />
       <File Name="Documentation/ProcessorExpert.txt" FileDate="2013-09-24, 17:50:43" FileAge="1380016243873" FileType="3072" />
       <File Name="Generated_Code/BitIO_START.h" FileDate="2013-08-03, 15:58:01" FileAge="1375516681840" FileType="45637" CompNumb="21" />
@@ -79,7 +79,7 @@
       <File Name="Project_Settings/Linker_Files/ProcessorExpert.ld" FileDate="2013-12-12, 21:58:18" FileAge="1386856698659" FileType="8" CompNumb="6" />
       <File Name="Documentation/doxygen/DMAT_S_SPI_TX.txt" FileDate="2013-09-20, 16:20:36" FileAge="1379665236477" FileType="45637" CompNumb="105" />
       <File Name="Documentation/doxygen/IO2.txt" FileDate="2013-08-04, 18:54:00" FileAge="1375613640341" FileType="45637" CompNumb="12" />
-      <File Name="Documentation/doxygen/pex.doxyfile" FileDate="2013-12-19, 10:54:48" FileAge="1387421688591" FileType="45637" CompNumb="6" />
+      <File Name="Documentation/doxygen/pex.doxyfile" FileDate="2013-12-23, 01:14:00" FileAge="1387732440827" FileType="45637" CompNumb="6" />
       <File Name="Generated_Code/DMAT_M_SPI_RX.c" FileDate="2013-09-21, 19:46:42" FileAge="1379764002005" FileType="45637" CompNumb="92" />
       <File Name="Generated_Code/DMAT_M_SPI_TX.h" FileDate="2013-09-21, 19:46:42" FileAge="1379764002225" FileType="45637" CompNumb="89" />
       <File Name="Generated_Code/DMAT_M_SPI_TX.c" FileDate="2013-09-21, 19:46:42" FileAge="1379764002159" FileType="45637" CompNumb="89" />
@@ -88,5 +88,5 @@
       <File Name="Generated_Code/SysTick.h" FileDate="2013-07-26, 21:49:57" FileAge="1374846597333" FileType="45637" CompNumb="13" />
     </GeneratedByPE>
   </GeneratedFilesList>
-  <CodeGenReference>171</CodeGenReference>
+  <CodeGenReference>175</CodeGenReference>
 </CodeGenerationInfo>

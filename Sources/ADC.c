@@ -691,7 +691,6 @@ LDD_TError ADCSendCommand(byte* cmd)
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);         /* If error occurred, print the error message, */
-        return err;                     /* then return error type. */
     }
 
     return err;
@@ -784,7 +783,6 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
 #if DEBUG
         printf("Send command error\n");             /* If error occurred, print message, */
 #endif
-        return err;                                 /* then return the error type. */
     }
 
     return err;
@@ -863,9 +861,10 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
     if(err != ERR_OK)
     {
         PrintErrorMessage(err);
+#if DEBUG
         printf("Send command error\n");             /* If error occurred, print message, */
+#endif
 
-        return err;                                 /* then return the error type. */
     }
 
     return err;
@@ -926,7 +925,6 @@ LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
 #if DEBUG
         printf("Send dummy error\n");
 #endif
-        return err;
     }
 
     return err;
@@ -1003,7 +1001,6 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
 #if DEBUG
         printf("Send command error\n");             /* If error occurred, print message, */
 #endif
-        return err;                                 /* then return the error type. */
     }
 
     return err;

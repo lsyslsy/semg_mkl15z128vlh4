@@ -50,19 +50,6 @@ extern "C"
      * @addtogroup SysGlbVar System Global Variables
      * @{
      */
-TADCData adcData;                       /*!< The structure of ADC data. */
-TADCDataPtr adcDataPtr;                 /*!< The pointer to structure of ADC data. */
-TMCUData mcuData;                       /*!< The structure of MCU data. */
-TMCUDataPtr mcuDataPtr;                 /*!< The pointer to structure of MCU data. */
-TARMData armData;                       /*!< The structure of ARM data. */
-TARMDataPtr armDataPtr;                 /*!< The pointer to structure of ARM data. */
-TADCSetting adcSetting;                 /*!< The structure of ADC setting. */
-TADCSettingPtr adcSettingPtr;           /*!< The pointer to structure of ADC setting. */
-TMCUSetting mcuSetting;                 /*!< The structure of MCU setting. */
-TMCUSettingPtr mcuSettingPtr;           /*!< The pointer to structure of MCU setting. */
-TARMSetting armSetting;                 /*!< The structure of ARM setting. */
-TARMSettingPtr armSettingPtr;           /*!< The pointer to structure of ARM setting. */
-
 TADC tADC[USING_ADC_COUNT];             /*!< The structure of ADC device. */
 TADCPtr tADCPtr[USING_ADC_COUNT];       /*!< The pointer to structure of ADC device. */
 TMCU tMCU;                              /*!< The structure of MCU device. */

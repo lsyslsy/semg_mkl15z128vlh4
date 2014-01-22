@@ -3,9 +3,9 @@
  **     Filename    : SPI.c
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Sep 20, 2013, 4:29:29 PM, # CodeGen: 1
  **     Author	    : Dong
@@ -30,7 +30,7 @@
 /*!
  * @file SPI.h
  * @version 01.00
- * @brief   
+ * @brief
  *      This file contains high level functions on receiving and sending data via SPI.
  */
 /*!
@@ -72,38 +72,38 @@
  *          receiveByteCount   - The number of bytes to be received.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount)
 {
     byte* dummy = NULL;
-    
+
     dummy = (byte*)malloc(receiveByteCount);
-    
+
 //    SPI0RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0RxDMASetDestinationAddress((LDD_DMA_TAddress)destAddr);
     SPI0RxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
-    
+
     SPI0TxDMASetSourceAddress((LDD_DMA_TAddress)dummy);
 //    SPI0TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0TxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
-    
+
 //    SPI0Enable();
 //    SPI0EnableRxDMA();
 //    SPI0EnableTxDMA();
     SPI0RxDMAEnable();
     SPI0TxDMAEnable();
-    
+
     free(dummy);
-    
+
     return ERR_OK;
 }
 
@@ -121,38 +121,38 @@ LDD_TError SPI0ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receive
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCount)
-{    
+{
     byte* dummy = NULL;
-    
+
     dummy = (byte*)malloc(sendByteCount);
-    
+
 //    SPI0RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0RxDMASetDestinationAddress((LDD_DMA_TAddress)dummy);
     SPI0RxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
-    
+
     SPI0TxDMASetSourceAddress((LDD_DMA_TAddress)srcAddr);
 //    SPI0TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0TxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
- 
+
 //    SPI0Enable();
 //    SPI0EnableRxDMA();
 //    SPI0EnableTxDMA();
     SPI0RxDMAEnable();
     SPI0TxDMAEnable();
-    
+
     free(dummy);
-    
+
     return ERR_OK;
 }
 
@@ -164,8 +164,8 @@ LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @brief
  *          This method packs a serious operations of receiving & sending data via
  *          SPI0. Receive & send data from SPI0 directly with it.
- *     @param[in]           
- *          srcAddr         - The address of source buffer. 
+ *     @param[in]
+ *          srcAddr         - The address of source buffer.
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
@@ -174,32 +174,32 @@ LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount, LDD_DMA_TByteCount sendByteCount)
-{    
+{
 //    SPI0RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0RxDMASetDestinationAddress((LDD_DMA_TAddress)destAddr);
     SPI0RxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
-    
+
     SPI0TxDMASetSourceAddress((LDD_DMA_TAddress)srcAddr);
 //    SPI0TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI0_D));
     SPI0TxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
- 
+
 //    SPI0Enable();
 //    SPI0EnableRxDMA();
 //    SPI0EnableTxDMA();
     SPI0RxDMAEnable();
     SPI0TxDMAEnable();
-    
+
     return ERR_OK;
 }
 
@@ -217,36 +217,36 @@ LDD_TError SPI0ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAd
  *          receiveByteCount   - The number of bytes to be receive.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount)
-{   
+{
     byte* dummy = NULL;
-    
+
     dummy = (byte*)malloc(receiveByteCount);
-    
+
 //    SPI1RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1RxDMASetDestinationAddress((LDD_DMA_TAddress)destAddr);
     SPI1RxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
-    
+
     SPI1TxDMASetSourceAddress((LDD_DMA_TAddress)dummy);
 //    SPI1TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1TxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
- 
+
 //    SPI1Enable();
 //    SPI1EnableRxDMA();
 //    SPI1EnableTxDMA();
     SPI1RxDMAEnable();
     SPI1TxDMAEnable();
-    
+
     free(dummy);
 
     return ERR_OK;
@@ -266,38 +266,38 @@ LDD_TError SPI1ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receive
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCount)
 {
     byte* dummy = NULL;
-    
+
     dummy = (byte*)malloc(sendByteCount);
-    
+
 //    SPI1RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1RxDMASetDestinationAddress((LDD_DMA_TAddress)dummy);
     SPI1RxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
-    
+
     SPI1TxDMASetSourceAddress((LDD_DMA_TAddress)srcAddr);
 //    SPI1TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1TxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
- 
+
 //    SPI1Enable();
 //    SPI1EnableRxDMA();
 //    SPI1EnableTxDMA();
     SPI1RxDMAEnable();
     SPI1TxDMAEnable();
-    
+
     free(dummy);
-    
+
     return ERR_OK;
 }
 
@@ -309,8 +309,8 @@ LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @brief
  *          This method packs a serious operations of receiving & sending data via
  *          SPI1. Receive & send data from SPI1 directly with it.
- *     @param[in]           
- *          srcAddr         - The address of source buffer. 
+ *     @param[in]
+ *          srcAddr         - The address of source buffer.
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
@@ -319,32 +319,37 @@ LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount, LDD_DMA_TByteCount sendByteCount)
-{    
+{
+    SPI1Disable();
+    SPI1TxDMADisable();
+    SPI1RxDMADisable();
+
 //    SPI1RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1RxDMASetDestinationAddress((LDD_DMA_TAddress)destAddr);
     SPI1RxDMASetByteCount((LDD_DMA_TByteCount)receiveByteCount);
-    
-    SPI1TxDMASetSourceAddress((LDD_DMA_TAddress)srcAddr);
+
+    SPI1TxDMASetSourceAddress((LDD_DMA_TAddress)(srcAddr));
 //    SPI1TxDMASetDestinationAddress((LDD_DMA_TAddress)(&SPI1_D));
-    SPI1TxDMASetByteCount((LDD_DMA_TByteCount)sendByteCount);
- 
-//    SPI1Enable();
-//    SPI1EnableRxDMA();
-//    SPI1EnableTxDMA();
+    SPI1TxDMASetByteCount((LDD_DMA_TByteCount)(sendByteCount));
+
     SPI1RxDMAEnable();
     SPI1TxDMAEnable();
-    
+
+    SPI1Enable();
+    SPI1EnableRxDMA();
+    SPI1EnableTxDMA();
+
     return ERR_OK;
 }
 

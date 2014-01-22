@@ -324,8 +324,8 @@ void DMAT_M_SPI_RX_OnComplete(LDD_TUserData *UserDataPtr)
   /* Write your code here ... */
     extern TMCUPtr tMCUPtr;
 
-    SPI1RxDMADisable();
-//    SPI1DisableRxDMA();
+//    SPI1RxDMADisable();
+    SPI1DisableRxDMA();
     tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = TRUE;
 }
 
@@ -377,8 +377,9 @@ void DMAT_M_SPI_TX_OnComplete(LDD_TUserData *UserDataPtr)
   /* Write your code here ... */
     extern TMCUPtr tMCUPtr;
 
-    SPI1TxDMADisable();
-//    SPI1DisableTxDMA();
+//    SPI1TxDMADisable();
+    SPI1DisableTxDMA();
+//    SPI1Disable();
 
     tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = TRUE;
     //flagDataReady = FALSE;

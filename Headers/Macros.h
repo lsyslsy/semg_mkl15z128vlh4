@@ -53,7 +53,7 @@
      * @{
      */
 #if USING_MKL15Z128VLH4
-#define USING_ADC_COUNT 1U                                     /*!< The count of ADC used. */
+#define USING_ADC_COUNT 2U                                     /*!< The count of ADC used. */
 extern const uint32 MIN_SYSTICK_VALUE;                         /*!< Minimum value of the SysTick value register. */
 extern const uint32 MAX_SYSTICK_VALUE;                         /*!< Maximum value of the SysTick value register. */
 extern const uint32 TICK_TO_US_PROCESSOR_CLOCK;                /*!< 48 ticks equals to 1us, when using processor clock(48MHz). */
