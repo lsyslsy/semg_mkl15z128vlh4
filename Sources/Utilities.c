@@ -73,6 +73,10 @@
  *     @brief
  *          This method delays 1us most precisely with assembly code.
  *          Error limit: +/-1%.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void Delay1Us()
@@ -314,6 +318,8 @@ LDD_TError DelaySomeS(uint32 n)
  *     @brief
  *          This method returns the current value of total microseconds
  *          since power on.
+ *     @param
+ *          void
  *     @return
  *                          - Total microseconds since power on.
  */
@@ -331,6 +337,8 @@ uint32 GetCurrentUs(void)
  *     @brief
  *          This method returns the current value of total milliseconds
  *          since power on.
+ *     @param
+ *          void
  *     @return
  *                          - Total milliseconds since power on.
  */
@@ -348,6 +356,8 @@ uint32 GetCurrentMs(void)
  *     @brief
  *          This method returns the current value of total seconds since
  *          power on.
+ *     @param
+ *          void
  *     @return
  *                          - Total seconds since power on.
  */
@@ -366,6 +376,8 @@ uint32 GetCurrentS(void)
  *          this method catches the error and print the right error message.
  *     @param[in]
  *          err             - The error occurred.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void PrintErrorMessage(LDD_TError err)

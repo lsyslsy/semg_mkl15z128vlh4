@@ -169,7 +169,7 @@ LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
- *          receiveByteCount   - The number of bytes to be received & writ.
+ *          receiveByteCount   - The number of bytes to be received & write.
  *     @param[in]
  *          sendByteCount  - The number of bytes to be written.
  *     @return
@@ -314,7 +314,7 @@ LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
- *          receiveByteCount   - The number of bytes to be received & writ.
+ *          receiveByteCount   - The number of bytes to be received & write.
  *     @param[in]
  *          sendByteCount  - The number of bytes to be written.
  *     @return
@@ -331,9 +331,9 @@ LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
 /* ===================================================================*/
 LDD_TError SPI1ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount, LDD_DMA_TByteCount sendByteCount)
 {
-    SPI1Disable();
-    SPI1TxDMADisable();
-    SPI1RxDMADisable();
+//    SPI1Disable();
+//    SPI1TxDMADisable();
+//    SPI1RxDMADisable();
 
 //    SPI1RxDMASetSourceAddress((LDD_DMA_TAddress)(&SPI1_D));
     SPI1RxDMASetDestinationAddress((LDD_DMA_TAddress)destAddr);
@@ -346,9 +346,12 @@ LDD_TError SPI1ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAd
     SPI1RxDMAEnable();
     SPI1TxDMAEnable();
 
-    SPI1Enable();
-    SPI1EnableRxDMA();
-    SPI1EnableTxDMA();
+//    SPI1Enable();
+//    SPI1EnableRxDMA();
+//    SPI1EnableTxDMA();
+//    SPI1_C2 |= SPI_C2_TXDMAE_MASK | SPI_C2_RXDMAE_MASK;
+
+
 
     return ERR_OK;
 }

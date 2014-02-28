@@ -134,6 +134,10 @@ static void UARTInit(void);
  *          Initialize on-chip and peripheral devices.
  *          The method is called in the main function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void UserInit(void)
@@ -168,6 +172,10 @@ void UserInit(void)
   *          only once.
   *          Function ADCDataInit is defined in ADC.h. Function MCUDataInit
   *          and function ARMDataInit is defined below.
+  *     @param
+  *          void
+  *     @return
+  *          void
   */
  /* ===================================================================*/
 static void UserDataInit(void)
@@ -190,6 +198,8 @@ static void UserDataInit(void)
  *         	only once.
  *     @param
  *         	userDataPtr     - Pointer to specific user data.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void MCUDataInit(TMCUDataPtr userDataPtr)
@@ -232,6 +242,8 @@ static void MCUDataInit(TMCUDataPtr userDataPtr)
  *          only once.
  *     @param
  *          userDataPtr     - Pointer to specific user data.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void ARMDataInit(TARMDataPtr userDataPtr)
@@ -271,6 +283,10 @@ static void ARMDataInit(TARMDataPtr userDataPtr)
  *          Initialize on-chip devices.
  *          The method is called in the UserInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void OnChipInit(void)
@@ -313,6 +329,10 @@ static void OnChipInit(void)
  *          Initialize Peripheral devices.
  *          The method is called in the UserInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void PeripheralInit(void)
@@ -335,6 +355,10 @@ static void PeripheralInit(void)
  *          Initialize GPIO.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void GPIOInit(void)
@@ -413,6 +437,10 @@ static void GPIOInit(void)
  *          Initialize SPI.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void SPIInit(void)
@@ -441,6 +469,10 @@ static void SPIInit(void)
  *         	Initialize DMA controller. Including SPI transmission and reception DMA method.
  *         	The method is called in the OnChipInit function and will be called
  *         	only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void DMAInit(void)
@@ -478,6 +510,10 @@ static void DMAInit(void)
  *          Initialize UART.
  *          The method is called in the OnChipInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 static void UARTInit(void)

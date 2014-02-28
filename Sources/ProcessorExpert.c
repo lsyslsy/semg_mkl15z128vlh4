@@ -83,6 +83,14 @@
  * ===================================================================
  */
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
+/*!
+ *     @brief
+ *          The main function of the project.
+ *     @param
+ *          void
+ *     @return
+ *          int
+ */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
@@ -93,6 +101,7 @@ int main(void)
     byte cmd;
     //byte reg;
     byte regVal[25] = {0};
+    byte regVal2[25] = {0};
     //byte dummy[MSG_SIZE];
     bool flag1 = TRUE;
     uint16 i;
@@ -126,36 +135,44 @@ int main(void)
 //    msg[MSG_SIZE - 1] = 0x01U;
 //    msg2[MSG_SIZE - 1] = 0x20U;
 
-
-
     cmd = ADC_CMD_SDATAC;
     ADCSendCommand(&cmd);
-    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted || !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
     tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
     tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
 
-    for(;;)
+    cmd = ADC_REG_ID;
+    ADCReadRegister(cmd, regVal, 1);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted || !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+    printf("ID: %#x\n", regVal[2]);
+    for(i = 0; i < 10; i++)
     {
-        cmd = ADC_REG_ID;
-        ADCReadRegister(cmd, regVal, 1);
-        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
-        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
-        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
-        printf("ID: %#x\t", regVal[0]);
-
-        cmd = ADC_REG_CONFIG3;
-        regVal[0] = 0x60U;
-        ADCWriteRegister(cmd, regVal, 1);
-        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
-        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
-        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
-        ADCReadRegister(cmd, regVal, 1);
-        while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
-        tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
-        tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
-        printf("CONFIG3: %#x\n", regVal[0]);
+        regVal[i] = 0xFF;
     }
-    for(;;);
+
+    cmd = ADC_REG_CONFIG3;
+    regVal2[0] = 0x60U;
+    ADCWriteRegister(cmd, regVal2, 1);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+    for(i = 0; i < 10; i++)
+    {
+        regVal2[i] = 0xFF;
+    }
+//    DelaySomeMs(100);
+    ADCReadRegister(cmd, regVal2, 1);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
+    DelaySomeMs(1);
+    printf("CONFIG3: %#x\n", regVal2[2]);
+    for(i = 0; i < 10; i++)
+    {
+        regVal2[i] = 0xFF;
+    }
 
 //
 //    regVal[0] = 0x10U;
@@ -171,19 +188,24 @@ int main(void)
 //    {
 //        regVal[i] = 0x00U;
 //    }
-////    for(;;)
 //    ADCReadRegister(ADC_REG_CH1SET, regVal, 8);
 //    printf("%#x, %#x, %#x, %#x, %#x, %#x, %#x, %#x\n", regVal[0], regVal[1], regVal[2], regVal[3], regVal[4], regVal[5], regVal[6], regVal[7]);
 
 
     cmd = ADC_CMD_RDATAC;
     ADCSendCommand(&cmd);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted || !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
 
     EIntNotReadyEnable(EINT_NOT_DRDY);
     EIntSyncInterruptEnable(EINT_SYNC_INT);
 
     cmd = ADC_CMD_START;
     ADCSendCommand(&cmd);
+    while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted || !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
+    tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
+//    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
 
     for(;;)
     {
@@ -206,6 +228,13 @@ int main(void)
                                                                                 tADCPtr[0]->adcData.channelData[2], tADCPtr[0]->adcData.channelData[3],
                                                                                 tADCPtr[0]->adcData.channelData[4], tADCPtr[0]->adcData.channelData[5],
                                                                                 tADCPtr[0]->adcData.channelData[6], tADCPtr[0]->adcData.channelData[7]);
+                tADCPtr[0]->adcData.head = 0xFFU;
+                tADCPtr[0]->adcData.loffStatP = 0xFFU;
+                tADCPtr[0]->adcData.loffStatN = 0xFFU;
+                tADCPtr[0]->adcData.regGPIOData = 0xFFU;
+                memset(tADCPtr[0]->adcData.rawData, 0xFFU, sizeof(tADCPtr[0]->adcData.rawData));
+                memset(tADCPtr[0]->adcData.channelData, 0xFF, sizeof(tADCPtr[0]->adcData.channelData));
+
                 tADCPtr[0]->adcStatus.isDataReady = FALSE;
             }
         }

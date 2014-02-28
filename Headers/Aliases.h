@@ -3,8 +3,8 @@
  **     Filename    : Aliases.h
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
+ **     Component   :
+ **     Version     :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-07-14, 00:30, # CodeGen: 0
  **     Author      : Dong
@@ -13,9 +13,9 @@
  **          Aliases guarantee minimum modification of code,
  **          when ports or functions changed.
  **
- **     
+ **
  **     Mail        : pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
@@ -25,7 +25,7 @@
  *      This file contains ports and functions aliases.
  *      Aliases guarantee minimum modification of code,
  *      when ports or functions changed.
- *          
+ *
  */
 /*!
  * @addtogroup Ala Alias
@@ -41,7 +41,7 @@
 
 #include "Settings.h"
 
-/* 
+/*
  * ===================================================================
  * Devices Aliases
  * ===================================================================
@@ -113,13 +113,13 @@
          * @}
          */
 
-/* 
+/*
  * ===================================================================
  * Functions Aliases
  * ===================================================================
  */
         /*!
-         * @addtogroup FuncAla Functions Aliases 
+         * @addtogroup FuncAla Functions Aliases
          * @{
          */
             /*!
@@ -137,7 +137,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define EIntSyncInterruptInit(userDataPtr)    EINT_SYNC_INT_Init(userDataPtr)
 #define EIntSyncInterruptEnable(userDataPtr)  EINT_SYNC_INT_Enable(userDataPtr)
@@ -146,7 +146,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define IOStartInit(userDataPtr) BitIO_START_Init(userDataPtr)
 #define IOStartGetVal()          BitIO_START_GetVal(IO_START)
@@ -168,7 +168,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define IODaisyInInit(userDataPtr) BitIO_DAISY_IN_Init(userDataPtr)
 #define IODaisyInGetVal()          BitIO_DAISY_IN_GetVal(IO_DAISY_IN)
@@ -179,7 +179,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define IOClockSelectInit(userDataPtr) BitIO_CLKSEL_Init(userDataPtr)
 #define IOClockSelectGetVal()          BitIO_CLKSEL_GetVal(IO_CLKSEL)
@@ -190,7 +190,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define EIntNotReadyInit(userDataPtr)    EINT_NOT_DRDY_Init(userDataPtr)
 #define EIntNotReadyEnable(userDataPtr)  EINT_NOT_DRDY_Enable(userDataPtr)
@@ -199,7 +199,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define IONotPowerDownInit(userDataPtr) BitIO_NOT_PWDN_Init(userDataPtr)
 #define IONotPowerDownGetVal()          BitIO_NOT_PWDN_GetVal(IO_NOT_PWDN)
@@ -210,7 +210,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #define IONotResetInit(userDataPtr) BitIO_NOT_RESET_Init(userDataPtr)
 #define IONotResetGetVal()          BitIO_NOT_RESET_GetVal(IO_NOT_RESET)
@@ -249,7 +249,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #if USING_SPI0
 #define SPI0Init(userDataPtr)   SS_SPI0_Init(userDataPtr)
@@ -269,7 +269,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #if USING_SPI1
 #define SPI1Init(userDataPtr)   SM_SPI1_Init(userDataPtr)
@@ -282,7 +282,7 @@
 #define SPI1EnableTxDMA()       SPI_PDD_EnableTransmitDma(SPI1_BASE_PTR, PDD_ENABLE)
 #define SPI1DisableTxDMA()      SPI_PDD_EnableTransmitDma(SPI1_BASE_PTR, PDD_DISABLE)
 #define SPI1EnableRxDMA()       SPI_PDD_EnableReceiveDma(SPI1_BASE_PTR, PDD_ENABLE)
-#define SPI1DisableRxDMA()      SPI_PDD_EnableReceiveDma(SPI1_BASE_PTR, PDD_ENABLE)
+#define SPI1DisableRxDMA()      SPI_PDD_EnableReceiveDma(SPI1_BASE_PTR, PDD_DISABLE)
 #endif
             /*!
              * @}
@@ -334,7 +334,7 @@
              * @}
              */
             /*!
-             * @{ 
+             * @{
              */
 #if USING_UART2
 #define UART2Init(UserDataPtr)   AS_UART2_Init(UserDataPtr)

@@ -3,15 +3,15 @@
  **     Filename    : Init.c
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-07-12, 15:40, # CodeGen: 0
  **     Author	    : Dong
  **     Abstract    :
  **			This file contains user initialization of data, on-chip and peripheral devices.
- **			
+ **
  **			The followings will be initialized:
  **			    - User data
  **				- On-chip devices
@@ -29,17 +29,17 @@
  **     Settings    :
  **
  **     Contents    :
- **     			UserInit - UserInit(void);        
- **         
+ **     			UserInit - UserInit(void);
+ **
  **     Mail      	: pzdongdong@163.com
- **     
+ **
  **     Revision    : No.  Name        Date/Time        Content
  ** ###################################################################*/
 /*!
  * @file Init.h
  * @version 01.00
- * @brief	
- * 	    This file contains user initialization of data, on-chip and peripheral devices. 
+ * @brief
+ * 	    This file contains user initialization of data, on-chip and peripheral devices.
  *	    <p>The followings will be initialized:</p>
  *		<ul>
  *		<li> User data
@@ -63,7 +63,7 @@
  */
 /*!
  *  @addtogroup UserInitialization	User Initialization
- *      This module contains user initialization of data, on-chip and peripheral devices. 
+ *      This module contains user initialization of data, on-chip and peripheral devices.
  *      <p>The followings will be initialized:</p>
  *      <ul>
  *      <li> User data
@@ -96,8 +96,8 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
-#endif 
+{
+#endif
 
 /*
  * ===================================================================
@@ -105,9 +105,13 @@ extern "C"
  */
 /*!
  *     @brief
- *          Initialize on-chip and peripheral devices. 
+ *          Initialize on-chip and peripheral devices.
  *          The method is called in the main function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void UserInit(void);
@@ -116,7 +120,7 @@ void UserInit(void);
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 #endif
 /* #ifndef Init_H_ */

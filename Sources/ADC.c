@@ -98,6 +98,10 @@ static LDD_TError CheckCommand(byte cmd);
  *          Initializes ADC.
  *          The method is called in the PeripheralInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void ADCInit(void)
@@ -123,6 +127,8 @@ void ADCInit(void)
 /*!
  *     @brief
  *          Signal ~CS is low, enable ADC.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -142,6 +148,8 @@ LDD_TError ADCEnable(void)
 /*!
  *     @brief
  *          Signal ~CS is High, disable ADC.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -161,6 +169,8 @@ LDD_TError ADCDisable(void)
 /*!
  *     @brief
  *          Configure the registers of ADC via SPI1.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -179,6 +189,8 @@ LDD_TError ADCConfigure(void)
 /*!
  *     @brief
  *          Signal ~PWDN is high, ADC power up.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -210,6 +222,8 @@ LDD_TError ADCPowerUp(void)
 /*!
  *     @brief
  *          Signal ~PWDN is low, ADC power down.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -241,6 +255,8 @@ LDD_TError ADCPowerDown(void)
 /*!
  *     @brief
  *          Signal CLKSEL is high, ADC uses internal clock.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -272,6 +288,8 @@ LDD_TError ADCUseInternalClock(void)
 /*!
  *     @brief
  *          Signal CLKSEL is low, ADC uses external clock.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -304,6 +322,8 @@ LDD_TError ADCUseExternalClock(void)
  *     @brief
  *          Signal START is high, ADC starts to convert.
  *          This function starts ADC to convert via signal START.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -337,6 +357,8 @@ LDD_TError ADCStartConvertByHardware(void)
  *          MCU sends START command to ADC, ADC starts to convert.
  *          This function starts ADC to convert via SPI1.
  *          In this method, signal START must be low.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -368,6 +390,8 @@ LDD_TError ADCStartConvertByCommand(void)
  *     @brief
  *          Signal START is low, ADC stops converting.
  *          This function starts ADC to convert via signal START.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -401,6 +425,8 @@ LDD_TError ADCStopConvertByHardware(void)
  *          MCU sends STOP command to ADC, ADC stops to convert.
  *          This function stops ADC to convert via SPI1.
  *          In this method, signal START must be low.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -511,6 +537,8 @@ LDD_TError ADCDaisyConnect(void)
 /*!
  *     @brief
  *          Signal Daisy_IN is low, ADC connects in direct mode.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -726,6 +754,8 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
     uint8 i;
     LDD_TError err;
     byte strCmd[2];                 /* The read register command is a 2-byte command. */
+    uint8 sendByteCount;
+    uint8 receiveByteCount;
 
     /* Check if the register address is valid. */
     if(regAddr < ADC_REG_ID || regAddr > ADC_REG_WCT2)
@@ -757,6 +787,8 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
     /* Prepare the command and the register number. */
     strCmd[0] = ADC_CMD_RREG(regAddr);              /* According to user manual, read ADC register command, */
     strCmd[1] = n - 1;                              /* and if the number of registers to be read is n, n - 1 should be sent to ADC. */
+    sendByteCount = n + 2;
+    receiveByteCount = n + 2;
 
     /*
      * Try to send and receive the data.
@@ -764,7 +796,7 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
      * The real data begins at dat[2]!!!
      */
     err = SPI1ReceiveSendData((LDD_DMA_TAddress)strCmd, (LDD_DMA_TAddress)dat,
-                              (LDD_DMA_TByteCount)(n + 2), (LDD_DMA_TByteCount)(n + 2));
+                              (LDD_DMA_TByteCount)sendByteCount, (LDD_DMA_TByteCount)receiveByteCount);
 
 
     /*
@@ -772,10 +804,10 @@ LDD_TError ADCReadRegister(byte regAddr, byte* dat, uint8 n)
      * Make the data right.
      * Then the real data begins at dat[0].
      */
-    for(i = 0; i < n; i++)
-    {
-        dat[i] = dat[i + 2];
-    }
+//    for(i = 0; i < n; i++)
+//    {
+//        dat[i] = dat[i + 2];
+//    }
 
     if(err != ERR_OK)
     {
@@ -1016,6 +1048,8 @@ LDD_TError ADCReadData(byte* dat, uint8 n)
  *         	data, setting and status.
  *     @param
  *         	userDataPtr     - Pointer to specific user data.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void ADCDataInit(TADCPtr userDataPtr)

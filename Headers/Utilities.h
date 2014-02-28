@@ -3,9 +3,9 @@
  **     Filename    : Utilities.h
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Jul 25, 2013, 7:28:41 PM, # CodeGen: 0
  **     Author	    : Dong
@@ -25,8 +25,8 @@
  **                           - uint32 GetCurrentMs(void);
  **                           - uint32 GetCurrentS(void);
  **         PrintErrorMessage - void PrintErrorMessage(LDD_TError err);
- **                         
- **                         
+ **
+ **
  **     Mail      	: pzdongdong@163.com
  **
  **     Revision    : No.  Name        Data/Time        Content
@@ -34,7 +34,7 @@
 /*!
  * @file Utilities.h
  * @version 01.00
- * @brief	
+ * @brief
  *      This file contains general functions used in this project.
  */
 /*!
@@ -52,7 +52,7 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
+{
 #endif
 
 /*
@@ -63,6 +63,10 @@ extern "C"
  *     @brief
  *          This method delays 1us most precisely with assembly code.
  *          Error limit: +/-1%.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void Delay1Us();
@@ -181,8 +185,10 @@ LDD_TError DelaySomeS(uint32 n);
  */
 /*!
  *     @brief
- *         	This method returns the current value of total microseconds 
- *         	since power on.     	
+ *         	This method returns the current value of total microseconds
+ *         	since power on.
+ *     @param
+ *          void
  *     @return
  *         	                - Total microseconds since power on.
  */
@@ -195,8 +201,10 @@ uint32 GetCurrentUs(void);
  */
 /*!
  *     @brief
- *          This method returns the current value of total milliseconds 
- *          since power on.         
+ *          This method returns the current value of total milliseconds
+ *          since power on.
+ *     @param
+ *          void
  *     @return
  *                          - Total milliseconds since power on.
  */
@@ -209,8 +217,10 @@ uint32 GetCurrentMs(void);
  */
 /*!
  *     @brief
- *          This method returns the current value of total seconds since 
- *          power on.         
+ *          This method returns the current value of total seconds since
+ *          power on.
+ *     @param
+ *          void
  *     @return
  *                          - Total seconds since power on.
  */
@@ -225,7 +235,9 @@ uint32 GetCurrentS(void);
  *     @brief
  *         	this method catches the error and print the right error message.
  *     @param[in]
- *         	err             - The error occurred.        	
+ *         	err             - The error occurred.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 #if DEBUG
@@ -236,7 +248,7 @@ void PrintErrorMessage(LDD_TError err);
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 #endif
 /* #ifndef UTILITIES_H_ */

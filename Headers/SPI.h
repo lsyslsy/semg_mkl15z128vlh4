@@ -3,9 +3,9 @@
  **     Filename    : SPI.c
  **     Project     : semg_mkl15z128vlh4
  **     Processor   : MKL15Z128VLH4
- **     Component   : 
- **     Version     : 
- **     Datasheet   : 
+ **     Component   :
+ **     Version     :
+ **     Datasheet   :
  **     Compiler    : GNU C Compiler
  **     Date/Time   : 2013-Sep 20, 2013, 4:29:29 PM, # CodeGen: 1
  **     Author      : Dong
@@ -30,7 +30,7 @@
 /*!
  * @file SPI.h
  * @version 01.00
- * @brief   
+ * @brief
  *      This file contains high level functions on receiving and sending data via SPI.
  */
 /*!
@@ -48,7 +48,7 @@
 
 #ifdef __cplusplus
 extern "C"
-{   
+{
 #endif
 
 /*
@@ -65,14 +65,14 @@ extern "C"
  *          receiveByteCount   - The number of bytes to be received.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount);
@@ -91,14 +91,14 @@ LDD_TError SPI0ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receive
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCount);
@@ -111,24 +111,24 @@ LDD_TError SPI0SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @brief
  *          This method packs a serious operations of receiving & sending data via
  *          SPI0. Receive & send data from SPI0 directly with it.
- *     @param[in]           
- *          srcAddr         - The address of source buffer. 
+ *     @param[in]
+ *          srcAddr         - The address of source buffer.
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
- *          receiveByteCount   - The number of bytes to be received & writ.
+ *          receiveByteCount   - The number of bytes to be received & write.
  *     @param[in]
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI0ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount, LDD_DMA_TByteCount sendByteCount);
@@ -147,14 +147,14 @@ LDD_TError SPI0ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAd
  *          receiveByteCount   - The number of bytes to be receive.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount);
@@ -173,14 +173,14 @@ LDD_TError SPI1ReceiveData(LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receive
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCount);
@@ -193,24 +193,24 @@ LDD_TError SPI1SendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TByteCount sendByteCou
  *     @brief
  *          This method packs a serious operations of receiving & sending data via
  *          SPI1. Receive & send data from SPI1 directly with it.
- *     @param[in]           
- *          srcAddr         - The address of source buffer. 
+ *     @param[in]
+ *          srcAddr         - The address of source buffer.
  *     @param[out]
  *          destAddr        - The address of destination buffer.
  *     @param[in]
- *          receiveByteCount   - The number of bytes to be received & writ.
+ *          receiveByteCount   - The number of bytes to be received & write.
  *     @param[in]
  *          sendByteCount  - The number of bytes to be written.
  *     @return
  *                          - Error code of the the transmission status.
- *                          - Possible codes:             
+ *                          - Possible codes:
  *                              - ERR_OK       - OK.
  *                              - ERR_SPEED    - This device does not work in
  *                                               the active clock configuration.
  *                              - ERR_DISABLED - Component is disabled.
  *                              - ERR_BUSY     - The previous receive request is
  *                                               pending.
- *                              - etc.         - See PE_Error.h. 
+ *                              - etc.         - See PE_Error.h.
  */
 /* ===================================================================*/
 LDD_TError SPI1ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAddr, LDD_DMA_TByteCount receiveByteCount, LDD_DMA_TByteCount sendByteCount);
@@ -235,7 +235,7 @@ LDD_TError SPI1ReceiveSendData(LDD_DMA_TAddress srcAddr, LDD_DMA_TAddress destAd
 
 #ifdef __cplusplus
 } /* extern "C" */
-#endif 
+#endif
 
 #endif
 /* SPI_H_ */

@@ -82,6 +82,10 @@ extern "C"
  *          Initializes ADC.
  *          The method is called in the PeripheralInit function and will be called
  *          only once.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void ADCInit(void);
@@ -93,6 +97,8 @@ void ADCInit(void);
 /*!
  *     @brief
  *         	Configure the registers of ADC via SPI1.
+ *     @param
+ *          void
  *     @return
  *         	                - See PE_Error.h
  */
@@ -106,6 +112,8 @@ LDD_TError ADCConfigure(void);
 /*!
  *     @brief
  *          Signal ~CS is low, enable ADC.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -120,6 +128,8 @@ LDD_TError ADCEnable(void);
 /*!
  *     @brief
  *          Signal ~CS is High, disable ADC.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -135,6 +145,8 @@ LDD_TError ADCDisable(void);
 /*!
  *     @brief
  *          Signal ~PWDN is high, ADC power up.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -149,6 +161,8 @@ LDD_TError ADCPowerUp(void);
 /*!
  *     @brief
  *          Signal ~PWDN is low, ADC power down.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -163,6 +177,8 @@ LDD_TError ADCPowerDown(void);
 /*!
  *     @brief
  *          Signal CLKSEL is high, ADC uses internal clock.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -177,6 +193,8 @@ LDD_TError ADCUseInternalClock(void);
 /*!
  *     @brief
  *          Signal CLKSEL is low, ADC uses external clock.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -192,6 +210,8 @@ LDD_TError ADCUseExternalClock(void);
  *     @brief
  *          Signal START is high, ADC starts to convert.
  *          This function starts ADC to convert via signal START.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -208,6 +228,8 @@ LDD_TError ADCStartConvertByHardware(void);
  *          MCU sends START command to ADC, ADC starts to convert.
  *          This function starts ADC to convert via SPI1.
  *          In this method, signal START must be low.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -222,6 +244,8 @@ LDD_TError ADCStartConvertByCommand(void);
  *     @brief
  *          Signal START is low, ADC stops converting.
  *          This function starts ADC to convert via signal START.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -238,6 +262,8 @@ LDD_TError ADCStopConvertByHardware(void);
  *          MCU sends STOP command to ADC, ADC stops to convert.
  *          This function stops ADC to convert via SPI1.
  *          In this method, signal START must be low.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -252,6 +278,8 @@ LDD_TError ADCStopConvertByCommand(void);
  *     @brief
  *          Signal ~RESET varies from high to low to high, ADC resets.
  *          This function resets ADC via signal RESET.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -268,6 +296,10 @@ void ADCResetByHardware(void);
  *          MCU sends RESET command to ADC, ADC resets.
  *          This function resets ADC via SPI1.
  *          Avoid sending any commands during reset.
+ *     @param
+ *          void
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 LDD_TError ADCResetByCommand(void);
@@ -279,6 +311,8 @@ LDD_TError ADCResetByCommand(void);
 /*!
  *     @brief
  *          Signal Daisy_IN is high, ADC connects in daisy mode.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -293,6 +327,8 @@ LDD_TError ADCDaisyConnect(void);
 /*!
  *     @brief
  *          Signal Daisy_IN is low, ADC connects in direct mode.
+ *     @param
+ *          void
  *     @return
  *                          - ERR_OK: Output of this pin is OK.
  *                          - ERR_COMMON: Output of this pin goes wrong.
@@ -309,6 +345,8 @@ LDD_TError ADCDirectConnect(void);
  *     @brief
  *         	Send command WAKEUP to ADC via SPI1 to wake up ADC
  *         	from low-power standby mode.
+ *     @param
+ *          void
  *     @return
  *         	                - See PE_Error.h
  */
@@ -323,6 +361,8 @@ LDD_TError ADCWakeUp(void);
  *     @brief
  *          Send command STANDBY via SPI1 to make ADC entering
  *          the low-power standby mode.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -337,6 +377,8 @@ LDD_TError ADCStandBy(void);
  *     @brief
  *          Send command RDATAC via SPI1 to make the conversion data
  *          of ADC can read continuously without command RDATA.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -350,6 +392,8 @@ LDD_TError ADCReadDataContinuous(void);
 /*!
  *     @brief
  *          Send command SDATAC to ADC via SPI1 to stop ADC's RDATAC mode.
+ *     @param
+ *          void
  *     @return
  *                          - See PE_Error.h
  */
@@ -494,6 +538,8 @@ LDD_TError ADCReadData(byte* dat, uint8 n);
  *          data, setting and status.
  *     @param
  *          userDataPtr     - Pointer to specific user data.
+ *     @return
+ *          void
  */
 /* ===================================================================*/
 void ADCDataInit(TADCPtr userDataPtr);
