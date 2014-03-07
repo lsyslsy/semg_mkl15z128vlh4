@@ -49,6 +49,7 @@
 #include "DMAT_M_SPI_RX.h"
 #include "DMAT_S_SPI_TX.h"
 #include "DMAT_S_SPI_RX.h"
+#include "WaitTimer.h"
 #include "BitIO_UPRDY.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
@@ -79,6 +80,40 @@
 
 /*
  * ===================================================================
+ * For Communication
+ * ===================================================================
+ */
+
+//For shake hand
+volatile byte rxbuf_shakehand[SHAKEHAND_SIZE] =
+{ 0 };
+volatile byte txbuf_shakehand[SHAKEHAND_SIZE] =
+{ 0 };
+volatile bool SPINeedWait = FALSE ;
+
+static void SPIWaitIdle(uint16_t ms )
+{
+	SPINeedWait = TRUE;
+	WaitTimer_Disable(NULL);
+	WaitTimer_SetPeriodTicks(NULL,24*1000*ms);
+	//WaitTimer_ResetCounter(NULL);
+	WaitTimer_Enable(NULL);
+}
+static void MoveADCDataToMCUData()
+{
+	static uint8 ch_dat_cnt = 0;
+	uint8 ch_num;
+	for ( ch_num = 0; ch_num < 8; ch_num++)
+	{
+		tMCUPtr->mcuData.channelData[ch_num][ch_dat_cnt] =
+				tADCPtr[0]->adcData.channelData[ch_num];
+	}
+	++ch_dat_cnt;
+	ch_dat_cnt %= CHANNEL_DATA_COUNT;
+
+}
+/*
+ * ===================================================================
  * Main Function
  * ===================================================================
  */
@@ -102,8 +137,9 @@ int main(void)
     //byte reg;
     byte regVal[25] = {0};
     byte regVal2[25] = {0};
-    //byte dummy[MSG_SIZE];
-    bool flag1 = TRUE;
+    byte dummy[MSG_SIZE];
+    unsigned char stage = 1;
+    bool flag1 = TRUE;//缓存切换标识
     uint16 i;
 
     /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
@@ -132,8 +168,9 @@ int main(void)
 //        msg[i] = 0xAAU;
 //        msg2[i] = 0xBBU;
 //    }
-//    msg[MSG_SIZE - 1] = 0x01U;
-//    msg2[MSG_SIZE - 1] = 0x20U;
+//    PrepareTheMSG();
+//    msg[MSG_SIZE - 1] = 0xCCU;
+//    msg2[MSG_SIZE - 1] = 0xDDU;
 
     cmd = ADC_CMD_SDATAC;
     ADCSendCommand(&cmd);
@@ -162,6 +199,7 @@ int main(void)
     {
         regVal2[i] = 0xFF;
     }
+    
 //    DelaySomeMs(100);
     ADCReadRegister(cmd, regVal2, 1);
     while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted && !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
@@ -206,7 +244,7 @@ int main(void)
     while(!tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted || !tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted);
     tMCUPtr->mcuStatus.isSPI1TxDMATransCompleted = FALSE;
 //    tMCUPtr->mcuStatus.isSPI1RxDMATransCompleted = FALSE;
-
+    tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted = TRUE; //First time needs
     for(;;)
     {
         /* If data of ADC is ready, read it. */
@@ -222,44 +260,127 @@ int main(void)
             {
                 tMCUPtr->mcuStatus.isReceivingADCData = FALSE;
                 SplitRawData(&(tADCPtr[0]->adcData));
-                printf("%#x %#x %#x %#x | %#x %#x %#x %#x %#x %#x %#x %#x\n", tADCPtr[0]->adcData.head, tADCPtr[0]->adcData.loffStatP,
-                                                                                tADCPtr[0]->adcData.loffStatN, tADCPtr[0]->adcData.regGPIOData,
-                                                                                tADCPtr[0]->adcData.channelData[0], tADCPtr[0]->adcData.channelData[1],
-                                                                                tADCPtr[0]->adcData.channelData[2], tADCPtr[0]->adcData.channelData[3],
-                                                                                tADCPtr[0]->adcData.channelData[4], tADCPtr[0]->adcData.channelData[5],
-                                                                                tADCPtr[0]->adcData.channelData[6], tADCPtr[0]->adcData.channelData[7]);
+//                printf("%#x %#x %#x %#x | %#x %#x %#x %#x %#x %#x %#x %#x\n", tADCPtr[0]->adcData.head, tADCPtr[0]->adcData.loffStatP,
+//                                                                                tADCPtr[0]->adcData.loffStatN, tADCPtr[0]->adcData.regGPIOData,
+//                                                                                tADCPtr[0]->adcData.channelData[0], tADCPtr[0]->adcData.channelData[1],
+//                                                                                tADCPtr[0]->adcData.channelData[2], tADCPtr[0]->adcData.channelData[3],
+//                                                                                tADCPtr[0]->adcData.channelData[4], tADCPtr[0]->adcData.channelData[5],
+//                                                                                tADCPtr[0]->adcData.channelData[6], tADCPtr[0]->adcData.channelData[7]);
+                printf("AD\n");
                 tADCPtr[0]->adcData.head = 0xFFU;
-                tADCPtr[0]->adcData.loffStatP = 0xFFU;
-                tADCPtr[0]->adcData.loffStatN = 0xFFU;
-                tADCPtr[0]->adcData.regGPIOData = 0xFFU;
-                memset(tADCPtr[0]->adcData.rawData, 0xFFU, sizeof(tADCPtr[0]->adcData.rawData));
-                memset(tADCPtr[0]->adcData.channelData, 0xFF, sizeof(tADCPtr[0]->adcData.channelData));
-
+//                tADCPtr[0]->adcData.loffStatP = 0xFFU;
+//                tADCPtr[0]->adcData.loffStatN = 0xFFU;
+//                tADCPtr[0]->adcData.regGPIOData = 0xFFU;
+//                memset(tADCPtr[0]->adcData.rawData, 0xFFU, sizeof(tADCPtr[0]->adcData.rawData));
+//                memset(tADCPtr[0]->adcData.channelData, 0xFF, sizeof(tADCPtr[0]->adcData.channelData));
+               MoveADCDataToMCUData();
                 tADCPtr[0]->adcStatus.isDataReady = FALSE;
+                
+
             }
         }
-
-
+        
+        //MoniData();
         /*  If the ARM requires data, transmit. */
+       // SPINeedWait = TRUE;
+        if(!SPINeedWait)
         if(tARMPtr->armStatus.isRequiringData && tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted)
         {
             tARMPtr->armStatus.isRequiringData = FALSE;
             tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted = FALSE;
-            IOUploadReadyClrVal();
-            if(flag1)
-            {
-//                SPI0ReceiveSendData((LDD_DMA_TAddress)msg, (LDD_DMA_TAddress)dummy,
-//                                    (LDD_DMA_TByteCount)MSG_SIZE, (LDD_DMA_TByteCount)MSG_SIZE);
-                flag1 = FALSE;
-            }
-            else
-            {
-//                SPI0ReceiveSendData((LDD_DMA_TAddress)msg2, (LDD_DMA_TAddress)dummy,
-//                                    (LDD_DMA_TByteCount)MSG_SIZE, (LDD_DMA_TByteCount)MSG_SIZE);
-                flag1 = TRUE;
-            }
+			if (flag1)
+			{
+				DataFrame_Prepare((byte*) tARM.armDataLeft.dataFrame);
+			}
+			else
+			{
+				DataFrame_Prepare((byte*) tARM.armDataRight.dataFrame);
+			}
+			if (stage == 1) //开始握手
+			{
+
+				rxbuf_shakehand[0] = 0xFF;
+				rxbuf_shakehand[1] = 0xFF;
+				rxbuf_shakehand[2] = 0xFF;
+				//MOSI 收3个字节
+                //开启DMA之前需要清空接收缓冲区标志
+				//不能加tmp = SPI_D SPI_S  影响DMA状态
+				SPI0ReceiveSendData((LDD_DMA_TAddress) txbuf_shakehand,
+						(LDD_DMA_TAddress) rxbuf_shakehand,
+						(LDD_DMA_TByteCount) 4, (LDD_DMA_TByteCount) 4);
+				IOUploadReadyClrVal();
+				//PTE20_PutVal(NULL, TRUE);
+				while (! tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted)
+					; //必须要等  不然切到上面不知道多久哦了
+			//	PTE20_PutVal(NULL, FALSE);
+				if(rxbuf_shakehand[0] == 0 && rxbuf_shakehand[1] == 0xa5)
+				{
+					rxbuf_shakehand[0] = rxbuf_shakehand[1];
+					rxbuf_shakehand[1] = rxbuf_shakehand[2];
+					rxbuf_shakehand[2] = rxbuf_shakehand[3];
+				//	rxbuf_shakehand[0] = rxbuf_shakehand[1];
+					
+				}
+				if (rxbuf_shakehand[0]
+						!= 0xa5 || rxbuf_shakehand[1] != BRANCH_NUM)
+					{
+					//做10ms 时隙退避
+					//DelayMs(10);//错了 必须要等 以后可用定时器实现 以便占用读取AD，时间
+					SPIWaitIdle(10);
+					printf("wait for 10ms");
+				//	SCB_AIRCR |= SCB_AIRCR_VECTKEY(0x5fa);
+				//	SCB_AIRCR |= SCB_AIRCR_SYSRESETREQ_MASK;
+					goto sh_failed;
+					}
+				stage = 2;
+			}
+
+			if (stage == 2)
+			{
+				stage = 1;
+				switch (rxbuf_shakehand[2])
+				{
+				case CMD_SHKEHAND:
+					 tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted = FALSE;
+					//MISO 发3个字节  由于错误SPICLK时钟  3+1=4
+					txbuf_shakehand[0] = 0xb6; //182
+					txbuf_shakehand[1] = BRANCH_NUM;
+					txbuf_shakehand[2] = STATE_OK; //1
+					SPI0ReceiveSendData((LDD_DMA_TAddress) txbuf_shakehand,
+							(LDD_DMA_TAddress) rxbuf_shakehand,
+							(LDD_DMA_TByteCount) 4, (LDD_DMA_TByteCount) 4);
+					//while (!flagSPI0TxDMATransCompleted)
+					//	;
+					break;
+				case CMD_TRANSFER:
+					tMCUPtr->mcuStatus.isSPI0TxDMATransCompleted = FALSE;
+					//DMACheckNeeded = TRUE;
+					//发送AD数据包
+					if (flag1)
+					{
+						SPI0ReceiveSendData((LDD_DMA_TAddress) tARM.armDataLeft.dataFrame,
+								(LDD_DMA_TAddress) dummy,
+								(LDD_DMA_TByteCount) MSG_SIZE + 1,
+								(LDD_DMA_TByteCount) MSG_SIZE) + 1;
+						//flag1 = FALSE;
+					}
+					else
+					{
+						SPI0ReceiveSendData((LDD_DMA_TAddress) tARM.armDataRight.dataFrame,
+								(LDD_DMA_TAddress) dummy,
+								(LDD_DMA_TByteCount) MSG_SIZE + 1,
+								(LDD_DMA_TByteCount) MSG_SIZE) + 1;
+						//flag1 = TRUE;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			sh_failed: ;
         }
-    }
+			
+    } //end for
 
     /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

@@ -257,17 +257,17 @@ static void ARMDataInit(TARMDataPtr userDataPtr)
     memset(arm.armDataLeft.dataHigh, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
     memset(arm.armDataLeft.dataLow, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
     memset(arm.armDataLeft.dataFrame, 0, (sizeof(byte)) * USING_CHANNEL_COUNT);
-    arm.armDataLeft.dataFrame[0] = DATA_FRAME_HEAD_BIT;
-    arm.armDataLeft.dataFrame[1] = MCU_NUMBER;
-    arm.armDataLeft.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
-
+    //arm.armDataLeft.dataFrame[0] = DATA_FRAME_HEAD_BIT;
+    //arm.armDataLeft.dataFrame[1] = MCU_NUMBER;
+    //arm.armDataLeft.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
+    DataFrame_Format((byte*)arm.armDataLeft.dataFrame);
     memset(arm.armDataRight.dataHigh, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
     memset(arm.armDataRight.dataLow, 0, (sizeof(int8)) * USING_CHANNEL_COUNT);
     memset(arm.armDataRight.dataFrame, 0, (sizeof(byte)) * USING_CHANNEL_COUNT);
-    arm.armDataRight.dataFrame[0] = DATA_FRAME_HEAD_BIT;
-    arm.armDataRight.dataFrame[1] = MCU_NUMBER;
-    arm.armDataRight.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
-
+//    arm.armDataRight.dataFrame[0] = DATA_FRAME_HEAD_BIT;
+//    arm.armDataRight.dataFrame[1] = MCU_NUMBER;
+//    arm.armDataRight.dataFrame[DATA_FRAME_LENGTH - 1] = DATA_FRAME_TAIL_BIT;
+    DataFrame_Format((byte*)arm.armDataRight.dataFrame);
     tARM = arm;
     tARMPtr = &tARM;
 

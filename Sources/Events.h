@@ -66,6 +66,7 @@
 #include "DMAT_M_SPI_RX.h"
 #include "DMAT_S_SPI_TX.h"
 #include "DMAT_S_SPI_RX.h"
+#include "WaitTimer.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -364,6 +365,27 @@ void SM_SPI1_OnBlockReceived(LDD_TUserData *UserDataPtr);
 /* ===================================================================*/
 void Cpu_OnNMIINT(void);
 
+
+/*
+** ===================================================================
+**     Event       :  WaitTimer_OnCounterRestart (module Events)
+**
+**     Component   :  WaitTimer [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if counter overflow/underflow or counter is
+**         reinitialized by modulo or compare register matching.
+**         OnCounterRestart event and Timer unit must be enabled. See
+**         [SetEventMask] and [GetEventMask] methods. This event is
+**         available only if a [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void WaitTimer_OnCounterRestart(LDD_TUserData *UserDataPtr);
 
 /* END Events */
 

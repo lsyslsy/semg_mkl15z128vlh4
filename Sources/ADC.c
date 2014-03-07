@@ -928,7 +928,7 @@ LDD_TError ADCWriteRegister(byte regAddr, byte* dat, uint8 n)
 LDD_TError ADCReadContinuousData(byte* dat, uint8 n)
 {
     LDD_TError err;
-    byte dummy[RAW_DATA_SIZE];
+    byte dummy[RAW_DATA_SIZE] = {0};
 
     /* Check if the reception buffer is valid. */
     if(!dat)

@@ -43,7 +43,7 @@
 #include "Utilities.h"
 #include "SPI.h"
 #include "Events.h"
-
+#include "Com.h"
 //#include "SPI_PDD.h"
 
     /* END MODULE MYHEADERS. */

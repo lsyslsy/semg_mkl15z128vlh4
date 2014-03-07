@@ -522,6 +522,32 @@ void DMAT_S_SPI_TX_OnError(LDD_TUserData *UserDataPtr)
   /* Write your code here ... */
 }
 
+/*
+** ===================================================================
+**     Event       :  WaitTimer_OnCounterRestart (module Events)
+**
+**     Component   :  WaitTimer [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if counter overflow/underflow or counter is
+**         reinitialized by modulo or compare register matching.
+**         OnCounterRestart event and Timer unit must be enabled. See
+**         [SetEventMask] and [GetEventMask] methods. This event is
+**         available only if a [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void WaitTimer_OnCounterRestart(LDD_TUserData *UserDataPtr)
+{
+	extern volatile bool SPINeedWait ;
+	SPINeedWait = FALSE;
+	WaitTimer_Disable(NULL);
+}
+
 /* END Events */
 
 #ifdef __cplusplus

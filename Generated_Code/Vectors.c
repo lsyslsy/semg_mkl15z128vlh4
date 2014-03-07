@@ -5,7 +5,7 @@
 **     Processor   : MKL15Z128VLH4
 **     Version     : Component 01.000, Driver 01.04, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2013-12-12, 21:57, # CodeGen: 166
+**     Date/Time   : 2014-03-05, 18:21, # CodeGen: 179
 **     Abstract    :
 **
 **     Settings    :
@@ -47,6 +47,7 @@
   #include "DMAT_M_SPI_RX.h"
   #include "DMAT_S_SPI_TX.h"
   #include "DMAT_S_SPI_RX.h"
+  #include "WaitTimer.h"
   #include "Events.h"
 
 
@@ -104,7 +105,7 @@
     (tIsrFunc)&Cpu_Interrupt,          /* 0x23  0x0000008C   -   ivINT_TPM2                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x24  0x00000090   -   ivINT_RTC                     unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x25  0x00000094   -   ivINT_RTC_Seconds             unused by PE */
-    (tIsrFunc)&Cpu_Interrupt,          /* 0x26  0x00000098   -   ivINT_PIT                     unused by PE */
+    (tIsrFunc)&WaitTimer_Interrupt,    /* 0x26  0x00000098   2   ivINT_PIT                     used by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x27  0x0000009C   -   ivINT_Reserved39              unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x28  0x000000A0   -   ivINT_USB0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x29  0x000000A4   -   ivINT_DAC0                    unused by PE */
